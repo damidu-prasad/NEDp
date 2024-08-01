@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <head>
+        <title>NEDP - Data Input Score</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style type="text/css">
+            body{
+                -webkit-print-color-adjust:exact;
+            }
+
+            @page {
+                size: A4;
+                margin: 20px;
+            }
+            @media print {
+                html, body {
+                    width: 210mm;
+                    height: 297mm;
+                }
+                table { page-break-after:auto }
+                tr    { page-break-inside:avoid; page-break-after:auto }
+                td    { page-break-inside:avoid; page-break-after:auto }
+                /*thead { display:table-header-group }*/
+                /*tfoot { display:table-footer-group }*/
+            }
+
+
+            table {
+                border-collapse: collapse;
+
+            }
+
+            table, th, td {
+                border: 1px solid silver;
+                padding: 4px;
+            }
+
+            .text-right{
+                text-align:right;
+                padding-right: 5px;
+            }
+
+            .text-center{
+                text-align:center;
+            }	
+
+            .text-center.bold{
+                font-weight: bold;
+                background-color: #ffe88d;
+            }
+            .bg {
+                background-color: #DADADA;
+            }
+        </style> 
+    </head>
+    <body style=" font-family:Arial, Helvetica, sans-serif;">
+
+
+
+        <table  style="page-break-inside: auto;page-break-after:always;border:none;"  width="850" border="0" cellspacing="0" cellpadding="0">
+
+            <tr>
+                <td height="69" align="center" style="border:none;"><strong>National Education Development Portal<br/> Data Input Score</strong></td>
+            </tr>
+            <tr>
+                <td style="border:none;"><table width="839" border="0" cellspacing="0" cellpadding="5">
+                        <tr>
+                            <td width="95" class="bg">Filtered By</td>
+                            <td width="722" colspan="3"> ${printDataInputScore.topic}</td>
+
+                        </tr>
+                        <tr>
+                            <td width="95" class="bg">Terms</td>
+                            <td width="722" colspan="3"> ${printDataInputScore.termsTopic}</td>
+
+                        </tr>
+                        <tr>
+                            <td class="bg">Date</td>
+                            <td colspan="3">${printDataInputScore.date}</td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td height="45" style="border:none;">
+                    <table width="840" border="0" cellspacing="0" cellpadding="5">
+                        <tr>
+                            <td width="69" align="center"><strong>#</strong></td>
+                            <td width="607" align="center"><strong>School Name</strong></td>
+                            <td width="132" align="center"><strong>Data Input %</strong></td>
+                            <td width="132" align="center"><strong>No of Teachers</strong></td>
+                            <td width="132" align="center"><strong>No of Active Teachers</strong></td>
+                            <td width="132" align="center"><strong>Active Teacher %</strong></td>
+
+                        </tr>
+                        <ui:repeat value="#{printDataInputScore.scoreSchoolList}" var="sub">
+                            <tr>
+                                <td align="center">${sub.order} </td>
+                                <td>${sub.sname} </td>
+                                <td align="center">${sub.marks_enter_perc}% </td>
+                                <td align="center">${sub.no_of_teachers} </td>
+                                <td align="center">${sub.no_of_active} </td>
+                                <td align="center">${sub.active_perc}% </td>
+
+                            </tr>
+                        </ui:repeat>
+                    </table></td>
+            </tr>
+            <tr>
+                <td height="45" align="center" style="border:none;font-size:10px;">
+                    Powered by Java Institute for Advanced Technology</td>
+            </tr>
+
+        </table>
+
+
+        <script>
+            window.print();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,359 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .ui-datatable-resizable tbody td{
+
+                    white-space: normal !important;
+                }
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>List of Teachers / Employees</h1>
+                <p>You can search Teachers or Employees by Province, Zone, Division or Schools.  </p>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+                    <div class="ui-g-12" >
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{listOfTeachers.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{listOfTeachers.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{listOfTeachers.getEducationZoneList}" render="zone" />
+
+                                <f:selectItems value="#{listOfTeachers.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{listOfTeachers.disabledFiledZone}" autoWidth="false" effect="slide" value="#{listOfTeachers.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{listOfTeachers.getEducationDivisionList}" render="division" />
+                                <f:selectItems value="#{listOfTeachers.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{listOfTeachers.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{listOfTeachers.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{listOfTeachers.getSchoolList}" render="school" />
+                                <f:selectItems value="#{listOfTeachers.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{listOfTeachers.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{listOfTeachers.schoolName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{listOfTeachers.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Grade" for="grade" style="font-weight: bold;" />
+                            <p:selectOneMenu id="grade"  autoWidth="false" effect="slide" value="#{listOfTeachers.gradeName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{listOfTeachers.gradeNameList}" />
+
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+
+                            <p:outputLabel value="Subject" for="subject" style="font-weight: bold;" />
+                            <p:selectOneMenu id="subject"  autoWidth="false" effect="slide" value="#{listOfTeachers.subjectName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{listOfTeachers.subjectNameList}" />
+
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+                            <h:panelGroup >
+                                <p:outputLabel value="Type" for="reg_type" style="font-weight: bold;" />
+                                <p:selectOneMenu id="reg_type"   autoWidth="false" effect="slide" value="#{listOfTeachers.regTypeName}" style="width: 100%;" >
+
+                                    <f:selectItems value="#{listOfTeachers.regTypeNameList}" />
+
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-3" >
+
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-3" >
+
+                            <p:commandButton type="button" value="Search"  style="margin-bottom:10px;" styleClass="secondary">
+
+                                <f:ajax execute="@form" render="form" listener="#{listOfTeachers.loadListOfTeachers()}" />
+                            </p:commandButton>
+                        </div>
+                        <div class="ui-g-4" ></div>
+                    </div>
+                    <div class="ui-g-12" >
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+                            <p:outputLabel value="Search Teacher / Employee by NIC or Name" for="search" style="font-weight: bold;" />
+                            <p:autoComplete id="search" value="#{listOfTeachers.searchTeacher}" completeMethod="#{listOfTeachers.LoadTeacherSearch}" style="margin-bottom:10px;">
+                                <p:ajax event="itemSelect" listener="#{listOfTeachers.setSearchStudentToTable}" update="form"></p:ajax>
+                            </p:autoComplete>
+
+                        </div>
+                    </div>
+                    <div class="ui-g-12" >
+
+                        <p:dataTable var="lte"  id="datasTable" value="#{listOfTeachers.teacherList}"  stickyHeader="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="true"  reflow="true" paginator="true" rows="100" rowsPerPageTemplate="100,200,300,400">
+
+                            <f:facet name="{Exporters}" >
+                                <div style="float:right;">
+                                    <h:commandLink style="padding: 5px;">
+                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+                                        <p:dataExporter type="xls" target="datasTable" fileName="Teacher List" />
+                                    </h:commandLink>
+
+                                    <h:commandLink>
+                                        <p:graphicImage name="/demo/images/pdf.jpg" width="24"/>
+                                        <p:dataExporter type="pdf" target="datasTable" fileName="Teacher List"/>
+                                    </h:commandLink>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="#" style="text-align: center;vertical-align: top;">
+                                <h:outputText value="#{lte.no}" />
+                            </p:column>
+                            <p:column headerText="School / Organization" style="vertical-align: top;" >
+                                <h:outputText value="#{lte.school_name}" />
+                            </p:column>
+                            <p:column headerText="NIC" style="vertical-align: top;" >
+                                <h:outputText value="#{lte.nic}" />
+                            </p:column>
+
+                            <p:column headerText="Name" style="vertical-align: top;" >
+                                <h:outputText value="#{lte.name}" />
+                            </p:column>
+
+                            <p:column headerText="Email" style="vertical-align: top;" >
+                                <h:outputText value="#{lte.email}" />
+                            </p:column>
+                            <p:column headerText="Subject" style="vertical-align: top;" >
+                                <h:outputText value="#{lte.subject}" />
+                            </p:column>
+                            <p:column headerText="Select for Send Email" exportable="false" style="text-align: right;vertical-align: top;" >
+                                <p:selectBooleanCheckbox rendered="true" value="#{lte.checkMail}" id="abc" disabled="#{lte.disabledCheck}" />
+
+                            </p:column>
+                            <p:column headerText="" exportable="false" style="text-align: center;width: auto;vertical-align: top;" >
+
+                                <p:commandButton icon="ui-icon-edit" styleClass="blue-grey-btn flat" value="Edit" update=":editTeacher"  oncomplete="PF('editTeacherDialog').show()" style="width: auto"  >
+                                    <f:setPropertyActionListener value="#{lte}" target="#{listOfTeachers.selectedTeacher}" />
+                                </p:commandButton>
+
+                            </p:column>
+
+                        </p:dataTable>
+
+
+                    </div>
+
+                    <div class="ui-g-12" >
+                        <div class="ui-g-1" style="text-align: right" >
+                            <c:if test="#{listOfTeachers.emailCount==0}" id="check1">
+
+                                <p:selectBooleanCheckbox value="#{listOfTeachers.selectAllBox}"  disabled="true" />
+                            </c:if>
+                            <c:if test="#{listOfTeachers.emailCount!=0}" id="check2">
+
+                                <p:selectBooleanCheckbox value="#{listOfTeachers.selectAllBox}"   >
+                                    <p:ajax event="change"  update="form:datasTable" listener="#{listOfTeachers.setSelectedCheckBoxes()}" />
+
+                                </p:selectBooleanCheckbox>
+                            </c:if>
+                        </div>
+                        <div class="ui-g-1 " >Select All</div>
+                        <div class="ui-g-10 " style="text-align: right;">
+                            <c:if test="#{listOfTeachers.emailCount!=0}" >
+                                <p:commandButton type="button" value="Send Email" action="#{listOfTeachers.checkforSendMail()}" icon="ui-icon-email" styleClass="cyan-btn flat"  style="margin-bottom:10px;height: 40px;width: 20%"  >
+                                    <f:ajax execute="@form"/>
+                                </p:commandButton>
+
+                            </c:if>
+                        </div>
+
+                        <p:dialog header="Send Emails" width="50%"  widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                            <p:outputPanel id="selectedCarDetail"  style="text-align:left;width: 100%;border: none;">
+                                <h:form id="form2">
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                        <p:growl autoUpdate="true" />
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Subject" for="subject" style="font-weight: bold;" />
+                                            <p:inputText id="subject" value="#{listOfTeachers.subject}"   />
+                                        </h:panelGroup>
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Email Content" for="content" style="font-weight: bold;" />
+                                            <p:inputTextarea id="content" value="#{listOfTeachers.emailContent}"   />
+                                        </h:panelGroup>
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Footer" for="footer" style="font-weight: bold;" />
+                                            <h:outputText id="footer" value="&lt;br /&gt; &lt;br /&gt; Thanks, &lt;br /&gt;Provincial Education Ministry" escape="false" />
+                                        </h:panelGroup>
+                                        <h:panelGroup >
+                                            <p:commandButton  value="Send"  icon="ui-icon-email" styleClass="amber-btn" >
+                                                <f:ajax execute="@form" render="form2"  listener="#{listOfTeachers.sendEmailToTeachers()}" />
+                                                <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                                            </p:commandButton>
+                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                            </p:confirmDialog>
+
+                                        </h:panelGroup>
+
+                                    </p:panelGrid>
+                                </h:form>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </div>
+
+                </h:form>
+                <p:dialog header="Edit Teacher Details" width="80%"  widgetVar="editTeacherDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                    <f:ajax event="close"  render=":form:datasTable" />
+                    <p:outputPanel id="editTeacher"  style="text-align:left;width: 100%;border: none;">
+                        <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                            <h:form id="save-form">
+                                <p:growl autoUpdate="true" />
+                                <p:panel  header="Personal Details" style="margin-top: 20px;">
+                                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup >
+                                            <p:outputLabel value="First Name" for="first_name" style="font-weight: bold;" />
+                                            <p:inputText id="first_name" required="true" requiredMessage="Enter First Name !" style="width: 100%;" value="#{listOfTeachers.firstName}" />
+
+                                        </h:panelGroup>
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Last Name" for="last_name" style="font-weight: bold;" />
+                                            <p:inputText id="last_name" required="true" requiredMessage="Enter Last Name !" style="width: 100%;" value="#{listOfTeachers.lastName}" />
+
+                                        </h:panelGroup>
+                                        <h:panelGroup  >
+                                            <p:outputLabel value="Name with Initials" for="name_with_in" style="font-weight: bold;" />
+                                            <p:inputText id="name_with_in" required="true" requiredMessage="Enter Name with Initials !" style="width: 100%;" value="#{listOfTeachers.nameWithIn}" />
+
+                                        </h:panelGroup>
+                                        <h:panelGroup  >
+                                            <p:outputLabel value="NIC" for="nic" style="font-weight: bold;" />
+                                            <p:inputText id="nic" disabled="true" required="true" style="width: 100%;" requiredMessage="Enter NIC !" value="#{listOfTeachers.nic}" />
+
+                                        </h:panelGroup>
+                                        <h:panelGroup  >
+                                            <p:outputLabel value="Date of Birth" for="dob" style="font-weight: bold;" />
+                                            <p:calendar id="dob" pattern="yyyy-MM-dd" required="true" requiredMessage="Select Date of birth !" value="#{listOfTeachers.dob}" />
+
+                                        </h:panelGroup>
+
+                                        <h:panelGroup  >
+                                            <p:outputLabel value="Gender" for="gender" style="font-weight: bold;" />
+                                            <p:selectOneRadio required="true" requiredMessage="Select Gender !" id="gender" layout="responsive" columns="4" value="#{listOfTeachers.gender}">
+                                                <f:selectItem itemLabel="Male" itemValue="1" />
+                                                <f:selectItem itemLabel="Female" itemValue="2" />
+
+                                            </p:selectOneRadio>
+
+                                        </h:panelGroup>
+
+                                        <h:panelGroup  >
+                                            <p:outputLabel value="Teacher Type" for="teacherType" style="font-weight: bold;" />
+                                            <p:selectOneMenu id="teacherType" value="#{listOfTeachers.teacherType}" style="width: 30%;margin: 0 0 0 3%;background-color: #ffffff;height: 25px;padding: 0 0 0 1%;border-radius: 2px;">
+                                                <f:selectItems  value="#{listOfTeachers.teacherTypesList}" />
+                                            </p:selectOneMenu>
+
+                                        </h:panelGroup>
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Teacher Id" for="teacherId" style="font-weight: bold;" />
+                                            <p:inputText id="teacherId"  style="width: 100%;" required="false" value="#{listOfTeachers.teacherId}" />
+
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:panel>
+                                <p:panel  header="Contact Details" style="margin-top: 20px;">
+                                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Mobile" for="mobile" style="font-weight: bold;" />
+                                            <p:inputText id="mobile"  style="width: 100%;" required="true" requiredMessage="Enter Mobile !" value="#{listOfTeachers.mobile}" />
+
+                                        </h:panelGroup>
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Email" for="email" style="font-weight: bold;" />
+                                            <p:inputText id="email"  style="width: 100%;" value="#{listOfTeachers.email}" />
+
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup  >
+                                            <p:outputLabel value="Address No" for="address1" style="font-weight: bold;" />
+                                            <p:inputText id="address1"  style="width: 100%;" value="#{listOfTeachers.address1}" />
+
+                                        </h:panelGroup>
+                                        <h:panelGroup  >
+                                            <p:outputLabel value="Street" for="address2" style="font-weight: bold;" />
+                                            <p:inputText id="address2" required="true" requiredMessage="Enter Street !" style="width: 100%;" value="#{listOfTeachers.address2}" />
+
+                                        </h:panelGroup>
+
+                                        <h:panelGroup  >
+                                            <p:outputLabel value="City" for="address3" style="font-weight: bold;" />
+                                            <p:inputText id="address3" required="true" requiredMessage="Enter City !"  style="width: 100%;" value="#{listOfTeachers.address3}" />
+
+                                        </h:panelGroup>
+
+                                    </p:panelGrid>
+                                </p:panel>
+
+
+                                <div class="ui-g-12 ui-md-6 ui-lg-9" ></div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3" >
+                                    <p:commandButton  value="Save"  icon="ui-icon-update" styleClass="secondary" >
+                                        <f:ajax execute="@form" render=":form:datasTable" listener="#{listOfTeachers.updateTeacherRegistration()}"  />
+                                        <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
+
+                                </div>
+                            </h:form>
+                        </p:scrollPanel>
+                    </p:outputPanel>
+                </p:dialog>
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

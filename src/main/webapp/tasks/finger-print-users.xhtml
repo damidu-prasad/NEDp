@@ -1,0 +1,188 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/template.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    >
+    <ui:define name="content">
+        <div class="card ui-g ui-fluid">
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .ui-datatable-resizable tbody td{
+
+                    white-space: normal !important;
+                }
+
+                .tableHeaders{
+                    font-weight: bold;
+                    text-align: center;
+                    font-size: 1.3em;
+                    color: #ffffff;
+                    background-color: #2266e3;
+                    border-radius: 5px;
+                    width: 19%;
+                }
+
+                .tableData{
+                    font-weight: bold;
+                    text-align: center;
+                    height: 1.3em;
+                    border-bottom: 2px solid #cccccc;
+                    border-radius: 5px;
+                    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2);
+                    font-size: 1em;
+                }
+
+                .checkboxStyle{
+                    float: left;
+                }
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+
+                <h1>Finger Print Users</h1>
+
+                <h:form id ="search-employee">
+
+                    <p:growl autoUpdate="true" />
+
+                    <p:panel header="Search Teacher / Employee by NIC">
+
+                        <h:form id="form">
+                            <p:growl autoUpdate="true" />
+
+                        </h:form>
+
+                        <h:panelGroup>
+
+                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup >
+                                    <p:outputLabel value="Search Teacher / Employee by NIC or Name" for="search" style="font-weight: bold;" />
+
+                                    <p:autoComplete id="search" value="#{AddFingerPrintUsers.searchTeacher}" completeMethod="#{AddFingerPrintUsers.LoadTeacherSearch}" style="margin-bottom:10px;">
+
+                                        <p:ajax event="itemSelect" listener="#{AddFingerPrintUsers.setSearchTeacherToTable}" update="fingerPrintUsersTable"></p:ajax>
+
+                                    </p:autoComplete>
+
+                                </h:panelGroup>
+
+                                <h:panelGroup >
+                                </h:panelGroup>
+
+                                <h:panelGroup class="ui-g-12 ui-lg-12">
+
+                                    <p:commandButton  value="View"  icon="ui-icon-search" styleClass="secondary flat" style="width: 40%">
+
+                                        <f:ajax execute="@form" render="fingerPrintUsersTable" listener="#{AddFingerPrintUsers.viewFIngerPrintUser()}"  />
+
+                                    </p:commandButton>
+
+                                    <p:commandButton type="button" value="Add" onclick="PF('AssignFingerPrintUsers').show()" icon="ui-icon-add" styleClass="green-btn flat" style="width: 40%; margin-left: 5%">
+
+                                        <p:ajax   />
+
+                                    </p:commandButton>
+
+                                </h:panelGroup>
+
+                            </p:panelGrid>
+
+                        </h:panelGroup>
+
+                    </p:panel>
+
+                </h:form>
+
+            </div>
+
+            <div class="ui-g-12 ui-lg-12">
+
+                <h:form id="fingerPrintUsersTable">
+
+                    <p:dataTable var="fingerPrintUsers" value="#{AddFingerPrintUsers.fingerPrintUsersList}" id="fingerPrintUsers" stickyHeader="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="true"  reflow="true" paginator="true" rows="100" rowsPerPageTemplate="100,200,300,400" rowIndexVar="rowIndex">
+
+                        <p:column headerText="#" style="text-align: center;vertical-align: top;">
+                            <h:outputText value="#{rowIndex + 1}" />
+                        </p:column>
+                        <p:column headerText="NIC" style="text-align: center;vertical-align: top;">
+                            <h:outputText value="#{fingerPrintUsers.generalUserProfileGupId.nic}" />
+                        </p:column>
+                        <p:column headerText="Name With Initials" style="text-align: center;vertical-align: top;">
+                            <h:outputText value="#{fingerPrintUsers.generalUserProfileGupId.nameWithIn}" />
+                        </p:column>
+                        <p:column headerText="Enrollement Id" style="text-align: center;vertical-align: top;">
+                            <h:outputText value="#{fingerPrintUsers.enrollementId}" />
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+
+            </div>
+
+        </div>
+
+        <p:dialog header="Assign Finger Print Users" width="50%" widgetVar="AssignFingerPrintUsers" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true" >
+
+            <f:ajax event="close" render="form:search-employee">
+
+                <p:outputPanel id="user"  style="text-align:left;width: 100%;border: none;">
+
+                    <h:form id="userForm" >
+
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup >
+                                    
+                                    <p:outputLabel value="Search Teacher / Employee by NIC or Name" for="searchTeacher" style="font-weight: bold;" />
+
+                                    <p:autoComplete  id="searchTeacher" value="#{AddFingerPrintUsers.searchValue}" completeMethod="#{AddFingerPrintUsers.viewUnregisteredFingerPrintUsers}" style="margin-bottom:10px;">
+
+                                        <p:ajax event="itemSelect" listener="#{AddFingerPrintUsers.selectedTeacherSetToGupId}" update="user"></p:ajax>
+
+                                    </p:autoComplete>
+                                    
+                                </h:panelGroup>
+                                
+                                <h:panelGroup >
+                                    
+                                    <p:outputLabel value="Enter Enrollement No" for="enrollement_no"  style="font-weight: bold;" />
+                                    
+                                    <p:inputText id="enrollement_no" required="true" requiredMessage="Enter Enrollement No !" style="width: 100%;" value="#{AddFingerPrintUsers.enrollementNo}" />
+                                   
+                                </h:panelGroup>
+                              
+                                <h:panelGroup >
+                                    
+                                    <p:commandButton type="button" value="Save"   icon="ui-icon-save" styleClass="amber-btn" >
+                                        
+                                        <f:ajax execute="@form" render="userForm" listener="#{AddFingerPrintUsers.saveFingerPrintUser()}" />
+                                        
+                                        <!--<p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />-->
+                                        
+                                    </p:commandButton>
+
+                                </h:panelGroup>
+
+                            </p:panelGrid>
+
+                    </h:form>
+
+                </p:outputPanel>
+
+            </f:ajax>
+
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

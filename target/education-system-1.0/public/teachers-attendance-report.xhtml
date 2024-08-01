@@ -1,0 +1,223 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templateTwo.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+
+        <div class=" card ui-g ui-fluid">
+
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .ui-datatable-resizable tbody td{
+
+                    white-space: normal !important;
+                }
+
+                .tableHeaders{
+                    font-weight: bold;
+                    text-align: center;
+                    font-size: 1.3em;
+                    color: #ffffff;
+                    background-color: #2266e3;
+                    border-radius: 5px;
+                    width: 19%;
+                }
+
+                .tableData{
+                    font-weight: bold;
+                    text-align: center;
+                    height: 1.3em;
+                    border-bottom: 2px solid #cccccc;
+                    border-radius: 5px;
+                    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2);
+                    font-size: 1em;
+                }
+
+                .checkboxStyle{
+                    float: left;
+                }
+
+
+
+            </style>
+
+            <div class="ui-g-12 ui-lg-12" style="margin-top: 3%;text-align: center">
+
+                <h1 class="text ui-fluid" style="margin-top: 4%;font-weight: bold"><p:outputLabel value="#{publicTeacherAttendanceReport.loginUserSchoolId}"/>DAILY TEACHERS ATTENDANCE OF ANANDA COLLEGE <p:outputLabel value="#{publicTeacherAttendanceReport.currentDateTeacherAttendance}"/></h1>
+
+                <h:form id="form" >
+
+                    <p:growl autoUpdate="true" />
+
+                    <div class="ui-g-12" style="text-align: left">
+
+                        <div class="ui-g-4" style="margin-top: 5%">
+
+                            <div class="" >
+
+                                <p:outputLabel value="Total Registered Teachers : " style="font-weight: bold;" />
+                                <h:outputText value="#{publicTeacherAttendanceReport.totalRegisteredTeachers}" />
+                                <p:progressBar 
+                                    value="#{(publicTeacherAttendanceReport.totalRegisteredTeachers / 353) * 100}"
+                                    style="width: 215px;background-color: #ed1f64;  color: #d9ed1f"
+                                    labelTemplate="353"
+                                    />
+
+                            </div>
+
+                            <div style="margin-top: 3%" >
+
+                                <p:outputLabel value="Present Teachers Count : " style="font-weight: bold;" />
+                                <h:outputText value="#{publicTeacherAttendanceReport.presentTeachersCount}" />
+                                <p:progressBar 
+                                    value="#{publicTeacherAttendanceReport.attendBeforePercentage}"
+                                    style="width: 215px;background-color: #1fed48"
+                                    labelTemplate="#{publicTeacherAttendanceReport.presentTeachersCount}"
+                                    />
+                            </div>
+
+                            <div style="margin-top: 3%" >
+
+                                <p:outputLabel value="Absent Teachers Count : " style="font-weight: bold;" />
+                                <h:outputText value="#{publicTeacherAttendanceReport.absentTeachersCount }" />
+
+                                <p:progressBar 
+                                    value="#{(publicTeacherAttendanceReport.absentTeachersCount/publicTeacherAttendanceReport.totalRegisteredTeachers) * 100}"
+                                    style="width: 215px;background-color: #d9ed1f"
+                                    labelTemplate="#{publicTeacherAttendanceReport.totalRegisteredTeachers}"
+                                    />
+
+                            </div> 
+
+                            <div style="margin-top: 3%" >
+
+                                <p:outputLabel value="Attend Percentage KPI " style="font-weight: bold;" />
+                                <!--<h:outputText value="#{publicTeacherAttendanceReport.attendPercentageCount } %" />-->
+                                <p:progressBar 
+                                    value="#{publicTeacherAttendanceReport.attendPercentageCount}"
+                                    style="width: 215px;background-color: #ed901f"
+                                    labelTemplate="#{publicTeacherAttendanceReport.attendPercentageCount} %"
+                                    />
+                            </div> 
+
+                            <div style="margin-top: 3%" >
+
+                                <p:outputLabel value="Attend Before 7.20 AM : " style="font-weight: bold;" />
+                                <h:outputText value="#{publicTeacherAttendanceReport.attendBeforeSeventTwenty}" />
+                                <p:progressBar 
+                                    value="#{publicTeacherAttendanceReport.attendBeforePercentage}"
+                                    style="width: 215px;background-color: #ed291f"
+                                    labelTemplate="#{publicTeacherAttendanceReport.attendBeforeSeventTwenty}"
+                                    />
+                            </div> 
+
+                            <div style="margin-top: 3%" >
+
+                                <p:outputLabel value="Attend Before 7.20 AM KPI  " style="font-weight: bold;" />
+                                <!--<h:outputText value="#{publicTeacherAttendanceReport.attendBeforePercentage} %" />-->
+
+                                <p:progressBar 
+                                    value="#{publicTeacherAttendanceReport.attendBeforePercentage}"
+                                    style="width: 215px;background-color: #7f1fed"
+                                    labelTemplate="#{publicTeacherAttendanceReport.attendBeforePercentage} %"
+                                    />
+
+                            </div>
+
+                        </div>
+
+                        <div class="ui-g-8">
+
+                            <p:outputPanel>
+
+                                <p:panel style="margin-top: 1%;margin-left: -20%">
+
+                                    <p:chart type="bar" model="#{publicTeacherAttendanceReport.barModel}" style="height: 400px;" responsive="true"/>
+
+                                </p:panel>
+
+                            </p:outputPanel>
+
+                        </div>
+
+                    </div>
+
+                </h:form>
+
+            </div>
+
+            <div class="ui-g-12" >
+
+                <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                    <h4>Top 5 Daily Attendance Scores</h4>
+
+                    <p:dataTable rowIndexVar="rowIndex" id="datasTable" value="#{publicTeacherAttendanceReport.teachersTopFiveAttendanceMonthlyScores}"  var="record">
+
+                        <p:column class="" headerText="#" style="text-align: center;vertical-align: top;width: 3%">
+
+                            <h:outputText value="#{rowIndex + 1}" />
+
+                        </p:column>
+
+                        <p:column headerText="Name" style="text-align: center;vertical-align: top;">
+
+                            <h:outputText value="#{record.teacherId.generalUserProfileId.nameWithIn}" />
+
+                        </p:column>
+
+                        <p:column headerText="Attendance Score" style="text-align: center;vertical-align: top;">
+
+                            <h:outputText value="#{record.monthlyAttendanceScore}" />
+
+                        </p:column>
+
+                    </p:dataTable>
+
+                </div> 
+
+                <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                    <h4>Top 5 Daily Dedication Scores</h4>
+
+                    <p:dataTable id="datasTable2" rowIndexVar="rowIndex" value="#{publicTeacherAttendanceReport.teachersTopFiveDedicationMonthlyScores}"  var="record">
+
+                        <p:column headerText="#" style="text-align: center;vertical-align: top;width: 3%">
+
+                            <h:outputText value="#{rowIndex + 1}" />
+
+                        </p:column>
+
+                        <p:column headerText="Name" style="text-align: center;vertical-align: top;">
+
+                            <h:outputText value="#{record.teacherId.generalUserProfileId.nameWithIn}" />
+
+                        </p:column>
+
+                        <p:column headerText="Dedication Score" style="text-align: center;vertical-align: top;">
+
+                            <h:outputText value="#{record.monthlyDedicationScore}" />
+
+                        </p:column>
+
+                    </p:dataTable>
+
+                </div> 
+
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

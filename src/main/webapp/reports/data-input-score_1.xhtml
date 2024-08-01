@@ -1,0 +1,279 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Data Input Score</h1>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+                    <div class="ui-g-12" >
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{dataInputScore.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{dataInputScore.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{dataInputScore.getEducationZoneList}" render="zone" />
+
+                                <f:selectItems value="#{dataInputScore.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{dataInputScore.disabledFiledZone}" autoWidth="false" effect="slide" value="#{dataInputScore.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{dataInputScore.getEducationDivisionList}" render="division" />
+                                <f:selectItems value="#{dataInputScore.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{dataInputScore.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{dataInputScore.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{dataInputScore.getSchoolList}" render="school" />
+                                <f:selectItems value="#{dataInputScore.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{dataInputScore.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{dataInputScore.schoolName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{dataInputScore.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+
+                        <div class="ui-g-12 ui-md-2 ui-lg-2" ></div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-8" >
+
+                            <ui:repeat value="#{dataInputScore.searchingCriteriaList}" id="panel" var="cri" rendered="true" >
+
+                                <div class="ui-g-12 ui-md-3 ui-lg-3" >
+                                    <div class="ui-g-12" >
+                                        <div class="ui-g-12" style="font-weight: bold;">
+                                            <p:outputLabel value="#{cri.year_name}" id="yearName" style="font-weight: bold;" />  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12 ui-md-3 ui-lg-3" >
+                                    <div class="ui-g-12" >
+                                        <div class="ui-g-5" style="text-align: right" >
+                                            <p:selectBooleanCheckbox id="term1" value="#{cri.term1Selected}" /> 
+
+                                        </div>
+                                        <div class="ui-g-7 " >Term 1</div>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12 ui-md-3 ui-lg-3" >
+                                    <div class="ui-g-12" >
+                                        <div class="ui-g-5" style="text-align: right" >
+                                            <p:selectBooleanCheckbox id="term2" value="#{cri.term2Selected}" /> 
+
+                                        </div>
+                                        <div class="ui-g-7 " >Term 2</div>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12 ui-md-3 ui-lg-3" >
+                                    <div class="ui-g-12" >
+                                        <div class="ui-g-5" style="text-align: right" >
+                                            <p:selectBooleanCheckbox id="term3" value="#{cri.term3Selected}"  />
+
+                                        </div>
+                                        <div class="ui-g-7 " >Term 3</div>
+                                    </div>
+                                </div>
+
+
+                            </ui:repeat>
+                        </div>
+                        <div class="ui-g-12 ui-md-2 ui-lg-2" ></div>
+                        <div class="ui-g-12 ui-md-9 ui-lg-9" ></div>
+                        <div class="ui-g-12 ui-md-3 ui-lg-3" >
+
+                            <p:commandButton type="button" value="Search"  style="margin-bottom:10px;" styleClass="secondary">
+
+                                <f:ajax execute="@form" render="form:acc" listener="#{dataInputScore.loadListOfSchools()}" />
+                            </p:commandButton>
+                        </div>
+                        <div class="ui-g-4" ></div>
+                    </div>
+                    <div class="ui-g-12" >
+
+                        <p:dataTable var="car" id="acc" value="#{dataInputScore.scoreSchoolList}" stickyHeader="true">
+                            <p:column headerText="#" style="text-align: center;">
+                                <h:outputText value="#{car.order}" />
+                            </p:column>
+                            <p:column headerText="School">
+                                <p:commandLink value="#{car.sname}" update="form:dataEnteredClasses" oncomplete="PF('dataEnteredClassesDialog').show();" actionListener="#{dataInputScore.loadDataEnteredClasses(car.sid)}">
+                                </p:commandLink>
+                            </p:column>
+                            <p:column headerText="Data Input %" style="text-align: center;">
+                                <h:outputText value="#{car.marks_enter_perc}%" />
+                            </p:column>
+                            <p:column headerText="No of Teachers" style="text-align: center;">
+                                <h:outputText value="#{car.no_of_teachers}" />
+                            </p:column>
+                            <p:column headerText="No of Active Teachers" style="text-align: center;">
+                                <p:commandLink value="#{car.no_of_active}" update="form:teacherList" oncomplete="PF('teacherDialog').show();" actionListener="#{dataInputScore.loadTeacherList(car.sid)}">
+                                </p:commandLink>
+                            </p:column>
+                            <p:column headerText="Active Teacher %" style="text-align: center;">
+                                <h:outputText value="#{car.active_perc}%" />
+                            </p:column>
+                        </p:dataTable>
+
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-12 " style="text-align:  right!important;">
+
+
+                        <p:commandButton  value="Print" oncomplete="DataInputScorePrint()"   icon="ui-icon-print" styleClass="cyan-btn flat" style="margin-bottom:10px;height: 40px;width: auto;"   >
+                            <p:confirm header="Confirmation" message="Do You want to Print ?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+
+                    </div>
+                    <p:dialog header="Data Entered Classes"  widgetVar="dataEnteredClassesDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                        <p:outputPanel id="dataEnteredClasses"  style="text-align:left;width: 100%;border: none;">
+                            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" >
+                                    #{dataInputScore.selectedSchoolName}
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="padding-top: 20px;">
+
+
+                                    <ui:repeat var="year"  value="#{dataInputScore.yearList}" >
+
+                                        <div style="font-weight: bold;color: slategray;"> - #{year.yearName} </div>
+
+                                        <ui:repeat var="term"  value="#{year.termList}" >
+                                            <div style="font-weight: bold;padding-left: 20px;color: #EF6C00;">#{term.classNames} </div>
+
+                                            <ui:repeat var="grades"  value="#{term.classList}" >
+                                                <div style="font-weight: bold;padding-left: 40px;color: #3f51b5;">#{grades} </div>
+                                            </ui:repeat>
+                                        </ui:repeat>
+                                    </ui:repeat>
+
+                                </p:panelGrid>
+
+                            </p:scrollPanel>
+                        </p:outputPanel>
+                    </p:dialog>
+                    <p:dialog header="Teacher List" width="80%"  widgetVar="teacherDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                        <p:outputPanel id="teacherList"  style="text-align:left;width: 100%;border: none;">
+                            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" >
+                                    #{dataInputScore.selectedSchoolName}
+                                </p:panelGrid>
+                                <p:accordionPanel activeIndex="0" multiple="true"  >
+
+                                    <p:tab  title="Active Teachers" >
+
+                                        <p:dataTable var="lte"  id="allocatedList" value="#{dataInputScore.alloList}" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="true"  reflow="true" paginator="true" rows="100" rowsPerPageTemplate="100,200,300,400">
+
+                                            <f:facet name="{Exporters}" >
+                                                <div style="float:right;">
+                                                    <h:commandLink style="padding: 5px;">
+                                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+                                                        <p:dataExporter type="xls" target="allocatedList" fileName="Active Teacher List of #{dataInputScore.selectedSchoolName}" />
+                                                    </h:commandLink>
+
+                                                    <h:commandLink>
+                                                        <p:graphicImage name="/demo/images/pdf.jpg" width="24"/>
+                                                        <p:dataExporter type="pdf" target="allocatedList" fileName="Active Teacher List of #{dataInputScore.selectedSchoolName}"/>
+                                                    </h:commandLink>
+                                                </div>
+                                            </f:facet>
+
+                                            <p:column headerText="#" style="text-align: center;">
+                                                <h:outputText value="#{lte.no}" />
+                                            </p:column>
+
+                                            <p:column headerText="NIC" style="text-align: center" >
+                                                <h:outputText value="#{lte.nic}" />
+                                            </p:column>
+
+                                            <p:column headerText="Name"  >
+                                                <h:outputText value="#{lte.name}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+
+                                    </p:tab>
+                                    <p:tab  title="Inactive Teachers" >
+                                        <p:dataTable var="lte"  id="notallocatedList" value="#{dataInputScore.notAlloList}" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="true"  reflow="true" paginator="true" rows="100" rowsPerPageTemplate="100,200,300,400">
+
+                                            <f:facet name="{Exporters}" >
+                                                <div style="float:right;">
+                                                    <h:commandLink style="padding: 5px;">
+                                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+                                                        <p:dataExporter type="xls" target="notallocatedList" fileName="Inactive Teacher List of #{dataInputScore.selectedSchoolName}" />
+                                                    </h:commandLink>
+
+                                                    <h:commandLink>
+                                                        <p:graphicImage name="/demo/images/pdf.jpg" width="24"/>
+                                                        <p:dataExporter type="pdf" target="notallocatedList" fileName="Inactive Teacher List of #{dataInputScore.selectedSchoolName}"/>
+                                                    </h:commandLink>
+                                                </div>
+                                            </f:facet>
+
+                                            <p:column headerText="#" style="text-align: center;">
+                                                <h:outputText value="#{lte.no}" />
+                                            </p:column>
+
+                                            <p:column headerText="NIC" style="text-align: center" >
+                                                <h:outputText value="#{lte.nic}" />
+                                            </p:column>
+
+                                            <p:column headerText="Name"  >
+                                                <h:outputText value="#{lte.name}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </p:tab>
+
+                                </p:accordionPanel>
+
+                            </p:scrollPanel>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </h:form>
+
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+

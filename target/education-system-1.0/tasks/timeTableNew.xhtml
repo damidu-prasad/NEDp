@@ -1,0 +1,606 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/template.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    >
+    <ui:define name="content">
+        <div class="card ui-g ui-fluid">
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .ui-datatable-resizable tbody td{
+
+                    white-space: normal !important;
+                }
+
+                .tableHeaders{
+                    font-weight: bold;
+                    text-align: center;
+                    font-size: 1.3em;
+                    color: #ffffff;
+                    background-color: #2266e3;
+                    border-radius: 5px;
+                    width: 19%;
+                }
+
+                .tableData{
+                    font-weight: bold;
+                    text-align: center;
+                    height: 1.3em;
+                    border-bottom: 2px solid #cccccc;
+                    border-radius: 5px;
+                    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2);
+                    font-size: 1em;
+                }
+
+                .checkboxStyle{
+                    float: left;
+                }
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+
+                <h1>Time Table Setup</h1>
+
+                <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+
+                    <p:outputPanel style="text-align:left;width: 100%;border: none;">
+
+                        <h:form id="form">
+
+                            <p:panel style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) ">
+
+                                <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                    <h:panelGroup >
+
+                                        <p:outputLabel value="Year" for="teacherAttendYear" style="font-weight: bold;" />
+                                        
+                                        <p:selectOneMenu id="teacherAttendYear"  autoWidth="false" effect="slide" value="#{TimeTableManager.yearName}" style="width: 100%;" >
+
+                                            <f:selectItems value="#{TimeTableManager.yearList}" var="yearItems"/>
+
+                                        </p:selectOneMenu>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup >
+
+                                        <p:outputLabel value="Grade" for="teacherAttendGrade" style="font-weight: bold;" />
+
+                                        <p:selectOneMenu id="teacherAttendGrade"  autoWidth="false" effect="slide" value="#{TimeTableManager.selectedGrade}" style="width: 100%;" >
+
+                                            <f:ajax execute="@this" event="change" listener="#{TimeTableManager.loadClassList()}" render="teacherAttendClass" />
+
+                                            <f:selectItems value="#{TimeTableManager.gradeList}" var="gradeItems" />
+
+                                        </p:selectOneMenu>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup>
+
+                                        <p:outputLabel value="Class" for="teacherAttendClass" style="font-weight: bold;">
+
+                                            <p:selectOneMenu id="teacherAttendClass"  autoWidth="false" effect="slide" value="#{TimeTableManager.selectedClass}" style="width: 100%;" >
+
+                                                <f:ajax execute="@this" event="change" listener="#{TimeTableManager.testing()}" />
+
+                                                <f:selectItems value="#{TimeTableManager.classNameList}" var="classItems" />
+
+                                            </p:selectOneMenu>
+
+                                        </p:outputLabel>
+
+                                    </h:panelGroup>
+
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" style="width: 100%;margin: auto;text-align: center" styleClass="ui-panelgrid-blank form-group">
+
+                                    <h:panelGroup>
+
+                                        <p:commandButton  style="width: 20%" icon="ui-icon-search" value="View" ajax="true">
+
+                                            <p:ajax process="@form" update="formTwo" listener="#{TimeTableManager.loadTimeTable()}" />
+
+                                        </p:commandButton>
+
+                                    </h:panelGroup>
+
+                                </p:panelGrid>
+
+                            </p:panel>
+                        </h:form>
+
+                        <div class="ui-g-12" style="margin-top: 2%;box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) ">
+
+                            <p:panelGrid columns="2" style="width: 100%;margin: auto;text-align: end" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup>
+
+                                    <p:commandLink oncomplete="PF('timeTableSetup').show()" action="#{TimeTableManager.loadGradeSubjects(TimeTableManagerTimeTableManager.selectedClass)}">
+
+                                        CLICK HERE
+
+                                        <!--<p:commandButton type="button" style="width: 20%" styleClass="secondary flat" icon="ui-icon-add" value="ADD OR EDIT" />-->
+
+                                    </p:commandLink>
+
+                                </h:panelGroup>
+
+
+                            </p:panelGrid>
+
+                            <div class="ui-g-12">
+                                <h:form id="formTwo" class="ui-g-12">
+
+                                    <div class="ui-g-12">
+                                        <p:panelGrid id="timeTableView">
+                                            <table  class="ui-g-12 " border="0" cellpadding="10" cellspacing="2" width="100%">
+
+                                                <ui:repeat var="daysrow" value="#{TimeTableManager.timeTableHeaders}">
+
+                                                    <thead>
+                                                        <td></td>
+                                                        <td class="tableHeaders"><h:outputText value="#{daysrow.monday.name}" /></td>
+                                                        <td class="tableHeaders"><h:outputText value="#{daysrow.tuesday.name}" /></td>
+                                                        <td class="tableHeaders"><h:outputText value="#{daysrow.wednesday.name}" /></td>
+                                                        <td class="tableHeaders"><h:outputText value="#{daysrow.thursday.name}" /></td>
+                                                        <td class="tableHeaders"><h:outputText value="#{daysrow.friDay.name}" /></td>
+                                                    </thead>
+
+                                                </ui:repeat>
+
+                                                <tbody>
+
+                                                    <ui:repeat var="item" value="#{TimeTableManager.timeTable}" varStatus="loop">
+
+                                                        <tr>
+                                                            <td class="tableData" style=" box-shadow: none;font-weight: bold;text-align: center;font-size: 1.3em;color: #ffffff; background-color: #2266e3;">
+                                                                <h:outputText value="#{item.time_slot}" /></td>
+                                                            <td class="tableData">
+                                                                <p:selectBooleanCheckbox class="checkboxStyle"  value="#{item.period1.isSelected}" />
+                                                                <h:outputText value="#{item.period1.cellSubjectName}" /><br/>
+                                                                <h:outputText value="#{item.period1.cellSubjectTeacher}" />
+                                                            </td>
+                                                            <td class="tableData">
+                                                                <p:selectBooleanCheckbox class="checkboxStyle"  value="#{item.period2.isSelected}" />
+                                                                <h:outputText value="#{item.period2.cellSubjectName}" /><br/>
+                                                                <h:outputText value="#{item.period2.cellSubjectTeacher}" />
+                                                            </td>
+                                                            <td class="tableData">
+                                                                <p:selectBooleanCheckbox class="checkboxStyle"  value="#{item.period3.isSelected}" />
+                                                                <h:outputText value="#{item.period3.cellSubjectName}" /><br/>
+                                                                <h:outputText value="#{item.period3.cellSubjectTeacher}" />
+                                                            </td>
+                                                            <td class="tableData">
+                                                                <p:selectBooleanCheckbox class="checkboxStyle"  value="#{item.period4.isSelected}" />
+                                                                <h:outputText value="#{item.period4.cellSubjectName}" /><br/>
+                                                                <h:outputText value="#{item.period4.cellSubjectTeacher}" />
+                                                            </td>
+                                                            <td class="tableData">
+                                                                <p:selectBooleanCheckbox class="checkboxStyle"  value="#{item.period5.isSelected}" />
+                                                                <h:outputText value="#{item.period5.cellSubjectName}" /><br/>
+                                                                <h:outputText value="#{item.period5.cellSubjectTeacher}" />
+                                                            </td>
+
+                                                        </tr>
+
+                                                        <ui:fragment rendered="#{(loop.index + 1) % 5 == 0}">
+
+                                                            <td class="tableData" colspan="6" style="background-color:#2266e3 ;color:#ffffff;font-size: 2em ">
+                                                                <span style="margin: 0 10px;">I</span>
+                                                                <span style="margin: 0 10px;">N</span>
+                                                                <span style="margin: 0 10px;">T</span>
+                                                                <span style="margin: 0 10px;">E</span>
+                                                                <span style="margin: 0 10px;">R</span>
+                                                                <span style="margin: 0 10px;">V</span>
+                                                                <span style="margin: 0 10px;">A</span>
+                                                                <span style="margin: 0 10px;">L</span>
+                                                            </td>
+
+                                                        </ui:fragment>
+
+                                                    </ui:repeat>
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </p:panelGrid>
+
+                                    </div>
+
+                                </h:form>
+
+                            </div>
+
+                        </div>
+
+                    </p:outputPanel>
+
+                </p:scrollPanel>
+
+            </div>
+
+        </div>
+
+
+        <p:dialog header="Time Table Setup" width="50%" widgetVar="timeTableSetup" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+
+            <p:outputPanel id="timeTableSetupPanel" style="text-align:left;width: 100%;border: none;">
+
+                <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+
+                    <h:form id="formThree">
+                        <p:growl autoUpdate="true" />
+                        <p:panel style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) ">
+
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup>
+
+                                    <p:outputLabel value="Year :" for="attendYear" style="font-weight: bold;">
+                                        <p:inputText id="attendYear" style="width: 100%;" value="#{TimeTableManager.yearValue}" readonly="true"/>
+                                    </p:outputLabel>
+
+
+                                </h:panelGroup>
+
+                                <h:panelGroup>
+
+                                    <p:outputLabel value="Class :" for="selectedClass" style="font-weight: bold;">
+                                        <p:inputText id="selectedClass" style="width: 100%;" value="#{TimeTableManager.classId}" readonly="true"/>
+                                    </p:outputLabel>
+
+
+                                </h:panelGroup>
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                        <p:panel style="margin-top: 1%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3)">
+
+                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup>
+                                    <p:dataTable var="ts" value="#{TimeTableManager.selectedDataCellIds}" style="width: 100%"  id="timetablesetuptable" resizableColumns="false"  reflow="false" paginator="false" rows="8" rowsPerPageTemplate="200,400,600,800">
+                                        <p:column headerText="Date" style="text-align: center;vertical-align: top;font-weight: bold" >
+                                            <h:outputText value="#{ts.date}" /><br/>
+                                        </p:column>
+                                        <p:column headerText="Time Slot" style="text-align: center;vertical-align: top;font-weight: bold">
+                                            <h:outputText value="#{ts.timeSlot}" /><br/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGroup>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                        <p:panel style="margin-top: 1%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3)">
+
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup>
+
+                                    <p:outputLabel value="Subject:" for="assignSubject" style="font-weight: bold;" />
+
+                                    <p:selectOneMenu id="assignSubject"  autoWidth="false" effect="slide" value="#{TimeTableManager.gradeSubject}" style="width: 100%;" >
+
+                                        <f:ajax event="change" listener="#{TimeTableManager.loadSubjectTeacherNames()}" render="assignSubjectTeacher12" />
+
+                                        <f:selectItems value="#{TimeTableManager.gradeSubjectNameList}" />
+
+                                    </p:selectOneMenu>
+
+
+                                </h:panelGroup>
+
+                                <h:panelGroup>
+
+                                    <p:outputLabel value="Subject Teacher:" for="assignSubjectTeacher12" style="font-weight: bold;"/>
+
+                                    <p:selectOneMenu id="assignSubjectTeacher12" required="true" requiredMessage="Select Teacher !"  autoWidth="false" effect="slide" value="#{TimeTableManager.subjectTeacher}" style="width: 100%;" >
+
+                                        <f:selectItems value="#{TimeTableManager.subjectTeacherNameList}" />
+
+                                    </p:selectOneMenu>
+
+
+
+                                </h:panelGroup>
+
+                                <h:panelGroup></h:panelGroup>
+
+                                <h:panelGroup>
+
+                                    <p:panelGrid columns="1" style="width: 100%;text-align: end" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <p:commandButton type="button"  styleClass="blue-btn flat"  icon="ui-icon-plus" style="width: 50%" value="ADD">
+                                            <f:ajax execute="@form" render="loadtimetablesetup" listener="#{TimeTableManager.addSubjectAndTeacherToTimeTableSetup()}" />
+                                        </p:commandButton>
+
+                                    </p:panelGrid>
+
+                                </h:panelGroup>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                        <p:panel style="margin-top: 1%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3)">
+
+                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup>
+                                    <p:dataTable var="ts2" value="#{TimeTableManager.selectedDataCellsToUpdate}" style="width: 100%"  id="loadtimetablesetup" resizableColumns="false"  reflow="false" paginator="false" rows="8" rowsPerPageTemplate="200,400,600,800">
+                                        <!--                                        <p:column headerText="Time Slot" style="text-align: center;vertical-align: top;">
+                                                                                    <p:selectBooleanCheckbox value="#{ts2.isSelected}" />
+                                                                                </p:column>-->
+                                        <p:column headerText="Time Slot" style="text-align: center;vertical-align: top;">
+                                            <h:outputText value="#{ts2.daysPeriodId}" />
+                                        </p:column>
+                                        <p:column headerText="Subject" style="text-align: center;vertical-align: top;">
+                                            <h:outputText value="#{ts2.cellSubjectName}" />
+                                        </p:column>
+                                        <p:column headerText="Teacher" style="text-align: center;vertical-align: top;">
+                                            <h:outputText value="#{ts2.cellSubjectTeacher}" />
+                                        </p:column>
+
+                                    </p:dataTable>
+
+                                    <p:panelGrid columns="1" style="width: 100%;text-align: end" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                        <p:commandButton type="button" icon="ui-icon-delete" styleClass="secondary flat" style="width: 20%" value="CLEAR">
+
+                                            <f:ajax execute="@form" render="loadtimetablesetup" listener="#{TimeTableManager.clearSubjectAndTeacherFromTimeTableSetup()}" />
+
+                                        </p:commandButton>
+
+                                    </p:panelGrid>
+
+                                </h:panelGroup>
+
+                            </p:panelGrid>
+
+                        </p:panel> 
+
+                        <p:panel style="margin-top: 1%">
+
+                            <p:panelGrid columns="2" style="width: 100%;text-align: end" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup></h:panelGroup>
+
+                                <h:panelGroup>
+
+                                    <p:panelGrid columns="1" style="width: 100%;text-align: end" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                        <p:commandButton type="button" onclick="PF('timeTableSetup').hide()" icon="ui-icon-save" styleClass="green-btn flat" style="width: 50%" value="SAVE">
+
+                                            <f:ajax execute="@form" render="AssignClassTeachers" listener="#{TimeTableManager.saveSelectedTeacherToTimeTable()}" />
+
+                                        </p:commandButton>
+
+                                    </p:panelGrid>
+
+                                </h:panelGroup>
+
+                            </p:panelGrid>
+
+                        </p:panel>
+
+                        <!--</p:outputPanel>-->
+
+                    </h:form>
+
+                </p:scrollPanel>
+
+            </p:outputPanel>
+
+        </p:dialog>
+
+        <p:dialog header="Time Table Setup" width="100%" widgetVar="TeacherAttendance" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+
+            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+
+                <p:outputPanel style="text-align:left;width: 100%;border: none;">
+
+                    <p:panel style="text-align:left;width: 100%;border: none;">
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup>
+
+                                <!--<p:outputLabel value="Date :" for="datefield" style="font-weight: bold;">-->
+
+                                <p:calendar value="#{TimeTableManager.currentDateTeacherAttendance}" pattern="yyyy-MM-dd" readonly="true"/>
+
+                                <!--</p:outputLabel>-->
+
+                            </h:panelGroup>
+
+                            <h:panelGroup></h:panelGroup>
+
+                            <h:panelGroup style="text-align: end">
+
+                                <p:commandButton icon="ui-icon-edit" value="Add Manually Relief Teachers" styleClass="blue-btn flat" ></p:commandButton>
+
+                            </h:panelGroup>
+
+                        </p:panelGrid>
+
+                    </p:panel>
+
+                    <p:panel style="margin-top: 1%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+                        <p:panelGrid columns="1" style="width: 100%;" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup style="width: 100%; display: flex; justify-content: space-between;">
+
+                                <p:selectOneRadio  style="font-weight: bold;margin: auto;" value="#{TimeTableManager}">
+
+                                    <f:selectItem itemLabel="By Classes" itemValue="1"/>
+
+                                    <f:selectItem  itemLabel="By Teachers" itemValue="2"  />
+
+                                </p:selectOneRadio>
+
+                            </h:panelGroup>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="2" style="width: 100%;margin: auto;text-align: center" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup>
+
+                                <p:commandButton  style="width: 20%" value="View">
+
+                                    <f:ajax execute="@form" render="" listener="#{TimeTableManager.loadAbsentTeachersAndClassesToSetup()}" />
+
+                                </p:commandButton>
+
+                            </h:panelGroup>
+
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <p:panel style="margin-top: 1%;">
+                        <p:panelGrid columns="5" style="width: 100%;" styleClass="ui-panelgrid-blank form-group" rendered="">
+
+                            <h:panelGroup>
+
+
+                                <div class="card overview " style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+
+                                    <div class="overview-content clearfix" style="text-align: center; font-weight: bolder;font-size: 1.1em">
+                                        <span>Class 6 - 1</span> <br/>
+                                        <span>Absent Teachers</span> <br/>
+                                        <span>4</span> <br/>
+                                        <div style="margin-top: 1%">
+                                            <p:commandButton icon="ui-icon-edit" ></p:commandButton>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </h:panelGroup>
+
+                            <h:panelGroup>
+
+
+                                <div class="card overview " style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+
+                                    <div class="overview-content clearfix" style="text-align: center; font-weight: bolder;font-size: 1.1em">
+                                        <span>Class 6 - 1</span> <br/>
+                                        <span>Absent Teachers</span> <br/>
+                                        <span>4</span> <br/>
+                                        <div style="margin-top: 1%">
+                                            <p:commandButton icon="ui-icon-edit" ></p:commandButton>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </h:panelGroup>
+                            <h:panelGroup>
+
+
+                                <div class="card overview " style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+
+                                    <div class="overview-content clearfix" style="text-align: center; font-weight: bolder;font-size: 1.1em">
+                                        <span>Class 6 - 1</span> <br/>
+                                        <span>Absent Teachers</span> <br/>
+                                        <span>4</span> <br/>
+                                        <div style="margin-top: 1%">
+                                            <p:commandButton icon="ui-icon-edit" ></p:commandButton>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </h:panelGroup>
+
+                            <h:panelGroup>
+
+
+                                <div class="card overview " style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+
+                                    <div class="overview-content clearfix" style="text-align: center; font-weight: bolder;font-size: 1.1em">
+                                        <span>Class 6 - 1</span> <br/>
+                                        <span>Absent Teachers</span> <br/>
+                                        <span>4</span> <br/>
+                                        <div style="margin-top: 1%">
+                                            <p:commandButton icon="ui-icon-edit" ></p:commandButton>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </h:panelGroup>
+                            <h:panelGroup>
+
+
+                                <div class="card overview " style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">
+
+                                    <div class="overview-content clearfix" style="text-align: center; font-weight: bolder;font-size: 1.1em">
+                                        <span>Class 6 - 1</span> <br/>
+                                        <span>Absent Teachers</span> <br/>
+                                        <span>4</span> <br/>
+                                        <div style="margin-top: 1%">
+                                            <p:commandButton icon="ui-icon-edit" ></p:commandButton>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </h:panelGroup>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group"  rendered="#{loadViews.id eq '2'}">
+
+                            <h:panelGroup>
+                                <p:dataTable style="width: 100%" var="lte"  id="teachersetup" resizableColumns="false"  reflow="false" paginator="false" rows="8" rowsPerPageTemplate="200,400,600,800">
+
+                                    <p:column headerText="Class" style="text-align: center;vertical-align: top;">
+                                        <h:outputText value="1" />
+                                    </p:column>
+                                    <p:column headerText="Time Slot" style="text-align: center;vertical-align: top;">
+                                        <h:outputText value="Science" />
+                                    </p:column>
+                                    <p:column headerText="Subject" style="text-align: center;vertical-align: top;">
+                                        <h:outputText value="WMA WICKREMASINGHE" />
+                                    </p:column>
+                                    <p:column headerText="Re Assigned Subject" style="text-align: center;vertical-align: top;">
+                                        <h:outputText value="WMA WICKREMASINGHE" />
+                                    </p:column>
+                                    <p:column headerText="Re Assigned Teacher" style="text-align: center;vertical-align: top;">
+                                        <h:outputText value="WMA WICKREMASINGHE" />
+                                    </p:column>
+
+                                </p:dataTable> 
+                            </h:panelGroup>
+
+                        </p:panelGrid>
+
+                    </p:panel>
+
+                </p:outputPanel>
+
+            </p:scrollPanel>
+
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

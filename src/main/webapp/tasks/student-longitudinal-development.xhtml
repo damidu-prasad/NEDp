@@ -1,0 +1,455 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#03A9F4', '#E91E63', '#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBar() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinArea() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#FFC107', '#4CAF50'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBubble() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BubbleRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinZoom() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#03A9F4', '#E91E63', '#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77',
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    renderer: $.jqplot.PieRenderer,
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinDonut() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#03A9F4', '#E91E63', '#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77',
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    renderer: $.jqplot.DonutRenderer,
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBarAndLine() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#03A9F4', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 5,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinMeterGauge() {
+                this.cfg.title = '';
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 5,
+                    renderer: $.jqplot.MeterGaugeRenderer,
+                    rendererOptions: {
+                        shadow: false,
+                        min: 100,
+                        max: 800,
+                        intervals: [200, 300, 400, 500, 600, 700, 800],
+                        intervalColors: ['#03A9F4', '#E91E63', '#4CAF50', '#FFC107', '#03A9F4', '#E91E63', '#4CAF50']
+                    }
+                }
+            }
+
+            function skinMultiAxis() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label, .jqplot-x2axis-label {
+                color: #757575; 
+            }
+
+            table.jqplot-table-legend {
+                background-color: #ffffff;
+                color: #757575;
+                border-color: #bdbdbd;
+            }
+        </style>
+
+        <div class=" card ui-g ui-fluid">
+
+            <!--
+                        <style>
+            
+                            .cell {
+                                width: 200px;;
+                                border-left: 1px solid silver;
+                                border-top: 1px solid silver;
+                                border-bottom: 1px solid silver;
+                                border-right: 1px solid silver;
+                            }
+                        </style>-->
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Student Longitudinal Development</h1>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+                    <div class="ui-g-12" >
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{studentLongitudinalDevelopment.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{studentLongitudinalDevelopment.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{studentLongitudinalDevelopment.getEducationZoneList}" render="zone" />
+
+                                <f:selectItems value="#{studentLongitudinalDevelopment.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{studentLongitudinalDevelopment.disabledFiledZone}" autoWidth="false" effect="slide" value="#{studentLongitudinalDevelopment.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{studentLongitudinalDevelopment.getEducationDivisionList}" render="division" />
+                                <f:selectItems value="#{studentLongitudinalDevelopment.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{studentLongitudinalDevelopment.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{studentLongitudinalDevelopment.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{studentLongitudinalDevelopment.getSchoolList}" render="school" />
+                                <f:selectItems value="#{studentLongitudinalDevelopment.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{studentLongitudinalDevelopment.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{studentLongitudinalDevelopment.schoolName}" style="width: 100%;" >
+                                <f:ajax event="change" listener="#{studentLongitudinalDevelopment.getClasses}" render="classes" />
+                                <f:selectItems value="#{studentLongitudinalDevelopment.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                    </div>
+                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Year" for="year" style="font-weight: bold;" />
+                            <p:selectOneMenu id="year"  autoWidth="false" effect="slide" value="#{studentLongitudinalDevelopment.year}" style="width: 100%;" >
+
+                                <f:selectItems value="#{studentLongitudinalDevelopment.yearList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Class" for="classes" style="font-weight: bold;" />
+                            <p:selectOneMenu id="classes"  autoWidth="false" effect="slide" value="#{studentLongitudinalDevelopment.className}" style="width: 100%;" >
+
+                                <f:selectItems value="#{studentLongitudinalDevelopment.classNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:commandButton type="button" value="Search" icon="ui-icon-search" style="margin-bottom:10px;width: auto;" styleClass="secondary">
+
+                                <f:ajax execute="@form" render="form" listener="#{studentLongitudinalDevelopment.loadClassStudents()}" />
+                            </p:commandButton>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+
+                        <table cellpadding="2" csllspacing="2" width="100%">
+                            <tr >
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #0277BD;" rowspan="2" >#</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #0277BD;" rowspan="2" >Name</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #3399CC;" colspan="2">Overall</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #669999;" colspan="2">Last Year (#{studentLongitudinalDevelopment.lastYear})</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #21dfb8;" colspan="2">Selected Year (#{studentLongitudinalDevelopment.selectedYear})</td>
+                            </tr>
+                            <tr style="background-color: #0277BD;">
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #3399CC;" >AVG</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #3399CC;" >Coefficient of <br/> Variation</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #669999;" >AVG</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #669999;" >Coefficient of <br/> Variation</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #21dfb8;" >AVG</td>
+                                <td style="font-weight: bold;color: white;text-align: center;background-color: #21dfb8;" >Coefficient of <br/> Variation</td>
+
+                            </tr>
+                            <ui:repeat var="stu"  value="#{studentLongitudinalDevelopment.studentList}" >
+                                <tr style="color: black;">
+                                    <td style="background-color: #FFAB91;font-weight: bold;text-align: center;">#{stu.no}</td>
+                                    <td style="background-color: #f4f4f4;font-weight: bold;text-align: left;"><p:commandLink action="#{studentLongitudinalDevelopment.loadStudentDetails(stu.sid)}" value="#{stu.name}" update="form" oncomplete="PF('studentProfileDialog').show();"/> </td>
+                                    <td style="background-color: #f4f8fc;font-weight: bold;text-align: center;">#{stu.allAVGVal}</td>
+                                    <td style="background-color: #f4f4f4;font-weight: bold;text-align: center;">#{stu.allVarianceVal}</td>
+                                    <td style="background-color: #f4f8fc;font-weight: bold;text-align: center;">#{stu.lastYearAVGVal}</td>
+                                    <td style="background-color: #f4f4f4;font-weight: bold;text-align: center;">#{stu.lastYearVarianceVal}</td>
+                                    <td style="background-color: #f4f8fc;font-weight: bold;text-align: center;">#{stu.selectedYearAVGVal}</td>
+                                    <td style="background-color: #f4f4f4;font-weight: bold;text-align: center;">#{stu.selectedYearVarianceVal}</td>
+                                </tr>
+                            </ui:repeat>
+                        </table>
+
+                    </p:panelGrid>
+                    <p:dialog header="Student Profile" width="80%"  widgetVar="studentProfileDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                        <p:outputPanel id="studentProfile"  style="text-align:left;width: 100%;border: none;">
+                            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                                <p:accordionPanel activeIndex="0" multiple="true" id="acc" >
+
+                                    <p:tab  title="Personal Details" >
+                                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                            <h:panelGroup  >
+                                                <p:outputLabel value="Name : #{studentLongitudinalDevelopment.studentName}" style="font-weight: bold;" />
+
+                                            </h:panelGroup>
+                                            <h:panelGroup  >
+                                                <p:outputLabel value="Index No : #{studentLongitudinalDevelopment.indexNo}"  style="font-weight: bold;" />
+
+                                            </h:panelGroup>
+
+
+                                        </p:panelGrid>
+                                    </p:tab>
+                                    <p:tab  title="Academic Performance - Overall" >
+                                        <div class="card">
+                                            <p:chart id="bar" type="bar" responsive="true" model="#{studentLongitudinalDevelopment.barModel}" style="height:300px"/>
+                                        </div>
+                                    </p:tab>
+                                   
+                                </p:accordionPanel>
+
+                            </p:scrollPanel>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

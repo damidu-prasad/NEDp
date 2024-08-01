@@ -1,0 +1,757 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+
+    <ui:define name="head">
+
+        <style type="text/css">
+            .cars-datalist .text-column p:last-child{
+                color:#757575;
+            }
+
+            .cars-datalist .car-item i, .cars-datalist .car-item .car-details {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .cars-datalist .car-item button {
+                float: right;
+            }
+
+            .cars-datalist ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ui-car-display td:last-child {
+                font-weight: 700;
+            }
+
+            @media (max-width:640px) {
+                .cars-datalist .text-column {
+                    text-align: center;
+                }
+            }
+
+            .ui-autocomplete-input {
+                width: 100% !important;  
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Grade Class Manager</h1>
+                    <h:form id="form">
+                        <p:growl autoUpdate="true" />
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup >
+                                <p:outputLabel value="Province"  for="province" style="font-weight: bold;" />
+                                <p:selectOneMenu id="province" disabled="#{gradeClassManager.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{gradeClassManager.provinceName}"  style="width: 100%;" >
+                                    <f:ajax event="change" listener="#{gradeClassManager.getEducationZoneList}" render="zone" />
+
+                                    <f:selectItems value="#{gradeClassManager.provinceNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+
+                            <h:panelGroup >
+                                <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                                <p:selectOneMenu id="zone" disabled="#{gradeClassManager.disabledFiledZone}" autoWidth="false" effect="slide" value="#{gradeClassManager.zoneName}"  style="width: 100%;" >
+
+                                    <f:ajax event="change" listener="#{gradeClassManager.getEducationDivisionList}" render="division" />
+                                    <f:selectItems value="#{gradeClassManager.zoneNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+                            <h:panelGroup >
+                                <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                                <p:selectOneMenu id="division" disabled="#{gradeClassManager.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{gradeClassManager.divisionName}"  style="width: 100%;" >
+                                    <f:ajax event="change" listener="#{gradeClassManager.getSchoolList}" render="school" />
+                                    <f:selectItems value="#{gradeClassManager.divisionNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+                            <h:panelGroup >
+                                <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                                <p:selectOneMenu id="school" disabled="#{gradeClassManager.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{gradeClassManager.schoolName}" style="width: 100%;" >
+                                    <f:ajax event="change"  listener="#{gradeClassManager.loadGradeClasses}" render="form:ol_list form:al_list SubjectForm:grade_subject SubjectForm:stream_subject SubjectForm:olSobjects SubjectForm:alSobjects" />
+                                    <f:selectItems value="#{gradeClassManager.schoolNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+                        </p:panelGrid>
+
+                        <p:separator style="margin-bottom: 20px;margin-top: 20px;" />
+
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup >
+                                <p:outputLabel value="Select Year"  for="year" style="font-weight: bold;" />
+                                <p:selectOneMenu id="year"  autoWidth="false" effect="slide" value="#{gradeClassManager.year}"  style="width: 100%;" >
+                                    <f:ajax event="change"  listener="#{gradeClassManager.loadGradeClasses}" render="form:ol_list form:al_list" />
+                                    <f:selectItems value="#{gradeClassManager.yearList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+                            <h:panelGroup >
+                                <p:commandButton type="button" value="Manage Subjects" onclick="PF('ManageOLSubjects').show();"  icon="ui-icon-local-dining" styleClass="cyan-btn flat" style="margin-bottom:10px;width: 100%;">
+
+                                </p:commandButton>
+                            </h:panelGroup>
+                            <h:panelGroup >
+                                <p:commandButton type="button" value="Create New Class" onclick="PF('CreateNewGradeDLG').show();"  icon="ui-icon-plus" styleClass="green-btn flat" style="margin-bottom:10px;width: 100%;">
+
+                                </p:commandButton>
+                            </h:panelGroup>
+                            <p:dialog header="Manage Subjects" width="80%"  widgetVar="ManageOLSubjects" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+
+                                <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+
+                                    <p:outputPanel  style="text-align:left;width: 100%;border: none;">
+                                        <h:form id="SubjectForm">
+                                            <p:growl autoUpdate="true" />
+                                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <h:panelGroup >
+                                                    <p:outputLabel value="Select Grade"  for="grade_subject" style="font-weight: bold;" />
+                                                    <p:selectOneMenu id="grade_subject" required="true" requiredMessage="Select Grade !" autoWidth="false" effect="slide" value="#{gradeClassManager.gradeSubjectName}"  style="width: 100%;" >
+                                                        <f:ajax event="change" listener="#{gradeClassManager.getStreamsSubject}" render="streanPanelSubject" />
+                                                        <f:selectItems value="#{gradeClassManager.gradeSubjectNameList}" />
+
+                                                    </p:selectOneMenu>
+                                                </h:panelGroup>
+                                                <h:panelGroup >
+                                                    <p:outputLabel value="Enter Subject" for="subject"  style="font-weight: bold;" />
+                                                    <p:autoComplete id="subject"  style="width: 100%;" value="#{gradeClassManager.subjectName}" completeMethod="#{gradeClassManager.LoadSubjectsAutoComplete}" />
+
+
+                                                </h:panelGroup>
+                                                <h:panelGroup id="streanPanelSubject"><div style="display: #{gradeClassManager.visibleStreamSubject};">
+                                                        <p:outputLabel value="Select Stream"  for="stream_subject" style="font-weight: bold;" />
+                                                        <p:selectOneMenu id="stream_subject" autoWidth="false" effect="slide" value="#{gradeClassManager.streamSubjectName}"  style="width: 100%;" >
+
+                                                            <f:selectItems value="#{gradeClassManager.streamSubjectNameList}" />
+
+                                                        </p:selectOneMenu>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h:panelGroup style="text-align: right;">
+                                                    <p:commandButton  value="Save"   icon="ui-icon-save" styleClass="amber-btn" >
+                                                        <f:ajax  execute="@form" render="subject olSobjects alSobjects :form:subAlert" listener="#{gradeClassManager.SaveSubject}" />
+                                                        <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <p:dataGrid var="car" value="#{gradeClassManager.gradeArrayOL}" columns="3" layout="grid"
+                                                            rows="6" paginator="true" id="olSobjects"
+                                                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                            rowsPerPageTemplate="3,6,9,12,16">
+
+                                                    <f:facet name="header">
+                                                        O/L Subjects
+                                                    </f:facet>
+
+                                                    <p:panel header="#{car.gradeName}" style="text-align:left;">
+
+
+                                                        <ui:repeat var="gs"  value="#{car.gsa}" >
+                                                            <h:panelGrid columns="1" style="width:100%">
+                                                                <h:outputText value="#{gs.subjectName}" styleClass="Fs14 FontDosisMedium"/>
+                                                            </h:panelGrid>
+                                                        </ui:repeat>
+                                                        <!--                                    <p:commandButton icon="ui-icon-search" styleClass="AquaButton" update=":form:selectedCarDetail" oncomplete="PF('carDialog').show()">
+                                                                                                <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
+                                                                                            </p:commandButton>-->
+
+                                                    </p:panel>
+
+                                                </p:dataGrid>
+
+                                            </p:panelGrid>
+                                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                <p:dataGrid var="sub" value="#{gradeClassManager.gradeArrayAL}" columns="3" layout="grid"
+                                                            rows="6" paginator="true" id="alSobjects"
+                                                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                            rowsPerPageTemplate="3,6,9,12,16">
+
+                                                    <f:facet name="header">
+                                                        A/L Subjects
+                                                    </f:facet>
+
+                                                    <p:panel header="#{sub.gradeName}" style="text-align:left;">
+
+
+                                                        <ui:repeat var="gsal"  value="#{sub.gsa}" >
+                                                            <h:panelGrid columns="1" style="width:100%">
+                                                                <h:outputText value="#{gsal.subjectName}" styleClass="Fs14 FontDosisMedium"/>
+                                                            </h:panelGrid>
+                                                        </ui:repeat>
+                                                        <!--                                    <p:commandButton icon="ui-icon-search" styleClass="AquaButton" update=":form:selectedCarDetail" oncomplete="PF('carDialog').show()">
+                                                                                                <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
+                                                                                            </p:commandButton>-->
+
+                                                    </p:panel>
+
+                                                </p:dataGrid>
+
+                                            </p:panelGrid>
+
+                                        </h:form>
+
+                                    </p:outputPanel>
+                                </p:scrollPanel>
+                            </p:dialog>
+                            <p:dialog header="Success !" widgetVar="subject_error2" modal="true"  width="400" responsive="true">
+                                <p:panelGrid columns="1" id="subAlert" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <h:outputText style="color: tomato;font-weight: bold;" value="Thank You!"  />
+                                    <h:outputText id="subjectModalMsg2" value="You have introduced a new subject name to our database. The name should be verified by the authorities. We will contact you within 48 hours." />
+                                    <h:outputText style="color: tomato;font-weight: bold;" value="ස්තුතියි!"  />
+                                    <h:outputText  id="subjectModalMsg3" value="ඔබ විසින් අලුතෙන් විෂය නාමයක් අප දත්ත පදතිය වෙත හඳුන්වා දී තිබේ. මෙම නාමය බලයලත් නිලධාරීන් විසින් තහවුරු කල යුතුයි. පැය 48ක් යාමට මත්තෙන් මේ පිළිබඳව ඔබව දැනුවත් කිරීමට බලාපොරොත්තු වෙමු. " />
+                                    <p:commandButton style="width: auto;float: right;"  styleClass="secondary"  value="Ok" type="button" onclick="PF('subject_error2').hide();" />
+                                </p:panelGrid>
+                            </p:dialog>
+                            
+                            <p:dialog header="Create New Class" width="50%"  widgetVar="CreateNewGradeDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+
+                                <f:ajax event="close"  listener="#{gradeClassManager.loadGradeClasses}" render="form:ol_list form:al_list SubjectForm:grade_subject SubjectForm:stream_subject SubjectForm:olSobjects SubjectForm:alSobjects" />
+
+                                <p:outputPanel id="selectedCarDetail"  style="text-align:left;width: 100%;border: none;">
+                                    <h:form id="myform">
+                                        <p:growl autoUpdate="true" />
+                                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                            <h:panelGroup >
+                                                <p:outputLabel value="Select Grade"  for="grade" style="font-weight: bold;" />
+                                                <p:selectOneMenu id="grade" required="true" requiredMessage="Select Grade !" autoWidth="false" effect="slide" value="#{gradeClassManager.gradeName}"  style="width: 100%;" >
+                                                    <f:ajax event="change" listener="#{gradeClassManager.getStreams}" render="streanPanel" />
+                                                    <f:selectItems value="#{gradeClassManager.gradeNameList}" />
+
+                                                </p:selectOneMenu>
+                                            </h:panelGroup>
+                                            <h:panelGroup >
+                                                <p:outputLabel value="Enter Class Name" for="class_name"  style="font-weight: bold;" />
+                                                <p:inputText id="class_name" required="true" requiredMessage="Enter Class Name !" style="width: 100%;" value="#{gradeClassManager.gradeClassName}" />
+                                                <p:outputLabel value="Ex : A,B,C,D"   style="font-size: 12px;color: #bdbdbd;" />
+                                            </h:panelGroup>
+                                            <h:panelGroup id="streanPanel"><div style="display: #{gradeClassManager.visibleStream};">
+                                                    <p:outputLabel value="Select Stream"  for="stream" style="font-weight: bold;" />
+                                                    <p:selectOneMenu id="stream" autoWidth="false" effect="slide" value="#{gradeClassManager.streamName}"  style="width: 100%;" >
+
+                                                        <f:selectItems value="#{gradeClassManager.streamNameList}" />
+
+                                                    </p:selectOneMenu>
+                                                </div>
+                                            </h:panelGroup>
+
+
+                                            <h:panelGroup >
+                                                <p:commandButton  value="Save"   icon="ui-icon-save" styleClass="amber-btn" >
+                                                    <f:ajax execute="@form" render="myform" listener="#{gradeClassManager.SaveCreateNewClass}" />
+                                                    <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                                                </p:commandButton>
+                                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                </p:confirmDialog>
+
+                                            </h:panelGroup>
+
+                                        </p:panelGrid>
+                                    </h:form>
+
+                                </p:outputPanel>
+
+                            </p:dialog>
+
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                            <p:dataList value="#{gradeClassManager.gc_list_ol}" var="ol" id="ol_list"
+                                        type="unordered" itemType="none" paginator="true" rows="11" styleClass="cars-datalist">
+                                <f:facet name="header">
+                                    Manage Classes Up to O/L
+
+
+
+                                </f:facet>
+                                <div style="border-bottom: 1px solid #bdbdbd" class="clearfix car-item">
+                                    <i class="ui-icon ui-icon-account-balance" style="font-size:48px;color:#757575;margin:12px;"></i>
+                                    <div class="car-details">
+                                        <p style="font-weight: bold;">#{ol.gradeName}</p>
+                                        <table style="width: 100%">
+                                            <ui:repeat var="cl"  value="#{ol.gca}" >
+
+
+                                                <tr>
+                                                    <td style="padding-left: 10px;padding-right: 10px;font-weight: bold;">#{cl.classNames}</td>
+                                                    <td style="padding-left: 10px;padding-right: 10px;font-weight: bold;">
+                                                        <p:selectOneMenu   autoWidth="false" effect="slide" value="#{cl.teacherName}" onchange="callAutoLogin(this.value,#{cl.gcmID})" style="width: 100%;" >
+                                                            <f:selectItems value="#{cl.teacherNameList}" />
+
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                    <td style="padding-left: 5px;padding-right: 5px;font-weight: bold;">
+                                                        <p:commandButton icon="ui-icon-loupe" id="sb" styleClass="#{cl.btnColor}"   onclick="callAssignSubjectTeaches('#{cl.gcmID}')">
+                                                            <p:tooltip id="toolTipTrack1" for="sb" value="Manage Subject Teachers" trackMouse="true" />
+                                                        </p:commandButton>
+
+                                                    </td>
+                                                    <td style="padding-left: 5px;padding-right: 5px;font-weight: bold;">
+                                                        <p:commandButton icon="ui-icon-accessibility" id="bt" styleClass="teal-btn"   onclick="callAssignStudents('#{cl.gcmID}')">
+                                                            <p:tooltip id="toolTipTrack" for="bt" value="Manage Students" trackMouse="true" />
+                                                        </p:commandButton>
+
+                                                    </td>
+                                                    <td style="padding-left: 5px;padding-right: 5px;font-weight: bold;">
+                                                        <p:commandButton icon="ui-icon-close" id="del" styleClass="amber-btn"   onclick="callRemoveClass('#{cl.gcmID}')">
+                                                            <p:tooltip id="toolTipTrack2" for="del" value="Remove Class" trackMouse="true" />
+                                                        </p:commandButton>
+
+                                                    </td>
+
+                                                </tr>
+                                            </ui:repeat>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </p:dataList>
+                            <p:dataList value="#{gradeClassManager.gc_list_al}" var="al" id="al_list"
+                                        type="unordered" itemType="none" paginator="true" rows="7" styleClass="cars-datalist">
+                                <f:facet name="header">
+                                    Manage Classes Up to A/L
+                                </f:facet>
+                                <div style="border-bottom: 1px solid #bdbdbd" class="clearfix car-item">
+                                    <i class="ui-icon ui-icon-account-balance" style="font-size:48px;color:#757575;margin:6px;"></i>
+                                    <div class="car-details" >
+                                        <p style="font-weight: bold;">#{al.gradeName}</p>
+                                        <table style="width: 100%">
+
+                                            <ui:repeat var="cla"  value="#{al.gca}" varStatus="loop">
+
+                                                <tr >
+                                                    <td style="padding-left: 10px;padding-right: 10px;font-weight: bold;">#{cla.classNames}</td>
+                                                    <td style="padding-left: 10px;padding-right: 10px;font-weight: bold;">
+                                                        <p:selectOneMenu   autoWidth="false" effect="slide" value="#{cla.teacherName}" onchange="callAutoLogin(this.value,#{cla.gcmID})" style="width: 100%;" >
+<!--                                                            <f:ajax event="change" listener="#{gradeClassManager.SaveAssignTeacher(cla.gcmID,cla)}"   />-->
+                                                            <f:selectItems value="#{cla.teacherNameList}" />
+
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                    <td style="padding-left: 10px;padding-right: 10px;font-weight: bold;">
+                                                        <p:commandButton icon="ui-icon-loupe" id="sb1" styleClass="#{cla.btnColor}"   onclick="callAssignSubjectTeaches('#{cla.gcmID}')">
+                                                            <p:tooltip id="toolTipTrack3" for="sb1" value="Manage Subject Teachers" trackMouse="true" />
+                                                        </p:commandButton>
+
+                                                    </td>
+                                                    <td style="padding-left: 10px;padding-right: 10px;font-weight: bold;">
+                                                        <p:commandButton icon="ui-icon-accessibility" id="bt1" styleClass="teal-btn"   onclick="callAssignStudents('#{cla.gcmID}')">
+                                                            <p:tooltip id="toolTipTrack4" for="bt1" value="Manage Students" trackMouse="true" />
+                                                        </p:commandButton>
+
+                                                    </td>
+                                                    <td style="padding-left: 5px;padding-right: 5px;font-weight: bold;">
+                                                        <p:commandButton icon="ui-icon-close" id="del1" styleClass="amber-btn"   onclick="callRemoveClass('#{cla.gcmID}')">
+                                                            <p:tooltip id="toolTipTrack5" for="del1" value="Remove Class" trackMouse="true" />
+                                                        </p:commandButton>
+
+                                                    </td>
+
+                                                </tr>
+                                            </ui:repeat>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </p:dataList>
+
+
+                        </p:panelGrid>
+
+
+                        <p:dialog header="Assign Subject Teachers" width="50%"  widgetVar="AssignSubjectTearcherDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                                <p:outputPanel id="AssignSubjectTearcher"  style="text-align:left;width: 100%;border: none;">
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Class : #{gradeClassManager.assignSubjectModelClassName}"  style="font-weight: bold;" />
+
+                                        </h:panelGroup>
+
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Subject" for="subject_add" style="font-weight: bold;" />
+                                            <p:selectOneMenu id="subject_add" autoWidth="false" effect="slide" value="#{gradeClassManager.assignSubjectName}"  style="width: 100%;" >
+                                                <f:selectItems value="#{gradeClassManager.assignSubjectNameList}" />
+
+                                            </p:selectOneMenu>
+
+                                        </h:panelGroup>
+                                        <h:panelGroup >
+                                            <p:commandButton icon="ui-icon-add"  styleClass="green-btn" value="Assign Subject" onclick="callAssignNewSubject()"  >
+                                            </p:commandButton>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup >
+                                            <p:dataTable var="sub"  id="astTable" value="#{gradeClassManager.gradeclassSubjectTeacherList}" >
+
+                                                <p:column headerText="Subject" style="text-align: left;">
+                                                    <h:outputText value="#{sub.subjectName}" />
+                                                </p:column>
+                                                <p:column headerText="Subject Teacher" >
+                                                    <p:selectOneMenu   autoWidth="false" effect="slide" value="#{sub.teacherName}" onchange="callSaveSubjectTeacher(this.value,#{sub.subjectId})" style="width: 100%;" >
+                                                        <f:selectItems value="#{sub.teacherNameList}" />
+
+                                                    </p:selectOneMenu>
+                                                </p:column>
+                                                <p:column headerText="" style="width: 50px;text-align: center;">
+                                                    <p:commandButton icon="ui-icon-close"  styleClass="red-btn" onclick="callRemoveSubjects('#{sub.subjectId}')"  >
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:scrollPanel>
+                        </p:dialog>
+                        <p:dialog header="Class Students Manager" width="75%"  widgetVar="ClassStudentsDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                                <p:outputPanel id="classStudents"  style="text-align:left;width: 100%;border: none;">
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Class : #{gradeClassManager.classStudentsClassName}"  style="font-weight: bold;" />
+
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                        <h:panelGroup>
+                                            <h:form id="sourceForm">
+                                                <p:panel header="Add Students from a Source" >
+
+                                                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                                        <h:panelGroup >
+                                                            <p:outputLabel value="Year"  for="yearStudent" style="font-weight: bold;" />
+                                                            <p:selectOneMenu id="yearStudent"  autoWidth="false" effect="slide" value="#{gradeClassManager.studentYear}"  style="width: 100%;" >
+                                                                <f:selectItems value="#{gradeClassManager.studentYearList}" />
+
+                                                            </p:selectOneMenu>
+
+                                                        </h:panelGroup>
+                                                        <h:panelGroup >
+                                                            <p:outputLabel value="Class"  for="classStudent" style="font-weight: bold;" />
+                                                            <p:selectOneMenu id="classStudent"  autoWidth="false" effect="slide" value="#{gradeClassManager.studentClasses}"  style="width: 100%;" >
+                                                                <f:selectItems value="#{gradeClassManager.studentClassesList}" />
+
+                                                            </p:selectOneMenu>
+
+                                                        </h:panelGroup>
+                                                        <h:panelGroup >
+                                                            <p:commandButton   icon="ui-icon-search" styleClass="orange-btn" >
+                                                                <f:ajax  execute="@form" render="sourceStudents" listener="#{gradeClassManager.searchSourceStudents}" />
+                                                            </p:commandButton>
+                                                        </h:panelGroup>
+
+
+
+                                                    </p:panelGrid>
+                                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                                        <h:panelGroup >
+                                                            <p:scrollPanel mode="native" style="width:auto;height:50vh;border: none;">
+                                                                <p:dataTable var="st"  id="sourceStudents" value="#{gradeClassManager.sourceStudentsList}" >
+
+                                                                    <p:column headerText="Select Students" style="text-align: left;">
+
+                                                                        <div align="left" style="float:left;"><h:outputText value="#{st.no}. #{st.indexNo} - #{st.name}" /></div>
+                                                                        <div align="right" style="float:right">
+                                                                            <p:selectBooleanCheckbox rendered="true" value="#{st.selected}"  />
+
+                                                                        </div> 
+
+                                                                    </p:column>
+
+                                                                </p:dataTable>
+                                                            </p:scrollPanel>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup >
+
+                                                            <div class="ui-g-12" >
+                                                                <div class="ui-g-1" style="text-align: right" >
+
+                                                                    <p:selectBooleanCheckbox value="#{gradeClassManager.selectAllBox}"   >
+                                                                        <p:ajax event="change"  update="sourceStudents" listener="#{gradeClassManager.setSelectedCheckBoxes()}" />
+
+                                                                    </p:selectBooleanCheckbox>
+                                                                </div>
+                                                                <div class="ui-g-3 " >Select All</div>
+                                                                <div class="ui-g-8 " style="text-align: right;">
+                                                                    <p:commandButton type="button" value="Add"  icon="ui-icon-arrow-forward" styleClass="cyan-btn flat"  style="margin-bottom:10px;"  >
+                                                                        <f:ajax execute="@form" render=":form:classStudents" listener="#{gradeClassManager.addStudentsToClass}" />
+                                                                        <p:confirm header="Confirmation" message="Do You want to Add this Students?" icon="ui-icon-alert" />
+                                                                    </p:commandButton>
+                                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                    </p:confirmDialog>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </h:panelGroup>
+
+                                                    </p:panelGrid>
+                                                </p:panel>
+                                            </h:form>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup>
+                                            <h:form id="curForm">
+                                                <p:panel header="Current Students of the Selected Class" >
+
+                                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                                        <h:panelGroup >
+                                                            <p:scrollPanel mode="native" style="width:auto;height:60vh;border: none;">
+                                                                <p:dataTable var="cur"  id="curStudents" value="#{gradeClassManager.currentStudentsList}" >
+
+
+                                                                    <p:column headerText="Current Students" style="text-align: left;">
+
+                                                                        <div align="left" style="float:left;"><h:outputText value="#{cur.no}. #{cur.indexNo} - #{cur.name}" /></div>
+                                                                        <div align="right" style="float:right">
+                                                                            <p:selectBooleanCheckbox rendered="true" value="#{cur.selected}"  />
+
+                                                                        </div> 
+
+                                                                    </p:column>
+
+                                                                </p:dataTable>
+                                                            </p:scrollPanel>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup >
+
+                                                            <div class="ui-g-12" >
+                                                                <div class="ui-g-1" style="text-align: right" >
+
+                                                                    <p:selectBooleanCheckbox value="#{gradeClassManager.selectAllBoxCur}"   >
+                                                                        <p:ajax event="change"  update="curStudents" listener="#{gradeClassManager.setSelectedCheckBoxesCur()}" />
+
+                                                                    </p:selectBooleanCheckbox>
+                                                                </div>
+                                                                <div class="ui-g-3 " >Select All</div>
+                                                                <div class="ui-g-8 " style="text-align: right;">
+                                                                    <p:commandButton type="button" value="Remove"  icon="ui-icon-close" styleClass="red-btn flat"  style="margin-bottom:10px;"  >
+                                                                        <f:ajax execute="@form" render=":form:classStudents" listener="#{gradeClassManager.RemoveStudents}" />
+                                                                        <p:confirm header="Confirmation" message="Do You want to Remove selected Students?" icon="ui-icon-alert" />
+                                                                    </p:commandButton>
+                                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                                    </p:confirmDialog>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </h:panelGroup>
+
+                                                    </p:panelGrid>
+                                                </p:panel>
+
+                                            </h:form>
+                                        </h:panelGroup>
+                                        <!--                                        <h:panelGroup >
+                                                                                    <p:scrollPanel mode="native" style="width:auto;height:50vh;border: none;">
+                                                                                        <p:dataTable var="cur"  id="curStudents" value="#{gradeClassManager.currentStudentsList}" >
+                                        
+                                                                                            <f:facet name="header">
+                                                                                                Current Students
+                                                                                            </f:facet>
+                                        
+                                                                                            <p:column headerText="Name" style="text-align: left;">
+                                        
+                                                                                                <div align="left" style="float:left;"><h:outputText value="#{cur.no}. #{cur.indexNo} - #{cur.name}" /></div>
+                                                                                                <div align="right" style="float:right">
+                                                                                                    <p:selectBooleanCheckbox rendered="true" value="#{cur.selected}"  />
+                                        
+                                                                                                </div> 
+                                        
+                                                                                                                                                    <div align="right" style="float:right">
+                                                                                                    <p:commandButton icon="ui-icon-close"  styleClass="red-btn" onclick="callremoveStudents('#{cur.gcsId}', ' #{cur.indexNo} - #{cur.name}')"  >
+                                                                                                    </p:commandButton>
+                                            
+                                                                                                </div> 
+                                        
+                                                                                            </p:column>
+                                        
+                                                                                        </p:dataTable>
+                                                                                    </p:scrollPanel>
+                                                                                </h:panelGroup>-->
+
+
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:scrollPanel>
+                        </p:dialog>
+
+                        <p:dialog header="Reson for Removing"   widgetVar="reasonDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="true" responsive="true">
+                            <p:outputPanel  style="text-align:left;width: 100%;border: none;" id="reasonPanel">
+                                <h:form id="reasonForm">
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+
+                                        <h:panelGroup >
+                                            <p:outputLabel value="#{gradeClassManager.selectedStudentsforRemoveName}" style="font-weight: bold;width: 100%;" />
+                                        </h:panelGroup>
+                                        <h:panelGroup >
+                                            <p:outputLabel value="Select Reason"  for="reason" style="font-weight: bold;width: 100%;" />
+                                            <p:selectOneMenu id="reason" autoWidth="false" effect="slide" value="#{gradeClassManager.reasonName}"  style="width: 100%;" >
+
+                                                <f:selectItems value="#{gradeClassManager.reasonNameList}" />
+
+                                            </p:selectOneMenu>
+
+                                        </h:panelGroup>
+                                        <h:panelGroup style="float: right;">
+                                            <p:commandButton  value="Remove"   icon="ui-icon-close" styleClass="red-btn" >
+                                                <f:ajax  execute="@form" render=":form:classStudents" listener="#{gradeClassManager.removeStudents}" />
+                                                <p:confirm header="Confirmation" message="Do You want to Remove this Student from this Class?" icon="ui-icon-alert" />
+                                            </p:commandButton>
+                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                            </p:confirmDialog>
+
+                                        </h:panelGroup>
+
+                                    </p:panelGrid>
+                                </h:form>
+                            </p:outputPanel>
+                        </p:dialog>
+                        <p:dialog header="Remove Class !" widgetVar="del_class_error" modal="true"  width="400" responsive="true">
+                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <h:outputText style="color: tomato;font-weight: bold;" value="Cofirmation !"  />
+                                <h:outputText value="All the data belongs to this class will be removed.Do You want to continue?"  />
+
+
+                                <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:commandButton style="width: auto;float: left;"  styleClass="secondary"  value="Cancel" type="button" onclick="PF('del_class_error').hide();" />
+                                    <h:form id="dform">
+                                        <p:commandButton style="width: auto;float: right;"  styleClass="red-button"  value="Remove" type="button" oncomplete="PF('del_class_error').hide();" >
+                                            <f:ajax  execute="@form" render=":form:ol_list :form:al_list"  listener="#{gradeClassManager.removeClass}" />
+
+                                        </p:commandButton>
+                                    </h:form>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:dialog> 
+                        <p:dialog header="Remove Subject !" widgetVar="del_subject_error" modal="true"  width="400" responsive="true">
+                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <h:outputText style="color: tomato;font-weight: bold;" value="Cofirmation !"  />
+                                <h:outputText value="All the marks belongs to this subjects will be removed for this year.Do You want to continue?"  />
+
+
+                                <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:commandButton style="width: auto;float: left;"  styleClass="secondary"  value="Cancel" type="button" onclick="PF('del_subject_error').hide();" />
+                                    <h:form id="dlform">
+                                        <p:commandButton style="width: auto;float: right;"  styleClass="red-button"  value="Remove" type="button" oncomplete="PF('del_subject_error').hide();" >
+                                            <f:ajax  execute="@form" render=":form:astTable :form:SubjectForm:olSobjects :form:SubjectForm:alSobjects"  listener="#{gradeClassManager.removeSubject}" />
+
+                                        </p:commandButton>
+                                    </h:form>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </p:dialog> 
+
+
+
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+        <h:form>
+            <p:remoteCommand  name="remoteAssignTeacherCmd" actionListener="#{gradeClassManager.SaveAssignTeacher()}" ></p:remoteCommand>
+        </h:form>
+        <h:form>
+            <p:remoteCommand  name="remoteAssignSubjectTeacherCmd" actionListener="#{gradeClassManager.SaveSubjectTeacher()}" ></p:remoteCommand>
+        </h:form>
+        <h:form>
+            <p:remoteCommand  name="remoteLoadSubjectTeachersCmd" value="" update=":form:AssignSubjectTearcher" actionListener="#{gradeClassManager.loadAssignSubjectTeacher()}" ></p:remoteCommand>
+        </h:form>
+        <h:form>
+            <p:remoteCommand  name="remoteLoadCurrentStudents" value="" update=":form:classStudents" actionListener="#{gradeClassManager.loadCurrentStudents()}" ></p:remoteCommand>
+        </h:form>
+        <h:form>
+            <p:remoteCommand  name="remoteRemoveClass" value=""  actionListener="#{gradeClassManager.removeClassConfirmation()}" ></p:remoteCommand>
+        </h:form>
+        <h:form>
+            <p:remoteCommand  name="remoteRemoveSubjects" value=""  actionListener="#{gradeClassManager.removeSubjectConfirmation()}" ></p:remoteCommand>
+        </h:form>
+        <h:form>
+            <p:remoteCommand  name="remoteAssignSubjectToClass" value=""  actionListener="#{gradeClassManager.assignSubjectToClass()}" ></p:remoteCommand>
+        </h:form>
+        <h:form>
+            <p:remoteCommand  name="remoteRemoveStudents" value="" update=":form:reasonPanel" actionListener="#{gradeClassManager.removeStudentsLoadReason()}" ></p:remoteCommand>
+        </h:form>
+
+        <script>
+
+            function callAutoLogin(teacherID, gcmID) {
+                remoteAssignTeacherCmd([{name: 'teacherID', value: teacherID}, {name: 'gcmID', value: gcmID}]);
+            }
+
+            function callSaveSubjectTeacher(teacherID, subID) {
+                remoteAssignSubjectTeacherCmd([{name: 'teacherID', value: teacherID}, {name: 'subID', value: subID}]);
+            }
+
+            function callAssignSubjectTeaches(gcs_id) {
+                remoteLoadSubjectTeachersCmd([{name: 'gcs_id', value: gcs_id}]);
+            }
+            function callAssignStudents(gcs_id) {
+                remoteLoadCurrentStudents([{name: 'gcs_id', value: gcs_id}]);
+            }
+            function callRemoveClass(gcs_id) {
+                remoteRemoveClass([{name: 'gcs_id', value: gcs_id}]);
+            }
+            function callremoveStudents(gcs_id, name) {
+                remoteRemoveStudents([{name: 'gcs_id', value: gcs_id}, {name: 'name', value: name}]);
+            }
+            function callRemoveSubjects(sub_id) {
+                remoteRemoveSubjects([{name: 'sub_id', value: sub_id}]);
+            }
+            function callAssignNewSubject() {
+
+                var sub_id = document.getElementById('form:subject_add_input').value;
+
+                remoteAssignSubjectToClass([{name: 'sub_id', value: sub_id}]);
+            }
+        </script>
+    </ui:define>
+
+</ui:composition>

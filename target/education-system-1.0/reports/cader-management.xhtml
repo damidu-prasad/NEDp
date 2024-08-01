@@ -1,0 +1,502 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#03A9F4', '#E91E63', '#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBar() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinArea() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#FFC107', '#4CAF50'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBubble() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BubbleRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinZoom() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#03A9F4', '#E91E63', '#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77',
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    renderer: $.jqplot.PieRenderer,
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinDonut() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#03A9F4', '#E91E63', '#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#666F77',
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    renderer: $.jqplot.DonutRenderer,
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinBarAndLine() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#03A9F4', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 5,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinMeterGauge() {
+                this.cfg.title = '';
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 5,
+                    renderer: $.jqplot.MeterGaugeRenderer,
+                    rendererOptions: {
+                        shadow: false,
+                        min: 100,
+                        max: 800,
+                        intervals: [200, 300, 400, 500, 600, 700, 800],
+                        intervalColors: ['#03A9F4', '#E91E63', '#4CAF50', '#FFC107', '#03A9F4', '#E91E63', '#4CAF50']
+                    }
+                }
+            }
+
+            function skinMultiAxis() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#4CAF50', '#FFC107'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-xaxis-label, .jqplot-yaxis-label, .jqplot-y2axis-label, .jqplot-x2axis-label {
+                color: #757575; 
+            }
+
+            table.jqplot-table-legend {
+                background-color: #ffffff;
+                color: #757575;
+                border-color: #bdbdbd;
+            }
+        </style>
+
+        <div class=" card ui-g ui-fluid">
+
+            <!--
+                        <style>
+            
+                            .cell {
+                                width: 200px;;
+                                border-left: 1px solid silver;
+                                border-top: 1px solid silver;
+                                border-bottom: 1px solid silver;
+                                border-right: 1px solid silver;
+                            }
+                        </style>-->
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Cader Management</h1>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+                    <div class="ui-g-12" >
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{caderManagement.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{caderManagement.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{caderManagement.getEducationZoneList}" render="zone" />
+
+                                <f:selectItems value="#{caderManagement.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{caderManagement.disabledFiledZone}" autoWidth="false" effect="slide" value="#{caderManagement.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{caderManagement.getEducationDivisionList}" render="division" />
+                                <f:selectItems value="#{caderManagement.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{caderManagement.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{caderManagement.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{caderManagement.getSchoolList}" render="school" />
+                                <f:selectItems value="#{caderManagement.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{caderManagement.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{caderManagement.schoolName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{caderManagement.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                    </div>
+                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Year" for="year" style="font-weight: bold;" />
+                            <p:selectOneMenu id="year"  autoWidth="false" effect="slide" value="#{caderManagement.year}" style="width: 100%;" >
+
+                                <f:selectItems value="#{caderManagement.yearList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <h:panelGroup >
+                            <p:commandButton type="button" value="Search" icon="ui-icon-search" style="margin-bottom:10px;width: auto;" styleClass="secondary">
+
+                                <f:ajax execute="@form" render="form" listener="#{caderManagement.loadCaderList()}" />
+                            </p:commandButton>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+
+                        <p:dataTable var="lte"  id="datasTable" value="#{caderManagement.teacherList}" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="true"  reflow="true" paginator="true" rows="100" rowsPerPageTemplate="100,200,300,400">
+
+                            <f:facet name="{Exporters}" >
+                                <div style="float:right;">
+                                    <h:commandLink style="padding: 5px;">
+                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+                                        <p:dataExporter type="xls" target="datasTable" fileName="Cader Management" />
+                                    </h:commandLink>
+
+                                    <h:commandLink>
+                                        <p:graphicImage name="/demo/images/pdf.jpg" width="24"/>
+                                        <p:dataExporter type="pdf" target="datasTable" fileName="Cader Management"/>
+                                    </h:commandLink>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="#" style="text-align: center;">
+                                <h:outputText value="#{lte.no}" />
+                            </p:column>
+                            <p:column headerText="School" >
+                                <p:commandLink value="#{lte.schoolName}" update="@form" oncomplete="PF('studentProfileDialog').show();">
+                                    <f:setPropertyActionListener value="#{lte}" target="#{caderManagement.selectedSchool}" />
+                                </p:commandLink>
+
+                            </p:column>
+                            <p:column headerText="Total Teachers" style="text-align: center" >
+                                <h:outputText value="#{lte.totalTeachers}" />
+                            </p:column>
+
+                            <p:column headerText="Allocated Count" style="text-align: center" >
+                                <h:outputText value="#{lte.allocatedTeachers}" />
+                            </p:column>
+
+                            <p:column headerText="Not Allocated Count" style="text-align: center" >
+                                <h:outputText value="#{lte.notAllocatedTeachers}" />
+                            </p:column>
+
+
+                        </p:dataTable>
+
+
+
+                    </p:panelGrid>
+                    <p:dialog header="Teacher List" width="80%"  widgetVar="studentProfileDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                        <p:outputPanel id="teacherList"  style="text-align:left;width: 100%;border: none;">
+                            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                                <p:accordionPanel activeIndex="0" multiple="true" id="acc" >
+
+                                    <p:tab  title="Allocated Teachers" >
+
+                                        <p:dataTable var="lte"  id="allocatedList" value="#{caderManagement.selectedSchool.alloList}" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="true"  reflow="true" paginator="true" rows="100" rowsPerPageTemplate="100,200,300,400">
+
+                                            <f:facet name="{Exporters}" >
+                                                <div style="float:right;">
+                                                    <h:commandLink style="padding: 5px;">
+                                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+                                                        <p:dataExporter type="xls" target="allocatedList" fileName="Allocated Teacher List of #{caderManagement.selectedSchool.schoolName}" />
+                                                    </h:commandLink>
+
+                                                    <h:commandLink>
+                                                        <p:graphicImage name="/demo/images/pdf.jpg" width="24"/>
+                                                        <p:dataExporter type="pdf" target="allocatedList" fileName="Allocated Teacher List of #{caderManagement.selectedSchool.schoolName}"/>
+                                                    </h:commandLink>
+                                                </div>
+                                            </f:facet>
+
+                                            <p:column headerText="#" style="text-align: center;">
+                                                <h:outputText value="#{lte.no}" />
+                                            </p:column>
+
+                                            <p:column headerText="NIC" style="text-align: center" >
+                                                <h:outputText value="#{lte.nic}" />
+                                            </p:column>
+
+                                            <p:column headerText="Name"  >
+                                                <h:outputText value="#{lte.name}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+
+                                    </p:tab>
+                                    <p:tab  title="Not Allocated Teachers" >
+                                        <p:dataTable var="lte"  id="notallocatedList" value="#{caderManagement.selectedSchool.notAlloList}" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="true"  reflow="true" paginator="true" rows="100" rowsPerPageTemplate="100,200,300,400">
+
+                                            <f:facet name="{Exporters}" >
+                                                <div style="float:right;">
+                                                    <h:commandLink style="padding: 5px;">
+                                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+                                                        <p:dataExporter type="xls" target="notallocatedList" fileName="Not Allocated Teacher List of #{caderManagement.selectedSchool.schoolName}" />
+                                                    </h:commandLink>
+
+                                                    <h:commandLink>
+                                                        <p:graphicImage name="/demo/images/pdf.jpg" width="24"/>
+                                                        <p:dataExporter type="pdf" target="notallocatedList" fileName="Not Allocated Teacher List of #{caderManagement.selectedSchool.schoolName}"/>
+                                                    </h:commandLink>
+                                                </div>
+                                            </f:facet>
+
+                                            <p:column headerText="#" style="text-align: center;">
+                                                <h:outputText value="#{lte.no}" />
+                                            </p:column>
+
+                                            <p:column headerText="NIC" style="text-align: center" >
+                                                <h:outputText value="#{lte.nic}" />
+                                            </p:column>
+
+                                            <p:column headerText="Name"  >
+                                                <h:outputText value="#{lte.name}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </p:tab>
+
+                                </p:accordionPanel>
+
+                            </p:scrollPanel>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

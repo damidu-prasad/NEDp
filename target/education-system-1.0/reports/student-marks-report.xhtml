@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+            <style>
+
+                .cell {
+                    width: 200px;;
+                    border-left: 1px solid silver;
+                    border-top: 1px solid silver;
+                    border-bottom: 1px solid silver;
+                    border-right: 1px solid silver;
+                }
+                .rotated {
+                    writing-mode: tb-rl;
+                    transform: rotate(-180deg);
+                }
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Student Marks</h1>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+                    <div class="ui-g-12" >
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{studentMarksReport.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{studentMarksReport.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{studentMarksReport.getEducationZoneList}" render="zone" />
+
+                                <f:selectItems value="#{studentMarksReport.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{studentMarksReport.disabledFiledZone}" autoWidth="false" effect="slide" value="#{studentMarksReport.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{studentMarksReport.getEducationDivisionList}" render="division" />
+                                <f:selectItems value="#{studentMarksReport.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{studentMarksReport.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{studentMarksReport.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{studentMarksReport.getSchoolList}" render="school" />
+                                <f:selectItems value="#{studentMarksReport.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{studentMarksReport.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{studentMarksReport.schoolName}" style="width: 100%;" >
+                                <f:ajax event="change" listener="#{studentMarksReport.getClasses}" render="classes" />
+                                <f:selectItems value="#{studentMarksReport.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                    </div>
+                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Year" for="year" style="font-weight: bold;" />
+                            <p:selectOneMenu id="year"  autoWidth="false" effect="slide" value="#{studentMarksReport.year}" style="width: 100%;" >
+
+                                <f:selectItems value="#{studentMarksReport.yearList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Term" for="term" style="font-weight: bold;" />
+                            <p:selectOneMenu id="term"  autoWidth="false" effect="slide" value="#{studentMarksReport.termName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{studentMarksReport.termNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Class" for="classes" style="font-weight: bold;" />
+                            <p:selectOneMenu id="classes"  autoWidth="false" effect="slide" value="#{studentMarksReport.className}" style="width: 100%;" >
+
+                                <f:selectItems value="#{studentMarksReport.classNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <div class="ui-g-12" >
+                        <div class="ui-g-12 ui-md-6 ui-lg-9" ></div>
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-3" >
+
+                            <p:commandButton type="button" value="Search" icon="ui-icon-search" style="margin-bottom:10px;" styleClass="secondary">
+
+                                <f:ajax execute="@form" render="form" listener="#{studentMarksReport.loadStudentMarksReport()}" />
+                            </p:commandButton>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12" style="overflow-x: scroll;" >
+
+                        <table cellspacing="0" cellpadding="3" border="1" >
+                            <ui:repeat var="cla"  value="#{studentMarksReport.studentList}" varStatus="loop">
+                                <tr>
+                                    <ui:repeat var="val"  value="#{cla.name}" varStatus="loop">
+
+                                        <td style="background-color: ${val.color} ; text-align: ${val.align}; font-weight:${val.weight}; " ><p class="#{val.horalignment}"> #{val.marks}</p></td>
+                                    </ui:repeat>
+                                </tr>
+                            </ui:repeat>
+                        </table>
+
+
+
+                    </div>
+                    <div class="ui-g-12" style="padding-top: 20px;" >
+                        <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" actionListener="#{studentMarksReport.lOBExport2Excel()}" style="width: auto;" styleClass="blue-grey-btn flat" icon="ui-icon-arrow-downward">
+                            <p:fileDownload value="#{studentMarksReport.downloadExcel}" />
+                        </p:commandButton>
+
+
+                    </div>
+                </h:form>
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

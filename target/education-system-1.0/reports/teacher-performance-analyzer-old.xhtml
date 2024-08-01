@@ -1,0 +1,311 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .teacherTab {
+                    background-color: lightslategrey !important;
+                    font-weight: bold;
+                }
+                .subjectTab {
+                    background-color: #00bcd4 !important;
+
+                }
+                .defaultTab{
+
+                    background-color: #d6d5d5 !important;
+                    color: black !important;
+
+                }
+
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Teacher Performance Analyzer</h1>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Year" for="year" style="font-weight: bold;" />
+                            <p:selectOneMenu id="year"  autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.year}" style="width: 100%;" >
+
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.yearList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Term" for="term" style="font-weight: bold;" />
+                            <p:selectOneMenu id="term"  autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.termName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.termNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{teacherPerformanceAnalyzerOld.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{teacherPerformanceAnalyzerOld.getEducationZoneList}" render="zone division school teacher" />
+
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{teacherPerformanceAnalyzerOld.disabledFiledZone}" autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{teacherPerformanceAnalyzerOld.getEducationDivisionList}" render="division school teacher" />
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{teacherPerformanceAnalyzerOld.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{teacherPerformanceAnalyzerOld.getSchoolList}" render="school teacher" />
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{teacherPerformanceAnalyzerOld.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.schoolName}" style="width: 100%;" >
+                                <f:ajax event="change" listener="#{teacherPerformanceAnalyzerOld.getTeachersList}" render="teacher" />
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Teacher" for="teacher" style="font-weight: bold;" />
+                            <p:selectOneMenu id="teacher"  autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.teacherName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.teacherNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Grade" for="grade" style="font-weight: bold;" />
+                            <p:selectOneMenu id="grade"  autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.gradeName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.gradeNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Subject" for="subject" style="font-weight: bold;" />
+                            <p:selectOneMenu id="subject"  autoWidth="false" effect="slide" value="#{teacherPerformanceAnalyzerOld.subjectName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{teacherPerformanceAnalyzerOld.subjectNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="float: right;">
+
+                        <p:commandButton  value="Search"  icon="ui-icon-search"   style="margin-bottom:10px;width: auto;" styleClass="secondary" ajax="true">
+
+                            <p:ajax process="@form" update="form" listener="#{teacherPerformanceAnalyzerOld.loadSummary()}"  />
+                        </p:commandButton>
+                    </p:panelGrid>
+                    <div class="ui-g-12" >
+                        <ui:repeat var="anl"  value="#{teacherPerformanceAnalyzerOld.analysisSummary}" >
+                            <div class="ui-g-12 ui-md-3 ui-lg-3" >
+                                <table cellpadding="10" csllspacing="10" width="100%">
+                                    <tr style="background-color: #0277BD;">
+                                        <td style="font-weight: bold;color: white;text-align: center;" colspan="2"><p:outputLabel value="#{anl.area}"/></td>
+                                    </tr>
+                                    <ui:repeat var="anlr"  value="#{anl.records}" >
+                                        <tr style="color: black;">
+                                            <td style="background-color: #FFAB91;font-weight: bold;text-align: center;">#{anlr.name}</td>
+                                            <td style="background-color: #fff06e;font-weight: bold;text-align: center;">#{anlr.mean}</td>
+                                        </tr>
+                                    </ui:repeat>
+                                </table>
+
+                            </div>
+                        </ui:repeat>
+
+                    </div>
+                    <p:panelGrid columns="2" layout="grid" styleClass="form-group ui-panelgrid-blank">
+                        <h:panelGroup >
+                            <h:outputText id="a" rendered="#{teacherPerformanceAnalyzerOld.is_slider}" value="Filter Range " style="font-size:16px"/>
+                            <h:outputText id="displayRange" rendered="#{teacherPerformanceAnalyzerOld.is_slider}" value="Between 0 and 100" style="font-size:16px"/>
+                            <p:slider for="sliderMin,sliderMax" rendered="#{teacherPerformanceAnalyzerOld.is_slider}" display="displayRange" range="true" displayTemplate="Between {min} and {max}" minValue="0" maxValue="100" style="margin-top:15px"/>
+                            <h:inputHidden id="sliderMin" value="#{teacherPerformanceAnalyzerOld.sliderMin}"/>
+                            <h:inputHidden id="sliderMax" value="#{teacherPerformanceAnalyzerOld.slidrMax}"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{teacherPerformanceAnalyzerOld.is_slider}" >
+                            <p:commandButton  value="Filter"  icon="ui-icon-filter-list"   style="margin-bottom:10px;width: auto;" styleClass="purple-btn flat" ajax="true">
+
+                                <p:ajax process="@form" update="acc stu" listener="#{teacherPerformanceAnalyzerOld.loadAjustMean()}"  />
+                            </p:commandButton>
+                            <p:commandButton  value="Reset"  icon="ui-icon-refresh"   style="margin-bottom:10px;width: auto;" styleClass="green-btn flat" ajax="true">
+
+                                <p:ajax process="@form" update="form" listener="#{teacherPerformanceAnalyzerOld.resetAjustMean()}"  />
+                            </p:commandButton>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{teacherPerformanceAnalyzerOld.is_studentCount}" id="stu">
+                            <div class="ui-g-12 ui-md-6 ui-lg-6" >
+                                <table cellpadding="10" csllspacing="10" width="100%">
+                                    <tr style="background-color: #C62828">
+                                        <td style="font-weight: bold;color: white;text-align: center;" ><p:outputLabel value="Student Count"/></td>
+                                    </tr>
+
+                                    <tr style="color: black;">
+                                        <td style="background-color: lightgreen;font-weight: bold;text-align: center;">
+                                            <p:commandLink  value="#{teacherPerformanceAnalyzerOld.studentCount}" update="form" oncomplete="PF('studentListDialog').show();"/>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </h:panelGroup>
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" >
+                        <p:accordionPanel activeIndex="-1" multiple="true" id="acc" value="#{teacherPerformanceAnalyzerOld.meanSchoolList}" var="sc">
+                            <p:tab titleStyleClass="#{sc.status}" title="#{sc.name}" >
+
+                                <p:accordionPanel activeIndex="-1" multiple="true" value="#{sc.meanTeacherList}" var="tea">
+                                    <p:tab titleStyleClass="teacherTab">
+                                        <f:facet name="title"><span>
+                                                <div align="left" style="float:left;"><h:outputText  value=""/></div>
+                                                <div align="right" style="float:right"><h:outputText  value="#{tea.teachermeanVal}"/></div> 
+                                            </span>
+                                            #{tea.teachername}
+                                        </f:facet>
+                                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group" >
+
+                                            <p:accordionPanel multiple="true" var="sub" value="#{tea.meanSubjectList}">
+                                                <p:tab  titleStyleClass="subjectTab">
+
+                                                    <f:facet name="title"><span>
+                                                            <div align="left" style="float:left;"><h:outputText  value=""/></div>
+                                                            <div align="right" style="float:right"><h:outputText  value="#{sub.subjectmeanVal}"/></div> 
+                                                        </span>
+                                                        #{sub.subjectname}
+                                                    </f:facet>
+                                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" >
+
+
+                                                        <ui:repeat var="grade"  value="#{sub.meanGradeList}" >
+
+                                                            <div>#{grade.gradename} - #{grade.grademeanVal}</div>
+                                                        </ui:repeat>
+
+                                                    </p:panelGrid>
+
+                                                </p:tab>
+
+                                            </p:accordionPanel>
+                                        </p:panelGrid>
+
+                                    </p:tab>
+                                </p:accordionPanel>
+
+
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:panelGrid>
+                    <p:dialog header="Student List" width="80%"  widgetVar="studentListDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                        <p:outputPanel id="studentList"  style="text-align:left;width: 100%;border: none;">
+                            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" >
+
+                                    <p:accordionPanel multiple="true" var="st" value="#{teacherPerformanceAnalyzerOld.scSchoolList}">
+                                        <p:tab  >
+
+                                            <f:facet name="title">#{st.name}
+
+                                            </f:facet>
+                                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" >
+
+
+
+                                                <p:accordionPanel multiple="true" var="grades" value="#{st.studentCountClassList}">
+                                                    <p:tab  titleStyleClass="subjectTab">
+
+                                                        <f:facet name="title">#{grades.name}
+
+                                                        </f:facet>
+                                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" >
+                                                            <p:dataTable var="lte"  id="datasTable" value="#{grades.studentCountStudentList}" >
+
+                                                                <p:column headerText="#" style="text-align: center;width: 10%">
+                                                                    <h:outputText value="#{lte.no}" />
+                                                                </p:column>
+                                                                <p:column headerText="Index No" style="text-align: center;width: 20%">
+                                                                    <h:outputText value="#{lte.index_no}" />
+                                                                </p:column>
+                                                                <p:column headerText="Name" style="text-align: left;width: 70%">
+                                                                    <h:outputText value="#{lte.name}" />
+                                                                </p:column>
+                                                            </p:dataTable>
+
+                                                        </p:panelGrid>  
+
+                                                    </p:tab>
+
+                                                </p:accordionPanel>
+
+
+
+                                            </p:panelGrid>
+
+                                        </p:tab>
+
+                                    </p:accordionPanel>
+                                </p:panelGrid>
+
+                            </p:scrollPanel>
+                        </p:outputPanel>
+                    </p:dialog>
+
+
+                </h:form>
+
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

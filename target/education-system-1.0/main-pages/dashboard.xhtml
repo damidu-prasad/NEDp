@@ -1,0 +1,284 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <style>
+
+            #slide{
+                width:100%;
+            }
+
+            * {
+                box-sizing: border-box
+            }
+
+            .mySlides {
+                display: none
+            }
+
+            .slideshow-container {
+                width: 100%;
+                position: relative;
+                margin: -10px;
+
+            }
+            /* Next and previous buttons */
+            .prev, .next {
+                cursor: pointer;
+                position: absolute;
+                top: 50%;
+                width: auto;
+                padding: 16px;
+                margin-top: -22px;
+                color: white;
+                font-weight: bold;
+                font-size: 18px;
+                transition: 0.6s ease;
+                border-radius: 0 3px 3px 0;
+            }
+            /* Position the "next button" to the right */
+            .next {
+                right: 0;
+                border-radius: 3px 0 0 3px;
+            }
+            /* On hover, add a black background color with a little bit see-through */
+            .prev:hover, .next:hover {
+                background-color: rgba(0,0,0,0.8);
+            }
+            /* Caption text */
+            .text {
+                color: #f2f2f2;
+                font-size: 15px;
+                padding: 8px 12px;
+                position: absolute;
+                bottom: 8px;
+                width: 100%;
+                text-align: center;
+            }
+
+            /* The dots/bullets/indicators */
+            .dot {
+                cursor: pointer;
+                height: 13px;
+                width: 13px;
+                margin: 0 2px;
+                background-color: #bbb;
+                border-radius: 50%;
+                display: inline-block;
+                transition: background-color 0.6s ease;
+            }
+            .active, .dot:hover {
+                background-color: #717171;
+            }
+            /* Fading animation */
+            .fade {
+                -webkit-animation-name: fade;
+                -webkit-animation-duration: 2s;
+                animation-name: fade;
+                animation-duration: 2s;
+            }
+            @-webkit-keyframes fade {
+                from {opacity: .4} 
+                to {opacity: 1}
+            }
+
+            @keyframes fade {
+                from {opacity: .4} 
+                to {opacity: 1}
+            }
+
+            /* On smaller screens, decrease text size */
+            @media only screen and (max-width: 300px) {
+                .text {font-size: 11px}
+            }
+
+        </style>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Zonal Director - Dashboard</h1>
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <div id="slide">
+                            <div class="slideshow-container">
+                                <div class="mySlides fade">
+                                    <div style="width: 100%;height: 300px;background-color: #ff9800;">
+
+                                        <div style="padding: 20px;width: 100%;text-align: center;font-size: 20px;font-weight: bold;color: white;">TOP 5 SCHOOLS WITH HIGHEST AVERAGES</div>
+
+                                        <table cellpadding="10" csllspacing="0" width="100%">
+                                            <tr style="background-color: #0277BD;">
+                                                <td style="font-weight: bold;color: white;text-align: center;" >#</td>
+                                                <td style="font-weight: bold;color: white;text-align: center;" >SCHOOL NAME</td>
+                                                <td style="font-weight: bold;color: white;text-align: center;" >AVG</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #8bc34a;">
+                                                <td style="font-weight: bold;text-align: center;">1</td>
+                                                <td style="font-weight: bold;text-align: center;">ST.JOHN'S COLLEGE</td>
+                                                <td style="font-weight: bold;text-align: center;">62.8%</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #8bc34a;">
+                                                <td style="font-weight: bold;text-align: center;">2</td>
+                                                <td style="font-weight: bold;text-align: center;">MAHAMATHYA M.V.</td>
+                                                <td style="font-weight: bold;text-align: center;">58.3%</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #8bc34a;">
+                                                <td style="font-weight: bold;text-align: center;">3</td>
+                                                <td style="font-weight: bold;text-align: center;">SIRI SARIPUTHTHA M.V.</td>
+                                                <td style="font-weight: bold;text-align: center;">55.6%</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #8bc34a;">
+                                                <td style="font-weight: bold;text-align: center;">4</td>
+                                                <td style="font-weight: bold;text-align: center;">S.W.R.D.BANDARANAYAKE V.</td>
+                                                <td style="font-weight: bold;text-align: center;">53.3%</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #8bc34a;">
+                                                <td style="font-weight: bold;text-align: center;">5</td>
+                                                <td style="font-weight: bold;text-align: center;">ST.JOSEPH'S B.M.V.</td>
+                                                <td style="font-weight: bold;text-align: center;">50.7%</td>
+                                            </tr>
+                                        </table>
+
+                                        <!--                                        <div style="padding: 10px;width: auto;text-align: center;font-size: 16px;font-weight: bold;color: #607d8b;background-color: #8bc34a;">(1) ST.JOHN'S COLLEGE - 62.8%</div>
+                                                                                <div style="padding: 10px;width: auto;text-align: center;font-size: 16px;font-weight: bold;color: #607d8b;background-color: #96ce56;">(2) MAHAMATHYA M.V. - 58.3%</div>
+                                                                                <div style="padding: 10px;width: auto;text-align: center;font-size: 16px;font-weight: bold;color: #607d8b;background-color: #9fd561;">(3) SIRI SARIPUTHTHA M>V. - 55.6%</div>
+                                                                                <div style="padding: 10px;width: auto;text-align: center;font-size: 16px;font-weight: bold;color: #607d8b;background-color: #abe06e;">(4) S.W.R.D.BANDARANAYAKE V. - 53.3%</div>
+                                                                                <div style="padding: 10px;width: auto;text-align: center;font-size: 16px;font-weight: bold;color: #607d8b;background-color: #b7ec7a;">(5) ST.JOSEPH'S B.M.V. - 50.7%</div>-->
+
+
+                                    </div>
+                                </div>
+                                <div class="mySlides fade">
+                                    <div style="width: 100%;height: 300px;background-color: #607d8b;text-align: center;">
+                                        <div style="padding: 20px;width: 100%;text-align: center;font-size: 20px;font-weight: bold;color: white;">STUDENT TEACHER RATIO COLOMBO ZONE</div>
+                                        <div style="padding: 100px;width: 100%;text-align: center;font-size: 26px;font-weight: bold;color: white;"><span style="background-color: #ff9800;width: 100px;;padding: 50px;">75 : 1</span></div>
+
+                                    </div> 
+                                </div>
+                                <div class="mySlides fade">
+                                    <div style="width: 100%;height: 300px;background-color: #ff5722;">
+
+                                        <div style="padding: 20px;width: 100%;text-align: center;font-size: 20px;font-weight: bold;color: white;">5 SCHOOLS - HIGHEST PERCENTAGE OF FAIL STUDENTS</div>
+
+                                        <table cellpadding="10" csllspacing="0" width="100%">
+                                            <tr style="background-color: #ff9800;;">
+                                                <td style="font-weight: bold;color: white;text-align: center;" >#</td>
+                                                <td style="font-weight: bold;color: white;text-align: center;" >SCHOOL NAME</td>
+                                                <td style="font-weight: bold;color: white;text-align: center;" >FAILURE PERCENTAGE</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #757575;">
+                                                <td style="font-weight: bold;text-align: center;">1</td>
+                                                <td style="font-weight: bold;text-align: center;">VIPULANANTHA T.M.V.</td>
+                                                <td style="font-weight: bold;text-align: center;">25%</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #757575;">
+                                                <td style="font-weight: bold;text-align: center;">2</td>
+                                                <td style="font-weight: bold;text-align: center;">SRI SANGAMITHTHA B.V.</td>
+                                                <td style="font-weight: bold;text-align: center;">24%</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #757575;">
+                                                <td style="font-weight: bold;text-align: center;">3</td>
+                                                <td style="font-weight: bold;text-align: center;">D.S.SENANAYAKE COLLEGE</td>
+                                                <td style="font-weight: bold;text-align: center;">22%</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #757575;">
+                                                <td style="font-weight: bold;text-align: center;">4</td>
+                                                <td style="font-weight: bold;text-align: center;">PRESBYTERIAN B.V.</td>
+                                                <td style="font-weight: bold;text-align: center;">21%</td>
+                                            </tr>
+                                            <tr style="color: white;background-color: #757575;">
+                                                <td style="font-weight: bold;text-align: center;">5</td>
+                                                <td style="font-weight: bold;text-align: center;">MAHINDA V.</td>
+                                                <td style="font-weight: bold;text-align: center;">15%</td>
+                                            </tr>
+                                        </table>
+
+                                        
+                                    </div>
+                                </div>
+<!--                                <div class="mySlides fade"><div style="width: 100%;height: 300px;background-color: #03a9f4;">Myghgg</div> </div>
+                                <div class="mySlides fade"><div style="width: 100%;height: 300px;background-color: #8bc34a;">Myghgg</div> </div>-->
+                                <!--<div class="mySlides fade"><div style="width: 100%;height: 300px;background-color: #ff5722;">Myghgg</div> </div>-->
+                                <a class="prev" onclick="plusSlides(-1)">&#10094;</a> <a class="next" onclick="plusSlides(1)">&#10095;</a> 
+                            </div>
+                            <br/>
+                            <div style="text-align:center"> 
+                                <span class="dot" onclick="currentSlide(1)"></span> 
+                                <span class="dot" onclick="currentSlide(2)"></span> 
+                                <span class="dot" onclick="currentSlide(3)"></span>
+<!--                                <span class="dot" onclick="currentSlide(4)"></span>
+                                <span class="dot" onclick="currentSlide(5)"></span>-->
+                            </div>
+
+                        </div>
+                    </p:panelGrid>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            // <![CDATA[
+            var slideIndex = 0;
+            showSlides();
+            var slides, dots;
+
+            function showSlides() {
+                var i;
+                slides = document.getElementsByClassName("mySlides");
+                dots = document.getElementsByClassName("dot");
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+                slideIndex++;
+                if (slideIndex > slides.length) {
+                    slideIndex = 1
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                }
+                slides[slideIndex - 1].style.display = "block";
+                dots[slideIndex - 1].className += " active";
+                setTimeout(showSlides, 10000); // Change image every 8 seconds
+            }
+
+            function plusSlides(position) {
+                slideIndex += position;
+                if (slideIndex > slides.length) {
+                    slideIndex = 1
+                } else if (slideIndex < 1) {
+                    slideIndex = slides.length
+                }
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                    slides[slideIndex - 1].style.display = "block";
+                    dots[slideIndex - 1].className += " active";
+                }
+            }
+
+            function currentSlide(index) {
+                if (index > slides.length) {
+                    index = 1
+                } else if (index < 1) {
+                    index = slides.length
+                }
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                    slides[index - 1].style.display = "block";
+                    dots[index - 1].className += " active";
+                }
+            }
+            // ]]>
+        </script>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <head>
+        <title>NEDP - Report Card</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style type="text/css">
+            body{
+                -webkit-print-color-adjust:exact;
+            }
+
+            @page {
+                size: A4;
+                margin: 20px;
+            }
+            @media print {
+                html, body {
+                    width: 210mm;
+                    height: 297mm;
+                }
+                table { page-break-after:auto }
+                tr    { page-break-inside:avoid; page-break-after:auto }
+                td    { page-break-inside:avoid; page-break-after:auto }
+                /*thead { display:table-header-group }*/
+                /*tfoot { display:table-footer-group }*/
+            }
+
+
+            table {
+                border-collapse: collapse;
+
+            }
+
+            table, th, td {
+                border: 1px solid silver;
+                padding: 4px;
+            }
+
+            .text-right{
+                text-align:right;
+                padding-right: 5px;
+            }
+
+            .text-center{
+                text-align:center;
+            }	
+
+            .text-center.bold{
+                font-weight: bold;
+                background-color: #ffe88d;
+            }
+            .bg {
+                background-color: #DADADA;
+            }
+        </style> 
+    </head>
+    <body style=" font-family:Arial, Helvetica, sans-serif;">
+
+        <ui:repeat value="#{printReportCard.stList}" var="st">
+
+            <table  style="page-break-inside: auto;page-break-after:always;border:none;"  width="850" border="0" cellspacing="0" cellpadding="0">
+
+                <tr>
+                    <td height="23" style="border:none;">  </td>
+                </tr>
+                <tr>
+                    <td style="border:none;"><table width="839" border="0" cellspacing="0" cellpadding="5">
+                            <tr>
+                                <td width="109" class="bg">Year</td>
+                                <td width="429"> ${printReportCard.yearName}</td>
+                                <td width="87" class="bg">Class</td>
+                                <td width="108"> #{st.className}</td>
+                            </tr>
+                            <tr>
+                                <td class="bg">Student Name</td>
+                                <td>${st.name} </td>
+                                <td class="bg">Index No</td>
+                                <td>#{st.indexNo} </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="45" style="border:none;"><table width="" border="0" cellspacing="0" cellpadding="5">
+                            <tr>
+                                <td width="18" align="center"><strong>#</strong></td>
+                                <td width="396" align="center"><strong>Subject</strong></td>
+                                <td width="77" align="center"><strong>1st Term</strong></td>
+                                <td width="77" align="center"><strong>2nd Term</strong></td>
+                                <td width="77" align="center"><strong>3rd Term</strong></td>
+                                <td width="133" align="center"><strong>Special Notes</strong></td>
+                            </tr>
+                            <ui:repeat value="#{st.subList}" var="sub">
+                                <tr>
+                                    <td align="center">${sub.sibId} </td>
+                                    <td>${sub.subjectName} </td>
+                                    <td align="center">${sub.term1_marks} </td>
+                                    <td align="center">${sub.term2_marks} </td>
+                                    <td align="center">${sub.term3_marks} </td>
+                                    <td> </td>
+                                </tr>
+                            </ui:repeat>
+                            <ui:repeat value="" var="ab" rendered="#{printReportCard.is_upper_class}">
+                            <tr  >
+                                <td> </td>
+                                <td align="right"><strong>Total Marks</strong></td>
+                                <td align="center"><strong> ${st.tot1}</strong></td>
+                                <td align="center"><strong>${st.tot2} </strong></td>
+                                <td align="center"><strong>${st.tot3} </strong></td>
+                                <td> </td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td align="right"><strong>Student Avg</strong></td>
+                                <td align="center"><strong> ${st.avg1}</strong></td>
+                                <td align="center"><strong>${st.avg2} </strong></td>
+                                <td align="center"><strong>${st.avg3} </strong></td>
+                                <td> </td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td align="right"><strong>Class Avg</strong></td>
+                                <td align="center"><strong> ${st.classAvg1}</strong></td>
+                                <td align="center"><strong>${st.classAvg2} </strong></td>
+                                <td align="center"><strong>${st.classAvg3} </strong></td>
+                                <td> </td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td align="right"><strong>Grade Avg</strong></td>
+                                <td align="center"><strong> ${printReportCard.gradeAvg1}</strong></td>
+                                <td align="center"><strong>${printReportCard.gradeAvg2} </strong></td>
+                                <td align="center"><strong>${printReportCard.gradeAvg3} </strong></td>
+                                <td> </td>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td> </td>
+                                <td align="center"><strong>${st.order1}</strong> </td>
+                                <td align="center"><strong> ${st.order2}</strong></td>
+                                <td align="center"><strong>${st.order3} </strong></td>
+                                <td> </td>
+                            </tr>
+                            </ui:repeat>
+                        </table></td>
+                </tr>
+                <tr>
+                    <td height="45" style="border:none;"><table width="840" border="0" cellspacing="0" cellpadding="5">
+                            <tr>
+                                <td width="95" height="72" align="center">1st Term</td>
+                                <td width="248" align="center" valign="bottom">...............................................<br/>Class Teacher</td>
+                                <td width="260" align="center" valign="bottom">...............................................<br/>
+                                    Principal</td>
+                                <td width="195" align="center" valign="bottom">...............................................<br/>
+                                    Guardian</td>
+                            </tr>
+                            <tr>
+                                <td width="95" height="72" align="center">2nd Term</td>
+                                <td width="248" align="center" valign="bottom">...............................................<br/>
+                                    Class Teacher</td>
+                                <td width="260" align="center" valign="bottom">...............................................<br/>
+                                    Principal</td>
+                                <td width="195" align="center" valign="bottom">...............................................<br/>
+                                    Guardian</td>
+                            </tr>
+                            <tr>
+                                <td width="95" height="72" align="center">3rd Term</td>
+                                <td width="248" align="center" valign="bottom">...............................................<br/>
+                                    Class Teacher</td>
+                                <td width="260" align="center" valign="bottom">...............................................<br/>
+                                    Principle</td>
+                                <td width="195" align="center" valign="bottom">...............................................<br/>
+                                    Guardian</td>
+                            </tr>
+
+                        </table></td>
+                </tr>
+                <tr>
+                    <td height="45" style="border:none;"> </td>
+                </tr>
+
+
+            </table>
+        </ui:repeat>
+
+        <script>
+            window.print();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="title">Control Panel</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#FFC107', '#03A9F4'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>  
+        </script>
+
+        <style type="text/css">
+            ol li {
+                margin: 5px;
+            }
+            .title{
+                font-weight: bold !important;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Help</h1>
+
+                <h:form id="form">
+                    <p:growl autoUpdate="true" id="msg" />
+
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                        <p:accordionPanel multiple="true"  id="em" style="font-weight: bold;">
+                            <p:tab titleStyleClass="title" title="1. සිසුන්ගේ නම් පංතිවලට ඇතුලත් කරන්නේ කෙසේද?" >
+                                <p:panelGrid columns="1"  styleClass="ui-panelgrid-blank form-group">
+
+                                    <ol style="padding: 5px;">
+                                        <li>පංතිවලට සිසුන්ගේ නම් ඇතුලත් කිරීම සඳහා Student Registration වින්ඩෝ එක භාවිතා කිරීමට අවශ්‍ය නොවේ.</li>
+                                        <li>නම් සහ ලකුණු සහිත Excel ෆෝමැට් එක අප්ලෝඩ් කරන විට ඉබේම ඒ ඒ පන්තියේ සිසුන්ගේ නාමලේඛනය සකස්වේ.</li>
+                                        <li>අලුතෙන් සිසුන් ඇතුලත් කරන විට හෝ ජංගම දුරකථනය පමණක් භාවිතා කොට විභාග ලකුණු ඇතුලත් කරන්නේ නම් සිසුන්ගේ නම් පද්ධතියට ඇතුලත් කොට තිබිය යුතුයි. ඒ සඳහා පහත ක්‍රමය භාවිතා කරන්න.</li>
+                                    </ol>
+                                    <p style="padding-left: 10px;">Control Panel → School → Student Registration 
+                                    </p>
+
+                                </p:panelGrid>
+                            </p:tab>
+                            <p:tab titleStyleClass="title" title="2. සිසුවෙකුගේ නමක් වැරදුනොත් නිවැරදි කරන්නේ කෙසේද?" >
+                                <p:panelGrid columns="1"  styleClass="ui-panelgrid-blank form-group">
+
+                                    <ol style="padding: 5px;">
+                                        <li>සිසුන්ගේ නම් හෝ ලකුණු වෙනස් කිරීමේ හැකියාව මෘදුකාංගය තුල පාසල් ගුරුවරුන්ට ලබා දී නොමැත.</li>
+                                        <li>එසේ කිරීමට අවශ්‍ය නම් Excel ශීට් එකේ එම ලකුණු හෝ නම වෙනස් කර නැවත අප්ලෝඩ් කල හැකියි. එවිට ඩුප්ලිකේට් දත්තයක් ඇතුලත් වේ. එම දත්තය Grade Class Manager කව්ළුව වෙත ගොස් ඉවත් කල හැක.</li>
+                                    </ol>
+                                    <p style="padding-left: 10px;">Control Panel → Grade Class Manager →
+                                    </p>
+
+                                </p:panelGrid>
+                            </p:tab>
+                            <p:tab titleStyleClass="title" title="3. අප්ලෝඩ් කරපු ලකුණු ඩේටාබේස් එකට ඇතුලත් වූ බව දැනගන්නේ කෙසේද ?" >
+                                <p:panelGrid columns="1"  styleClass="ui-panelgrid-blank form-group">
+
+                                    <ol style="padding: 5px;">
+                                        <li>ලකුණු අප්ලෝඩ් කිරීමෙන් පසු ලැබෙන Message එක පරීක්ෂාකාරීව කියවන්න. එය සාර්ථක දැයි බලන්න. එය සාර්ථක නම්, <br/>Control Panel → Exams → Student Marks Reports වෙත යන්න <br/> තමන් ලකුණු ඇතුලත් කරන ලද පන්තිය තෝරා ගන්න 
+                                        </li>
+                                        <li>Control Panel → Exams → Upload Marks <br/> ලකුණු ඇතුලත් කල තැනම යට බලන්න View Last Uploaded Marks ලේබල් එක ක්ලික් කරන්න
+                                        </li>
+                                        <li>අලුතෙන් සිසුන් ඇතුලත් කරන විට හෝ ජංගම දුරකථනය පමණක් භාවිතා කොට විභාග ලකුණු ඇතුලත් කරන්නේ නම් සිසුන්ගේ නම් පද්දතියට ඇතුලත් කොට තිබිය යුතුයි. ඒ සඳහා පහත ක්‍රමය භාවිතා කරන්න.</li>
+
+                                        <li>මෙම ක්‍රම දෙකම පරීක්ෂා කර බැලීමෙන් පසු ලකුණු ඇතුලත් වී නොමැතිනම්. නැවතත් Excel ෆොර්මැට් එක ඩවුන්ලෝඩ් කර ගන්න. ලකුණු අප්ලෝඩ් කරන තැනම උඩින් ඇති View Format ක්ලික් කර එම Excel ෆෝමැට් එක ලබා ගන්න.<br/> Control Panel → Exams → Upload Marks → View Format  <br/> මෙම Excel ෆොර්මැට් එකටම ලකුණු ඇතුලත් කර නැවත අප්ලෝඩ් කරන්න.</li>
+                                  
+                                        <li>ඉහත ක්‍රම 3 නම  සාර්ථක නොවුයේ නම් ishantha@javainstitute.edu.lk ලිපිනයට ස්ක්‍රීන් ෂොට් හා ලකුණු සහිත  Excel ෆොර්මැට් එක ඊමේල් කරන්න.</li>
+                                  
+                                        
+                                    </ol>
+
+
+                                </p:panelGrid>
+                            </p:tab>
+                            <p:tab titleStyleClass="title" title="4. රිපොර්ට් කාඩ් එක ප්‍රින්ට් කරන්න යාමේදී පෙන්වන්නේ නැහැ" >
+                                <p:panelGrid columns="1"  styleClass="ui-panelgrid-blank form-group">
+
+                                    <ol style="padding: 5px;">
+                                        <li>මුලින්ම ලකුණු අප්ලෝඩ් කිරීම නිවැරදි දැයි 3.0 ක්‍රම අනුව බලන්න</li>
+                                        <li>බ්‍රව්සර් එකේ පොප් අප් බ්ලොක් කිරීම  ඇක්ටිව් කරලා වෙන්න පුළුවන්. ක්‍රෝම් බ්‍රව්සර් එකේ සර්ච් බොක්ස් එක ළඟ දකුණු පැත්තේ රතු පාටින් ධන ලකුණක් තිබේදැයි බලන්න. එය ක්ලික් කර ඉනැක්ටිව් කරන්න. </li>
+                                        
+                                    </ol>
+
+
+                                </p:panelGrid>
+                            </p:tab>
+
+                        </p:accordionPanel>
+                    </p:panelGrid>
+
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

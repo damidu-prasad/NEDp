@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+
+            <div class="ui-g-12 ui-lg-12">
+
+                <h3>Assign System Interface</h3>
+                <h:form id="save-form">
+                    <p:growl autoUpdate="true" />
+
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                        <h:panelGroup >
+                            <p:outputLabel value="User Role" for="user_role" style="font-weight: bold;" />
+                            <p:selectOneMenu id="user_role"  autoWidth="false" required="true"  requiredMessage="Select User Role !" effect="slide" value="#{assignSystemInterface.userRoleName}" >
+                                <p:ajax event="change" listener="#{assignSystemInterface.loadExistingInterfaces()}" update="save-form:tbl" />
+                                <f:selectItems value="#{assignSystemInterface.userRoleNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+
+                            <p:outputLabel value="System Interface" for="system_interface" style="font-weight: bold;" />
+                            <p:selectOneMenu id="system_interface"  autoWidth="false" required="true" requiredMessage="Select System Interface !" effect="slide" value="#{assignSystemInterface.systemInterfaceName}" >
+                                <f:selectItems value="#{assignSystemInterface.systemInterfaceNameList}" />
+
+                            </p:selectOneMenu>
+
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:commandButton  value="Save"  icon="ui-icon-save" styleClass="secondary"  style="width: 30%" >
+                                <f:ajax execute="@all"  render="save-form:tbl"  listener="#{assignSystemInterface.saveAssignSystemInterface()}"  />
+                                <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:dataTable var="types" id="tbl" value="#{assignSystemInterface.existInterfaceList}"  >
+                                <p:column headerText="#" style="text-align: center;">
+                                    <h:outputText value="#{types.no}" />
+                                </p:column>
+                                <p:column headerText="Interface Menu" >
+                                    <h:outputText value="#{types.interfaceMenuName}" />
+                                </p:column>
+                                <p:column headerText="Interface Sub Menu" >
+                                    <h:outputText value="#{types.interfaceSubMenuName}" />
+                                </p:column>
+                                <p:column headerText="System Interface" >
+                                    <h:outputText value="#{types.interfaceName}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+
+
+                </h:form>
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

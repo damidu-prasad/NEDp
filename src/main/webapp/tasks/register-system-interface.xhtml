@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+
+
+            <div class="ui-g-12 ui-lg-12">
+
+                <h3>Register System Interface</h3>
+                <h:form id="save-form">
+                    <p:growl autoUpdate="true" />
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                        <h:panelGroup >
+                            <p:outputLabel value="Interface Menu" for="interface_menu" style="font-weight: bold;" />
+                            <p:selectOneMenu id="interface_menu"  autoWidth="false" required="true" requiredMessage="Select Interface Menu !" effect="slide" value="#{registerSystemInterface.interfaceMenu}" >
+                                <f:selectItems value="#{registerSystemInterface.interfaceMenuList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+
+                        <h:panelGroup >
+                            <p:outputLabel value="Interface Sub Menu" for="interface_sub_menu" style="font-weight: bold;" />
+                            <p:selectOneMenu id="interface_sub_menu" required="true" requiredMessage="Select Interface Sub Menu !"  autoWidth="false" effect="slide" value="#{registerSystemInterface.interfaceSubMenu}" style="width: 100%;" >
+                                <f:selectItems value="#{registerSystemInterface.interfaceSubMenuList}" />
+                                <f:ajax event="change" listener="#{registerSystemInterface.changeIcon}" render="display_icon" />
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:outputLabel value="Interface Name" for="interface_name"  style="font-weight: bold;" />
+                            <p:inputText id="interface_name" required="true" requiredMessage="Enter Interface Name !" style="width: 100%;" value="#{registerSystemInterface.interfaceName}" />
+                            <p:outputLabel value="Teacher Registration"   style="font-size: 12px;color: #bdbdbd;" />
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:outputLabel value="Display Name" for="display_name" style="font-weight: bold;" />
+                            <p:inputText id="display_name" required="true" requiredMessage="Enter Display Name !" style="width: 100%;" value="#{registerSystemInterface.displayName}" />
+                            <p:outputLabel value="Teacher Registration"   style="font-size: 12px;color: #bdbdbd;" />
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:outputLabel value="Url" for="url" style="font-weight: bold;" />
+                            <p:inputText id="url" required="true" requiredMessage="Enter Url !"  style="width: 100%;" value="#{registerSystemInterface.url}" />
+                            <p:outputLabel value="/tasks/teacher-registration.xhtml"   style="font-size: 12px;color: #bdbdbd;" />
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:outputLabel value="Icon" for="display_icon" style="font-weight: bold;" />
+                            <p:inputText id="display_icon" required="true" requiredMessage="Enter Icon !" style="width: 100%;" value="#{registerSystemInterface.displayIcon}" />
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:outputLabel value="Description" for="description" style="font-weight: bold;" />
+                            <p:inputText id="description"  style="width: 100%;" value="#{registerSystemInterface.description}" />
+
+                        </h:panelGroup>
+                    </p:panelGrid>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-9" ></div>
+                    <div class="ui-g-12 ui-md-6 ui-lg-3" >
+                        <p:commandButton  value="Save"  icon="ui-icon-save" styleClass="secondary" >
+                            <f:ajax execute="@all"  render="save-form"  listener="#{registerSystemInterface.SaveRegisterSystemInterface}"  />
+                            <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+
+                    </div>
+                </h:form>
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>

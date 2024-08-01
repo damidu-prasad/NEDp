@@ -1,0 +1,191 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Create User Accounts</h1>
+                <p>You can search teachers by Province, Zone, Division or Schools.  </p>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+                    <div class="ui-g-12" >
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{createUserAccounts.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{createUserAccounts.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{createUserAccounts.getEducationZoneList}" render="zone" />
+
+                                <f:selectItems value="#{createUserAccounts.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{createUserAccounts.disabledFiledZone}" autoWidth="false" effect="slide" value="#{createUserAccounts.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{createUserAccounts.getEducationDivisionList}" render="division" />
+                                <f:selectItems value="#{createUserAccounts.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{createUserAccounts.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{createUserAccounts.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{createUserAccounts.getSchoolList}" render="school" />
+                                <f:selectItems value="#{createUserAccounts.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{createUserAccounts.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{createUserAccounts.schoolName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{createUserAccounts.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+                            <h:panelGroup >
+                                <p:outputLabel value="User Role" for="user_role" style="font-weight: bold;" />
+                                <p:selectOneMenu id="user_role"  autoWidth="false" effect="slide" value="#{createUserAccounts.userRoleName}" >
+
+                                    <f:selectItems value="#{createUserAccounts.userRoleNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-3" ></div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-3" >
+
+                            <p:commandButton type="button"  value="Search"  style="margin-bottom:10px;" styleClass="secondary">
+
+                                <f:ajax execute="@form" render="form" listener="#{createUserAccounts.loadListOfTeachers()}"  />
+                            </p:commandButton>
+                        </div>
+                        <div class="ui-g-4" ></div>
+                    </div>
+                    <div class="ui-g-12" >
+
+                        <p:dataTable var="lte"  id="datasTable" value="#{createUserAccounts.teacherList}" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" resizableColumns="true"  reflow="true" paginator="true" rows="20" rowsPerPageTemplate="10,20,50,100">
+
+                            <p:column headerText="" style="text-align: center;" >
+                                <p:selectBooleanCheckbox rendered="true" value="#{lte.checkMail}" id="abc"  />
+
+                            </p:column>
+                            <p:column headerText="#" style="text-align: center;">
+                                <h:outputText value="#{lte.no}" />
+                            </p:column>
+
+                            <p:column headerText="Name" >
+                                <h:outputText value="#{lte.name}" />
+                            </p:column>
+
+                            <p:column headerText="Email" >
+                                <h:outputText value="#{lte.email}" />
+                            </p:column>
+                            <p:column headerText="Account Status" >
+                                <h:outputText value="#{lte.accountName}  #{lte.accountStatusName}" /><br/>
+<!--                                <p:commandButton type="button" rendered="#{lte.accountStatus==1}" value="Suspend" action="#{createUserAccounts.activeOrInactive(0,lte.tid)}" icon="ui-icon-error" styleClass="amber-btn flat"  style="width: auto;"  >
+
+                                </p:commandButton>
+                                <p:commandButton type="button" rendered="#{lte.accountStatus==0}" value="Active" action="#{createUserAccounts.activeOrInactive(1,lte.tid)}" icon="ui-icon-done" styleClass="purple-btn flat"  style="width: auto;"  >
+
+                                </p:commandButton>-->
+
+                                <p:commandButton  value="Suspend"  rendered="#{lte.accountStatus==1}"  icon="ui-icon-error" styleClass="amber-btn flat" style="width: auto;"   >
+                                    <f:ajax execute="@form" render="datasTable" listener="#{createUserAccounts.activeOrInactive(0,lte.tid)}"  />
+                                    <p:confirm header="Confirmation" message="Do You want Inactive this Account?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                                
+                                <p:commandButton  value="Active"  rendered="#{lte.accountStatus==0}"  icon="ui-icon-done" styleClass="purple-btn flat" style="width: auto;"   >
+                                    <f:ajax execute="@form" render="datasTable" listener="#{createUserAccounts.activeOrInactive(1,lte.tid)}"  />
+                                    <p:confirm header="Confirmation" message="Do You want Active this Account?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+
+                            </p:column>
+
+
+                        </p:dataTable>
+
+
+                    </div>
+
+                    <div class="ui-g-12" >
+                        <div class="ui-g-1 ui-md-1 ui-lg-1" style="text-align: right" >
+
+                            <p:selectBooleanCheckbox value="#{createUserAccounts.selectAllBox}"   >
+                                <p:ajax event="change"  update="form:datasTable" listener="#{createUserAccounts.setSelectedCheckBoxes()}" />
+
+                            </p:selectBooleanCheckbox>
+
+                        </div>
+                        <div class="ui-g-11 ui-md-1 ui-lg-1 " >Select All</div>
+                        <div class="ui-g-2 ui-md-1 ui-lg-1" style="text-align: right" >
+
+                            <p:selectBooleanCheckbox value="#{createUserAccounts.selectAllNotExistBox}"   >
+                                <p:ajax event="change"  update="form:datasTable" listener="#{createUserAccounts.setSelectedNotExistsCheckBoxes()}" />
+
+                            </p:selectBooleanCheckbox>
+
+                        </div>
+                        <div class="ui-g-10 ui-md-2 ui-lg-2 " >Select Not Exists</div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-12 " style="text-align:  right!important;">
+
+
+                            <p:commandButton  value="Send Account Details"    icon="ui-icon-email" styleClass="cyan-btn flat" style="margin-bottom:10px;height: 40px;width: auto;"   >
+                                <f:ajax execute="@form" render="form:datasTable" listener="#{createUserAccounts.checkforSendMail()}"  />
+                                <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+
+                        </div>
+
+
+                    </div>
+
+                </h:form>
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

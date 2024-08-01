@@ -1,0 +1,275 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .teacherTab {
+                    background-color: lightslategrey !important;
+                    font-weight: bold;
+                }
+                .subjectTab {
+                    background-color: #00bcd4 !important;
+
+                }
+                .defaultTab{
+
+                    background-color: #d6d5d5 !important;
+                    color: black !important;
+
+                }
+
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Under Performed Student Development Target Management System</h1>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{underPerformedStudents.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{underPerformedStudents.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{underPerformedStudents.getEducationZoneList}" render="zone division school teacher" />
+
+                                <f:selectItems value="#{underPerformedStudents.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{underPerformedStudents.disabledFiledZone}" autoWidth="false" effect="slide" value="#{underPerformedStudents.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{underPerformedStudents.getEducationDivisionList}" render="division school teacher" />
+                                <f:selectItems value="#{underPerformedStudents.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{underPerformedStudents.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{underPerformedStudents.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{underPerformedStudents.getSchoolList}" render="school teacher" />
+                                <f:selectItems value="#{underPerformedStudents.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+<!--                            <p:selectOneMenu id="school" disabled="#{underPerformedStudents.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{underPerformedStudents.schoolName}" style="width: 100%;" >
+                                <f:ajax event="change" listener="#{underPerformedStudents.getTeachersList}" render="teacher" />
+                                <f:selectItems value="#{underPerformedStudents.schoolNameList}" />
+
+                            </p:selectOneMenu>-->
+                            <p:selectCheckboxMenu id="school" value="#{underPerformedStudents.schoolNameAr}" label="School"   filter="true" filterMatchMode="startsWith" style="width: 100%;">
+                                <f:selectItems value="#{underPerformedStudents.schoolNameList}" />
+                                <f:ajax event="change" listener="#{underPerformedStudents.getTeachersList}" render="teacher" />
+                            </p:selectCheckboxMenu>
+
+
+                        </h:panelGroup>
+
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Teacher" for="teacher" style="font-weight: bold;" />
+                            <p:selectOneMenu id="teacher"  autoWidth="false" effect="slide" value="#{underPerformedStudents.teacherName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{underPerformedStudents.teacherNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </h:panelGroup>
+
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Subject" for="subject" style="font-weight: bold;" />
+                            <p:selectOneMenu id="subject"  autoWidth="false" effect="slide" value="#{underPerformedStudents.subjectName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{underPerformedStudents.subjectNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Year" for="year" style="font-weight: bold;" />
+                            <p:selectOneMenu id="year"  autoWidth="false" effect="slide" value="#{underPerformedStudents.year}" style="width: 100%;" >
+                                <f:ajax event="change" listener="#{underPerformedStudents.setTargetDisabled}" render="target" />
+                                <f:selectItems value="#{underPerformedStudents.yearList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Term" for="term" style="font-weight: bold;" />
+                            <p:selectOneMenu id="term"  autoWidth="false" effect="slide" value="#{underPerformedStudents.termName}" style="width: 100%;" >
+                                <f:ajax event="change" listener="#{underPerformedStudents.setTargetDisabled}" render="target" />
+                                <f:selectItems value="#{underPerformedStudents.termNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Marks Under" for="marks_under" style="font-weight: bold;" />
+                            <p:inputText id="marks_under" value="#{underPerformedStudents.marksUnder}" onkeypress="return isNumberKey(event)" style="width: 100%;"  />
+                        </h:panelGroup>
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                            <h:panelGroup >
+
+                                <p:outputLabel value="Target for Selected Term %" for="target" style="font-weight: bold;" />
+                                <p:inputText id="target" disabled="#{underPerformedStudents.disableTarget}" value="#{underPerformedStudents.targetForSelectedTerm}" onkeypress="return isNumberKey(event)" style="width: 100%;" placeholder="%" />
+                            </h:panelGroup>
+
+                            <p:commandButton  icon="ui-icon-save" id="bt"  styleClass="teal-btn">
+                                <p:tooltip id="toolTipTrack" for="bt" value="Save Target" trackMouse="true" />
+                                <p:ajax process="@form" update="form" listener="#{underPerformedStudents.saveTargetforSelectedTerm()}"  />
+                                <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert"  >
+                                </p:confirm>
+                            </p:commandButton>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+
+                        </p:panelGrid>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="float: right;">
+
+                        <p:commandButton  value="Search"  icon="ui-icon-search"   style="margin-bottom:10px;width: auto;" styleClass="secondary" >
+
+                            <p:ajax process="@form" update="datasTable" listener="#{underPerformedStudents.loadReport()}"  />
+                        </p:commandButton>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+
+                        <p:dataTable var="lte"  id="datasTable" value="#{underPerformedStudents.schoolRecordList}"  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"  reflow="true" paginator="true" rows="10" rowsPerPageTemplate="10,20,30,40">
+
+                            <f:facet name="{Exporters}" >
+                                <div style="float:right;">
+                                    <h:commandLink style="padding: 5px;">
+                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+                                        <p:dataExporter type="xls" target="datasTable" fileName="Under Performed Student Development Target Management" />
+                                    </h:commandLink>
+
+                                    <h:commandLink>
+                                        <p:graphicImage name="/demo/images/pdf.jpg" width="24"/>
+                                        <p:dataExporter type="pdf" target="datasTable" fileName="Under Performed Student Development Target Management"/>
+                                    </h:commandLink>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="#" style="text-align: center;">
+                                <h:outputText value="#{lte.no}" />
+                            </p:column>
+                            <p:column headerText="School" style="overflow: auto;" >
+<!--                                <p:commandLink value="#{lte.schoolName}" update="@form" oncomplete="PF('studentProfileDialog').show();">
+                                    <f:setPropertyActionListener value="#{lte}" target="#{caderManagement.selectedSchool}" />
+                                </p:commandLink>-->
+                                <h:outputText value="#{lte.schoolName}" />
+                            </p:column>
+                            <p:column headerText="පසුගිය වාරයේ අඩු ලකුණු සිසුන් සංඛ්‍යාව (UPSC)" style="text-align: center" >
+                                <h:outputText value="#{lte.lastTermFailStudentCount}" />
+                            </p:column>
+
+                            <p:column headerText="පසුගිය වාරයේ අඩු ලකුණු සිසුන් සංවර්ධන ඉලක්කය (UPSDT) #{underPerformedStudents.lastTermTarget}%" style="text-align: center" >
+                                <h:outputText value="#{lte.lastTarget}" />
+                            </p:column>
+
+                            <p:column headerText="අඩු ලකුණු සංවර්ධන ඉලක්කය ඉටු කර ගැනීම " style="text-align: center; background-color: ${lte.color};" >
+                                <h:outputText value="#{lte.lastAchievement}%" />
+                            </p:column>
+                            <p:column headerText="මෙම වාරයේ අඩු ලකුණු සිසුන් සංඛ්‍යාව (UPSC)" style="text-align: center" >
+                                <h:outputText value="#{lte.thisTermFailStudentCount}" />
+                            </p:column>
+                            <p:column headerText="එන වාරය සඳහා අඩු ලකුණු සංවර්ධන ඉලක්කය (UPSDT) #{underPerformedStudents.thisTermTarget}%" style="text-align: center" >
+                                <h:outputText value="#{lte.thisTarget}" />
+                            </p:column>
+                            <!--                            <p:column headerText="එන වාරයේ අපේක්ෂිත සංවර්ධිත සිසුන් සංඛ්‍යාව" style="text-align: center" >
+                                                            <h:outputText value="#{lte.thisTermExpectedDeveloppedCount}" />
+                                                        </p:column>-->
+                            <p:column headerText="එන වාරයේ අපේෂිත අඩු සංවර්ධිත සිසුන් සංඛ්‍යාව" style="text-align: center" >
+                                <h:outputText value="#{lte.thisTermExpectedUnderMarksCount}" />
+                            </p:column>
+                            <p:column headerText="ලකුණු ඇතුලත් නොකළ පන්ති" exportable="false" style="text-align: center;" >
+
+                                <p:commandButton icon="ui-icon-view-headline" styleClass="blue-grey-btn flat"   oncomplete="PF('carDialog').show()"   >
+                                    <p:ajax process="@form" update="form:selectedCarDetail" listener="#{underPerformedStudents.loadDataEnteredClasses(lte.schoolID)}"  />
+                                </p:commandButton>
+
+                            </p:column>
+
+
+                        </p:dataTable>
+
+
+
+                    </p:panelGrid>
+                    <p:dialog header="ලකුණු ඇතුලත් නොකළ පන්ති"   widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                        <p:outputPanel id="selectedCarDetail"  style="text-align:left;width: auto;border: none;">
+                            <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="font-weight: bold;">
+                                    ${underPerformedStudents.selectedSchoolName}
+                                </p:panelGrid>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                    <table cellspacing="0" cellpadding="3" border="1" >
+                                        <tr>
+
+                                            <td style=" text-align:center; font-weight:bold;background-color: #FF8F00; " > Class</td>
+                                            <td style=" text-align:center; font-weight:bold;background-color: #FF8F00; " > ${underPerformedStudents.lastTermName}</td>
+                                            <td style=" text-align:center; font-weight:bold;background-color: #FF8F00;  " > ${underPerformedStudents.thisTermName}</td>
+                                        </tr>
+                                        <ui:repeat var="cla"  value="#{underPerformedStudents.marksNotEnteredList}" varStatus="loop">
+                                            <tr>
+
+                                                <td style=" text-align:center; font-weight:bold; " > #{cla.className}</td>
+                                                <td style=" text-align:center; font-weight:bold; color:#{cla.lastColor} " > #{cla.lastName}</td>
+                                                <td style=" text-align:center; font-weight:bold; color:#{cla.thisColor} " > #{cla.thisName}</td>
+                                            </tr>
+                                        </ui:repeat>
+                                    </table>
+
+                                </p:panelGrid>
+                            </p:scrollPanel>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,308 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templateTwo.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <ui:define name="content">
+
+        <div class=" card ui-g ui-fluid">
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .ui-datatable-resizable tbody td{
+
+                    white-space: normal !important;
+                }
+
+                .tableHeaders{
+                    font-weight: bold;
+                    text-align: center;
+                    font-size: 1.3em;
+                    color: #ffffff;
+                    background-color: #2266e3;
+                    border-radius: 5px;
+                    width: 19%;
+                }
+
+                .tableData{
+                    font-weight: bold;
+                    text-align: center;
+                    height: 1.3em;
+                    border-bottom: 2px solid #cccccc;
+                    border-radius: 5px;
+                    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2);
+                    font-size: 1em;
+                }
+
+                .checkboxStyle{
+                    float: left;
+                }
+
+                label{
+                    font-weight: bolder;
+                }
+
+                .saturday {
+                    background-color: #e0e0e0; /* light gray */
+                }
+
+                .sunday {
+                    background-color: #f0c0c0; /* light red */
+                }
+
+                .column-customize{
+                    font-size: 0.8em;
+                    font-weight: bold
+                }
+
+            </style>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <div class="ui-g-12 ui-lg-12" style="margin-top: 2%;text-align: center">
+
+                <h1 class="text ui-fluid" style="margin-top: 4%;font-weight: bold"><p:outputLabel value=""/>TEACHERS MONTHLY ATTENDANCE OVERVIEW REPORT OF ANANDA COLLEGE <p:outputLabel value="#{TeachersMonthlyAttendanceOverviewReport.previousMonthFormatted}"/></h1>
+
+
+                <!--                <p:panel>
+                                    CHARTS
+                                </p:panel>-->
+
+                <p:panel style="margin: 4% 0 0 0">
+
+                    <h:form id="form">
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup>
+                                <p:outputLabel value="Select Month" for="date"/>
+                                <p:calendar style="text-align: center" navigator="true" value="#{TeachersMonthlyAttendanceOverviewReport.selectedMonth}" pattern="yyyy-MM" id="date" />
+                            </h:panelGroup>
+
+                            <h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup>
+                                <p:outputLabel value="Teacher type" for="type"/>
+                                <p:selectOneMenu id="type" value="#{TeachersMonthlyAttendanceOverviewReport.teacherType}">
+                                    <f:selectItems value="#{TeachersMonthlyAttendanceOverviewReport.teacherTypeList}"/>
+                                    <f:ajax execute="@form" render="formOne" listener="#{TeachersMonthlyAttendanceOverviewReport.selectTeacherType()}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+
+
+
+                        </p:panelGrid>
+                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup style="">
+                                <p:inputText value="#{TeachersMonthlyAttendanceOverviewReport.teacherId}" placeholder="                                                          Type Teacher Id" style="margin: 1%;width: 50%"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup style="margin: 1%">
+                                <p:commandButton value="Search" style="width: 20%">
+                                    <f:ajax  execute="@form" render="formOne form" listener="#{TeachersMonthlyAttendanceOverviewReport.generateMonthlyAttendanceData()}" />
+                                </p:commandButton>
+                            </h:panelGroup>
+
+                        </p:panelGrid>
+
+                    </h:form>
+
+                </p:panel>
+
+                <p:panel style="margin: 3% 0 0 0;width: 100%;overflow-y: auto;">
+
+                    <h:form id="formOne" style="width: 200%;margin-top: 2%">
+
+                        <p:dataTable rowIndexVar="rowIndex" var="tal" value="#{TeachersMonthlyAttendanceOverviewReport.teacherAttendancesList}" id="datastable" stickyHeader="false" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="false"  reflow="false" paginator="true" rows="20" rowsPerPageTemplate="20,50,100,200,500" >
+
+                            <f:facet name="{Exporters}" >
+                                <div style="float:right;">
+
+                                    <p:commandLink style="padding: 5px;" onclick="PF('dlg').show()" action="#{TeachersMonthlyAttendanceOverviewReport.genarateExel(attendanceList)}">
+                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+                                    </p:commandLink>
+
+
+
+                                </div>
+                            </f:facet>
+
+
+                            <p:column headerText="#" style="text-align: left;vertical-align: top;width:10px">
+
+                                <h:outputText value="#{rowIndex + 1}" styleClass="column-customize"/>
+
+                            </p:column>
+
+                            <p:column headerText="TID" styleClass="column-customize" style="text-align: left;vertical-align: top;width: 20px">
+
+                                <h:outputText value="#{tal.teacherSignatureId}" styleClass="column-customize"/>
+
+                            </p:column>
+
+                            <p:column headerText="Name" styleClass="column-customize" style="text-align: left;vertical-align: top;width: 50px">
+
+                                <h:outputText value="#{tal.teacherName}" styleClass="column-customize"/>
+
+                            </p:column>
+                            <p:column headerText="01" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(1)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day01}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="02" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(2)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day02}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="03" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(3)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day03}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="04" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(4)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day04}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="05" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(5)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day05}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="06" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(6)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day06}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="07" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(7)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day07}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="08" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(8)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day08}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="09" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(9)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day09}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="10" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(10)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day10}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="11" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(11)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day11}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="12" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(12)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day12}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="13" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(13)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day13}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="14" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(14)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day14}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="15" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(15)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day15}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="16" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(16)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day16}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="17" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(17)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day17}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="18" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(18)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day18}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="19" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(19)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day19}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="20" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(20)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day20}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="21" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(21)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day21}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="22" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(22)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day22}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="23" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(23)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day23}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="24" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(24)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day24}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="25" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(25)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day25}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="26" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(26)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day26}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="27" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(27)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day27}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="28" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(28)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day28}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="29" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(29)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day29}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="30" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(30)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day30}" styleClass="column-customize"/>
+                            </p:column>
+                            <p:column headerText="31" styleClass="#{TeachersMonthlyAttendanceOverviewReport.getDayStyleClass(31)} column-customize" style="text-align: center;vertical-align: top;width: 3px">
+                                <h:outputText value="#{tal.day31}" styleClass="column-customize"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:form>
+                    <p:dialog header="Enter Your Email Address" widgetVar="dlg" width="50%">
+                        <h:form id="emailForm">
+                            <h:panelGrid style="width: 100%">
+                                <p:inputText style="width: 100%" id="email" value="#{TeachersMonthlyAttendanceOverviewReport.email}" />
+                            </h:panelGrid>
+                            <p:commandLink>
+
+                                <p:commandButton style="margin-top:5px; " value="Send" action="#{TeachersMonthlyAttendanceOverviewReport.sendEmailWithAtt()}" oncomplete="PF('dlg').hide();" update=":form" />
+
+                            </p:commandLink>
+                        </h:form>
+
+                    </p:dialog>
+                </p:panel>
+
+            </div>
+
+        </div>
+
+        <script>
+            function exportToExcel() {
+                PrimeFaces.expressions.SearchExpressionFacade.resolveComponentsAsSelector('#datasTable', function (components) {
+                    var table = components.eq(0);
+                    PrimeFaces.monitorDownload(
+                            PrimeFaces.expressions.SearchExpressionFacade.resolveComponentsAsSelector('#datasTable', function () {
+                            table.dataExporter({
+                            type: 'xls',
+                                    escape: true,
+                                    fileName: 'TEACHERS MONTHLY ATTENDANCE OVERVIEW REPORT OF ANANDA COLLEGE ' #{TeachersMonthlyAttendanceOverviewReport.previousMonthFormatted}
+                            });
+                            });
+                    }
+                    )
+                            );
+                });
+                function exportToPDF() {
+                    PrimeFaces.expressions.SearchExpressionFacade.resolveComponentsAsSelector('#datasTable', function (components) {
+                        var table = components.eq(0);
+                        PrimeFaces.monitorDownload(
+                                PrimeFaces.expressions.SearchExpressionFacade.resolveComponentsAsSelector('#datasTable', function () {
+                                table.dataExporter({
+                                type: 'pdf',
+                                        escape: true,
+                                        fileName: 'TEACHERS MONTHLY ATTENDANCE OVERVIEW REPORT OF ANANDA COLLEGE ' #{TeachersMonthlyAttendanceOverviewReport.previousMonthFormatted}
+                                });
+                            })
+                    );
+                }
+                );
+            }
+        </script>
+
+    </ui:define> 
+
+</ui:composition>

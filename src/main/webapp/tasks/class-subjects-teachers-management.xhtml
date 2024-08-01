@@ -1,0 +1,197 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/template.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    >
+    <ui:define name="content">
+        <div class="card ui-g ui-fluid">
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .ui-datatable-resizable tbody td{
+
+                    white-space: normal !important;
+                }
+
+                .tableHeaders{
+                    font-weight: bold;
+                    text-align: center;
+                    font-size: 1.3em;
+                    color: #ffffff;
+                    background-color: #2266e3;
+                    border-radius: 5px;
+                    width: 19%;
+                }
+
+                .tableData{
+                    font-weight: bold;
+                    text-align: center;
+                    height: 1.3em;
+                    border-bottom: 2px solid #cccccc;
+                    border-radius: 5px;
+                    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2);
+                    font-size: 1em;
+                }
+
+                .checkboxStyle{
+                    float: left;
+                }
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+
+                <h1>Leave Management</h1>
+
+                <h:form id ="search-employee">
+
+                    <p:growl autoUpdate="true" />
+
+                    <ui:repeat var="grade" value="#{LeaveManagement.gradeList}">
+
+                        <p:panel header="Grade #{grade}" style="margin-top: 10%">
+
+                            <table class="" border="0" style="width: 100%;border: 1px #000000 solid">
+
+                                <thead>
+
+                                    <th style="width: 8%;background-color: #000000;color: #ffffff">Class / Time Slot </th>
+                                    
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;background-color: #6666ff;color: white" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+
+                                </thead>
+
+                                <tbody>
+                                    
+                                    <tr>
+                                        
+                                        <th style="width: 10px;height: 40px;background-color: #ff9999;color: white" >1</th>
+                                        
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <th style="width: 10px;height: 40px;background-color: #ff9999;color: white" >1</th>
+                                        
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <th style="width: 10px;height: 40px;background-color: #ff9999;color: white" >1</th>
+                                        
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <th style="width: 10px;height: 40px;background-color: #ff9999;color: white" >1</th>
+                                        
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <th style="width: 10px;height: 40px;background-color: #ff9999;color: white" >1</th>
+                                        
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <th style="width: 10px;height: 40px;background-color: #ff9999;color: white" >1</th>
+                                        
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <th style="width: 10px;height: 40px;background-color: #ff9999;color: white" >1</th>
+                                        
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <th style="width: 10px;height: 40px;background-color: #ff9999;color: white" >1</th>
+                                        
+                                        <ui:repeat var="class" value="#{LeaveManagement.getClassesByHeader(grade)}" >
+
+
+                                            <th style="width: 100px;" >#{class.gcs_class_name}</th>
+
+                                        </ui:repeat>
+                                        
+                                    </tr>
+                                    
+                                </tbody>
+                                
+                            </table>
+
+                        </p:panel>
+
+                    </ui:repeat>
+
+                </h:form>
+
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

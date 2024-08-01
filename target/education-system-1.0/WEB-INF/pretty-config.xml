@@ -1,0 +1,23 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+               xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+<!--    <url-mapping id="dashboard">
+        <pattern value="/dashboard" />
+        <view-id value="/main-pages/dashboard.xhtml" />
+    </url-mapping>-->
+<!--    <url-mapping id="lg">
+        <pattern value="/login" />
+        <view-id value="login/login.xhtml" />
+    </url-mapping>-->
+<!--    
+    <url-mapping id="dashboard2">
+        <pattern value="/main-pages/dashboard.xhtml" />
+        <view-id value="/main-pages/dashboard.xhtml" />
+    </url-mapping>
+    -->
+    
+    
+
+</pretty-config>

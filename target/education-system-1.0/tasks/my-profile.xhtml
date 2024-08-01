@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>My Profile</h1>
+                    <p:outputPanel id="selectedCOA" style="text-align:left;width: 100%;border: none;">
+
+                        <h:form id="form">
+                            <p:growl autoUpdate="true" id="msg" />
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                <h:panelGroup >
+                                    <p:outputLabel value="Name" for="name" style="font-weight: bold;" />
+                                    <p:inputText id="name" value="#{userLoginData.companyName}" style="width: 100%;" />
+
+                                </h:panelGroup>
+
+                                <h:panelGroup >
+                                    <!--<div class="ui-g-6 ui-sm-12" >-->
+                                    <p:commandButton  value="Update" process="@form"  icon="ui-icon-update" update=":top_bar_name :menuform:side_bar_name"   styleClass="secondary" action="#{userLoginData.updateCompanyName}" >
+                                        <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
+                                    <!--</div>-->
+                                </h:panelGroup>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:outputPanel>
+
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

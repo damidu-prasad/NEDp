@@ -1,0 +1,159 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+
+            <div class="ui-g-12 ui-lg-12">
+
+                <h3>Student Registration</h3>
+                <p>Please be note that * fields are mandatory  </p>
+                <h:form id="save-form">
+                    <p:growl autoUpdate="true" />
+
+                    <p:panel  header="School Details">
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup >
+                                <p:outputLabel value="Province"  for="province" style="font-weight: bold;" />
+                                <p:selectOneMenu id="province" disabled="#{studentRegistration.disabledFiledProvince}" required="true" requiredMessage="Select Province !" autoWidth="false" effect="slide" value="#{studentRegistration.provinceName}"  style="width: 100%;" >
+                                    <f:ajax event="change" listener="#{studentRegistration.getEducationZoneList}" render="zone" />
+
+                                    <f:selectItems value="#{studentRegistration.provinceNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+
+                            <h:panelGroup >
+                                <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                                <p:selectOneMenu id="zone" disabled="#{studentRegistration.disabledFiledZone}" required="true" requiredMessage="Select Zone !" autoWidth="false" effect="slide" value="#{studentRegistration.zoneName}"  style="width: 100%;" >
+
+                                    <f:ajax event="change" listener="#{studentRegistration.getEducationDivisionList}" render="division" />
+                                    <f:selectItems value="#{studentRegistration.zoneNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup><!--
+-->                            <h:panelGroup >
+                                <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                                <p:selectOneMenu id="division" disabled="#{studentRegistration.disabledFiledDivision}" required="true" requiredMessage="Select Division !"  autoWidth="false" effect="slide" value="#{studentRegistration.divisionName}"  style="width: 100%;" >
+                                    <f:ajax event="change" listener="#{studentRegistration.getSchoolList}" render="school" />
+                                    <f:selectItems value="#{studentRegistration.divisionNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup><!--
+-->                            <h:panelGroup >
+                                <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                                <p:selectOneMenu id="school" disabled="#{studentRegistration.disabledFiledSchool}" required="true" requiredMessage="Select School !"  autoWidth="false" effect="slide" value="#{studentRegistration.schoolName}" style="width: 100%;" >
+                                    <f:ajax event="change" listener="#{studentRegistration.getClasses}" render="classes" />
+                                    <f:selectItems value="#{studentRegistration.schoolNameList}" />
+
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+                        </p:panelGrid>
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                            <h:panelGroup >
+                                <p:outputLabel value="Index No" for="index_no" style="font-weight: bold;" />
+                                <p:inputText id="index_no" required="true" requiredMessage="Enter Index No !" style="width: 100%;" value="#{studentRegistration.indexNo}" />
+
+                            </h:panelGroup><!--
+-->                            <h:panelGroup >
+
+                                <p:outputLabel value="Year" for="year" style="font-weight: bold;" />
+                                <p:selectOneMenu id="year" required="true" requiredMessage="Select Year !"  autoWidth="false" effect="slide" value="#{studentRegistration.year}" style="width: 100%;" >
+
+                                    <f:selectItems value="#{studentRegistration.yearList}" />
+
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup >
+
+                                <p:outputLabel value="Class" for="classes" style="font-weight: bold;" />
+                                <p:selectOneMenu id="classes" required="true" requiredMessage="Select Class !"  autoWidth="false" effect="slide" value="#{studentRegistration.className}" style="width: 100%;" >
+
+                                    <f:selectItems value="#{studentRegistration.classNameList}" />
+
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                        </p:panelGrid>
+
+                    </p:panel>
+                    
+
+                    <p:panel  header="Personal Details" style="margin-top: 20px;">
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                            <h:panelGroup  >
+                                <p:outputLabel value="Name" for="name_with_in" style="font-weight: bold;" />
+                                <p:inputText id="name_with_in" required="true" requiredMessage="Enter Name !" style="width: 100%;" value="#{studentRegistration.nameWithIn}" />
+
+                            </h:panelGroup>
+
+
+                            <h:panelGroup  >
+                                <p:outputLabel value="Gender" for="gender" style="font-weight: bold;" />
+                                <p:selectOneRadio required="true" requiredMessage="Select Gender !" id="gender" layout="responsive" columns="4" value="#{studentRegistration.gender}">
+                                    <f:selectItem itemLabel="Male" itemValue="1" />
+                                    <f:selectItem itemLabel="Female" itemValue="2" />
+
+                                </p:selectOneRadio>
+
+                            </h:panelGroup>
+
+
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:panel  header="Contact Details" style="margin-top: 20px;">
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                            <h:panelGroup  >
+                                <p:outputLabel value="Address No" for="address1" style="font-weight: bold;" />
+                                <p:inputText id="address1"  style="width: 100%;" value="#{studentRegistration.address1}" />
+
+                            </h:panelGroup>
+                            <h:panelGroup  >
+                                <p:outputLabel value="Street" for="address2" style="font-weight: bold;" />
+                                <p:inputText id="address2" style="width: 100%;" value="#{studentRegistration.address2}" />
+
+                            </h:panelGroup>
+
+                            <h:panelGroup  >
+                                <p:outputLabel value="City" for="address3" style="font-weight: bold;" />
+                                <p:inputText id="address3"   style="width: 100%;" value="#{studentRegistration.address3}" />
+
+                            </h:panelGroup>
+
+
+                        </p:panelGrid>
+                    </p:panel>
+
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-9" ></div>
+                    <div class="ui-g-12 ui-md-6 ui-lg-3" >
+                        <p:commandButton  value="Save"  icon="ui-icon-save" styleClass="secondary" >
+                            <f:ajax execute="@form" render="save-form" listener="${studentRegistration.saveStudentRegistration}" />
+                            <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+
+                    </div>
+                </h:form>
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

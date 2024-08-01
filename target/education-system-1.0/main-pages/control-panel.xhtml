@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="title">Control Panel</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#FFC107', '#03A9F4'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#212121'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>  
+        </script>
+
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+
+            .task {
+                background: url("#{resource['ultima-layout:images/dashboard/task.jpg']}") top left no-repeat #f7f7f7;
+                background-size: 100% auto; 
+            }
+            .reports {
+                background: url("#{resource['ultima-layout:images/dashboard/report.png']}") top left no-repeat #f7f7f7;
+                background-size: 100% auto; 
+            }
+            .cm{
+                padding: 5px !important;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Control Panel</h1>
+
+                <h:form id="form">
+                    <p:growl autoUpdate="true" id="msg" />
+                    <div class="ui-g dashboard">
+                        <div class="ui-g-12 ui-md-12 ui-lg-12" style="text-align: right;">
+                            <p:commandButton value="Download Mobile App" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" style="width: auto;float: right;" icon="ui-icon-arrow-downward">
+                                <p:fileDownload value="#{controlPanel.file}" />
+                            </p:commandButton>
+                        </div>
+                        <c:forEach var="me1" items="#{controlPanel.mi_list}" varStatus="loop">
+
+                            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                <div class="ui-g card cm">
+                                    <div class="ui-g-12 f">
+                                        <span class="colorbox-name " style="font-weight: bold;font-size: 16px;color: #0e2031;">#{me1.menuname}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <c:forEach var="me2" items="#{me1.interfaceList}" varStatus="loop">
+
+                                <div class="ui-g-12 ui-md-3">
+                                    <div class="card overview " style="background-color: #{me2.colorName};" >
+                                        <div class="overview-content clearfix">
+                                            <span class="overview-title">
+                                                <p:link outcome="#{me2.menuUrl}" value="#{me2.menuname}" style="color: #ffffff;font-size: 19px;">
+                                                </p:link>
+                                            </span>
+                                            <span class="overview-badge"></span>
+                                            <span class="overview-detail" style="font-size: 14px;color: #f7f7f7;">#{me2.description}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </c:forEach>
+
+
+                        </c:forEach>
+
+                        <p:dialog header="Enter Your Details" width="50%" closable="false"  widgetVar="CheckContactDetailsDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                            <p:scrollPanel mode="native" style="width:auto;height:auto;border: none;">
+                                <p:outputPanel id="AssignSubjectTearcher"  style="text-align:left;width: 100%;border: none;">
+
+                                    <h:form id="cform">
+                                        <p:growl autoUpdate="true"  />
+                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup >
+                                                <p:outputLabel value="Name with Initials" for="name_with_in"  style="font-weight: bold;" />
+                                                <p:inputText id="name_with_in" required="true" requiredMessage="Enter Name with Initials !"  style="width: 100%;" value="#{controlPanel.nameWithIn}" />
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                            <h:panelGroup >
+                                                <p:outputLabel value="Mobile No" for="mobile_no"  style="font-weight: bold;" />
+                                                <p:inputText id="mobile_no" onkeypress="return isNumberKey(event)" required="true" maxlength="10" requiredMessage="Enter Mobile No !" style="width: 100%;" value="#{controlPanel.mobileNo}" />
+                                            </h:panelGroup>
+                                            <h:panelGroup >
+                                                <p:outputLabel value="Email" for="email"  style="font-weight: bold;" />
+                                                <p:inputText id="email" type="email" required="true" requiredMessage="Enter Email !" validatorMessage="Check Email Format" style="width: 100%;" value="#{controlPanel.email}" >
+                                                     <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                                </p:inputText>
+                                            </h:panelGroup>
+
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                            <h:panelGroup >
+                                                <p:outputLabel value="Address No" for="add_no"  style="font-weight: bold;" />
+                                                <p:inputText id="add_no"  style="width: 100%;" value="#{controlPanel.address1}" />
+                                            </h:panelGroup>
+                                            <h:panelGroup >
+                                                <p:outputLabel value="Street" for="add_no2"  style="font-weight: bold;" />
+                                                <p:inputText id="add_no2" required="true" requiredMessage="Enter Street !"  style="width: 100%;" value="#{controlPanel.address2}" />
+                                            </h:panelGroup>
+                                            <h:panelGroup >
+                                                <p:outputLabel value="City" for="add_no3"  style="font-weight: bold;" />
+                                                <p:inputText id="add_no3" required="true" requiredMessage="Enter City !"  style="width: 100%;" value="#{controlPanel.address3}" />
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group" style="text-align: right;">
+                                            <p:commandButton  value="Save"   icon="ui-icon-save" styleClass="secondary" style="width: auto;" >
+                                                <f:ajax execute="@form" render=":form"  listener="#{controlPanel.SaveUpdateContactDetails}"  />
+                                                <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert" />
+                                            </p:commandButton>
+                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                            </p:confirmDialog>
+                                        </p:panelGrid>
+                                    </h:form>
+                                </p:outputPanel>
+                            </p:scrollPanel>
+                        </p:dialog>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

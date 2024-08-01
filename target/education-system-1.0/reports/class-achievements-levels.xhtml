@@ -1,0 +1,133 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+
+
+        <div class=" card ui-g ui-fluid">
+
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Class Achievements Levels</h1>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+                    <div class="ui-g-12" >
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{classAchiementsLevels.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{classAchiementsLevels.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{classAchiementsLevels.getEducationZoneList}" render="zone" />
+
+                                <f:selectItems value="#{classAchiementsLevels.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{classAchiementsLevels.disabledFiledZone}" autoWidth="false" effect="slide" value="#{classAchiementsLevels.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{classAchiementsLevels.getEducationDivisionList}" render="division" />
+                                <f:selectItems value="#{classAchiementsLevels.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{classAchiementsLevels.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{classAchiementsLevels.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{classAchiementsLevels.getSchoolList}" render="school" />
+                                <f:selectItems value="#{classAchiementsLevels.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{classAchiementsLevels.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{classAchiementsLevels.schoolName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{classAchiementsLevels.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                    </div>
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Year" for="year" style="font-weight: bold;" />
+                            <p:selectOneMenu id="year"  autoWidth="false" effect="slide" value="#{classAchiementsLevels.year}" style="width: 100%;" >
+
+                                <f:selectItems value="#{classAchiementsLevels.yearList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Term" for="term" style="font-weight: bold;" />
+                            <p:selectOneMenu id="term"  autoWidth="false" effect="slide" value="#{classAchiementsLevels.termName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{classAchiementsLevels.termNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Grade" for="grade" style="font-weight: bold;" />
+                            <p:selectOneMenu id="grade"  autoWidth="false" effect="slide" value="#{classAchiementsLevels.gradeName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{classAchiementsLevels.gradeNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <h:panelGroup >
+                            <p:commandButton type="button" value="Search" icon="ui-icon-search" style="margin-bottom:10px;width: auto;" styleClass="secondary">
+
+                                <f:ajax execute="@form" render="form" listener="#{classAchiementsLevels.loadClassAchievementsLevels()}" />
+                            </p:commandButton>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" id="printpage" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <div class="ui-g-12" style="overflow-x: scroll;" >
+
+                            <table cellspacing="0" cellpadding="3" border="1" >
+                                <ui:repeat var="cla"  value="#{classAchiementsLevels.recordList}" varStatus="loop">
+                                    <tr>
+                                        <ui:repeat var="val"  value="#{cla.name}" varStatus="loop">
+
+                                            <td style="width: 600px;background-color: ${val.color} ; text-align: ${val.align}; font-weight:${val.weight}; " colspan="${val.colspan}" > #{val.marks}</td>
+                                        </ui:repeat>
+                                    </tr>
+                                </ui:repeat>
+                            </table>
+
+
+
+                        </div>
+                    </p:panelGrid>
+
+                    <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px;width: auto;">
+                        <p:printer target="printpage" />
+                    </p:commandButton>
+
+                </h:form>
+
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+

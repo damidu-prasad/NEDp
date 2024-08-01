@@ -1,0 +1,84 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/ultima"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:form id="menuform"> 
+        <div class="layout-menu #{guestPreferences.menuClass}">
+            <div class="nano">
+                <div class="nano-content menu-scroll-content">
+                    <ui:fragment rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
+                        <div class="profile">
+                            <div class="profile-image"></div>
+                            <a id="profile-options" href="#">
+
+                                <p:outputLabel id="side_bar_name" styleClass="profile-name" value="#{userLoginData.profileName}"  />
+
+                                <i class="material-icons">&#xE313;</i>
+                            </a>
+                        </div>
+                        <ul id="profile-menu" class="ultima-menu">
+                            <pu:menu >
+                                <p:menuitem id="profile_page_link" value="Profile" icon="&#xE7FD;" outcome="/tasks/my-profile.xhtml" />
+                                <p:menuitem id="Logout" value="Logout" icon="&#xE8AC;" action="#{login.doLogout()}" />
+                            </pu:menu>
+                        </ul>
+                    </ui:fragment>
+
+                    <pu:menu widgetVar="me">
+                        <!--<p:menuitem id="um_dashboard" value="Dashboard" icon="&#xE871;" outcome="/main-pages/dashboard.xhtml" />-->
+
+                        <p:submenu id="um_dashboard" label="Dashboard" icon="&#xE871;" rendered="#{userLoginData.checkAdmin}" >
+                            <p:menuitem value="Zonal Director" icon="mms" outcome="/main-pages/dashboard.xhtml"  />
+                            <p:menuitem value="Principal" icon="mms" outcome="/main-pages/principal-dashboard.xhtml"  />
+                        </p:submenu>
+                        <p:menuitem id="um_control_panel" value="Control Panel" icon="business" outcome="/main-pages/control-panel.xhtml"/>
+                        <p:menuitem id="um_help" value="Help" icon="live_help" outcome="/main-pages/help.xhtml"/>
+                    </pu:menu>
+
+<!--                    <div class="ui-g-12" style="background-color: #e8e8e8;margin-top: 10px;margin-right: 10px;">
+                                                <div class="ui-g-3">
+                                                    <img src="../resources/ultima-layout/images/landing/top-5.png" style="width: 50px;height: auto;" />
+                                                </div>
+                        <div class="ui-g-12" style="font-weight: bold;color: white;font-size: 13px;background-color: #3f51b5;">
+                            TOP 5 SYSTEM USERS - SCHOOLS
+                        </div>
+                        <pu:menu widgetVar="me" >
+                            <c:forEach var="me1" items="#{loadBanners.scoreSchoolList}" varStatus="loop">
+                                <p:menuitem style="font-size: 12px;font-weight: bold;" value="#{me1.sname}"  icon="filter_#{me1.order}"/>
+                            </c:forEach>
+
+                        </pu:menu>
+                        <div class="ui-g-12" style="background-color: #5b6976;color: white;font-weight: bold;text-align: center;">
+                            Upload Marks - Upgrade Position
+                        </div>
+
+                    </div>-->
+<!--                    <div class="ui-g-12" style="background-color: #e8e8e8;margin-top: 10px;margin-right: 10px;margin-bottom: 100px;">
+                                                <div class="ui-g-3">
+                                                    <img src="../resources/ultima-layout/images/landing/top-5.png" style="width: 50px;height: auto;" />
+                                                </div>
+                        <div class="ui-g-12" style="font-weight: bold;color: white;font-size: 13px;background-color: #3f51b5;">
+                            TOP 5 SYSTEM USERS - TEACHERS
+                        </div>
+                        <pu:menu widgetVar="me" >
+                            <c:forEach var="me2" items="#{loadBanners.scoreTeacherList}" varStatus="loop">
+                                <p:menuitem style="font-size: 12px;font-weight: bold;white-space: pre;" value="#{me2.teacher_name}&#10;#{me2.school_name}"  icon="filter_#{me2.no}"/>
+                            </c:forEach>
+
+                        </pu:menu>
+                        <div class="ui-g-12" style="background-color: #5b6976;color: white;font-weight: bold;text-align: center;">
+                            Upload Marks - Upgrade Position
+                        </div>
+
+                    </div>-->
+
+                </div>
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

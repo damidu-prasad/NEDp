@@ -1,0 +1,329 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                template="/WEB-INF/templateTwo.xhtml">
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+            <style>
+                .selectAll{
+
+                    text-align: right !important;
+
+                }
+                .ui-datatable-resizable tbody td{
+
+                    white-space: normal !important;
+                }
+
+                .tableHeaders{
+                    font-weight: bold;
+                    text-align: center;
+                    font-size: 1.3em;
+                    color: #ffffff;
+                    background-color: #2266e3;
+                    border-radius: 5px;
+                    width: 19%;
+                }
+
+                .tableData{
+                    font-weight: bold;
+                    text-align: center;
+                    height: 1.3em;
+                    border-bottom: 2px solid #cccccc;
+                    border-radius: 5px;
+                    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2);
+                    font-size: 1em;
+                }
+
+                .checkboxStyle{
+                    float: left;
+                }
+
+                label{
+                    font-weight: bolder;
+                }
+
+
+            </style>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <div class="ui-g-12 ui-lg-12" style="margin-top: 2%;text-align: center">
+                <h1 class="text ui-fluid" style="margin-top: 4%;font-weight: bold"><p:outputLabel/>TEACHERS DAILY ATTENDANCE OVERVIEW REPORT OF ANANDA COLLEGE <p:outputLabel value="#{DailyAbsentReport.currentDateTeacherAttendance}"/></h1>
+                <p:panel>
+                    <h:form id="chartForm">
+                        <div style="display:flex;justify-content: space-between;align-items: center;margin-top: 1%;width: 90% ">
+                            <div style="margin: 0 0 0 5%">
+                                <div style="height: 400px;">
+                                    <canvas id="myHorizontalBarChart" width="700"></canvas>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="height: 300px;">
+                                    <canvas id="doughnutChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex;justify-content: space-between;align-items: center;margin: 1% 0 0 10%;width: 99% ">
+                            <div>
+                                <div style="height: 500px; ">
+                                    <canvas id="attendanceGroupedBarChart" width="1000" height="600"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                </p:panel>
+                <p:panel style="margin: 4% 0 0 0">
+                    <h:form id="form">
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                            <h:panelGroup>
+                                <p:outputLabel value="Date" for="date"/>
+                                <p:calendar style="text-align: center" value="#{DailyAbsentReport.currentDate}" pattern="yyyy-MM-dd" id="date"/>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <!--                            <p:outputLabel value="Grade" for="grade"/>
+                                                            <p:selectOneMenu id="grade">
+                                                                <f:selectItems value="#{DailyAbsentReport.gradeList}"/>
+                                                            </p:selectOneMenu>-->
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <p:outputLabel value="Teacher type" for="type"/>
+                                <p:selectOneMenu id="type" value="#{DailyAbsentReport.teacherType}">
+                                    <f:selectItems value="#{DailyAbsentReport.teacherTypeList}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <p:selectOneRadio  style="font-weight: bold;margin: auto;" value="#{DailyAbsentReport.attendaceType}">
+
+                                    <f:selectItem itemLabel="All" itemValue="1" />
+
+                                    <f:selectItem itemLabel="Attend" itemValue="2" />
+
+                                    <f:selectItem itemLabel="Absent" itemValue="3" />
+
+                                </p:selectOneRadio>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <p:commandButton value="Search">
+                                    <f:ajax execute="@form" render="formOne" listener="#{DailyAbsentReport.loadTeacherAttendance()}" />
+                                </p:commandButton>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                            </h:panelGroup>
+                        </p:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:panel style="margin: 3% 0 0 0">
+
+                    <div style="width: 50%;align-content: flex-end;margin: 0 0 0 20%">
+                        <h:form>
+                            <h:panelGroup >
+                                <p:outputLabel value="Search Teacher by Teacher ID" for="search" style="font-weight: bold;" />
+
+                                <p:autoComplete id="search" value="#{DailyAbsentReport.selectedTeacher}" completeMethod="#{DailyAbsentReport.loadSearchTeacher}" style="margin-bottom:10px;">
+
+                                    <p:ajax event="itemSelect"  update="formOne" listener="#{DailyAbsentReport.setSelectedTeacherToTable()}"></p:ajax>
+
+                                </p:autoComplete>  
+                            </h:panelGroup >
+                        </h:form>
+                    </div>
+
+                    <h:form id="formOne">
+                        <p:dataTable rowIndexVar="rowIndex" var="tal" value="#{DailyAbsentReport.attendanceList}" id="datatable" stickyHeader="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}" resizableColumns="true"  reflow="true" paginator="true" rows="200" rowsPerPageTemplate="200,400,600,800" >
+
+                            <f:facet name="{Exporters}" >
+
+                                <div style="float:right;">
+
+                                    <h:commandLink style="padding: 5px;"  >
+
+                                        <p:graphicImage name="/demo/images/excel.png" width="24"/>
+
+                                        <p:dataExporter type="xls" target="datatable" fileName="Teacher List" />
+
+                                    </h:commandLink>
+
+                                    <h:commandLink>
+
+                                        <p:graphicImage name="/demo/images/pdf.jpg" width="24"/>
+
+                                        <p:dataExporter type="pdf" target="datatable" fileName="Teacher List"/>
+
+                                    </h:commandLink>
+
+                                </div>
+
+                            </f:facet>
+
+                            <p:column headerText="#" style="text-align: center;vertical-align: top;">
+
+                                <h:outputText value="#{rowIndex + 1}" />
+
+                            </p:column>
+
+                            <p:column headerText="Teacher Id" style="text-align: center;vertical-align: top;">
+
+                                <h:outputText value="#{tal.teacher_id}" />
+
+                            </p:column>
+
+                            <p:column headerText="Teacher Name" style="text-align: center;vertical-align: top;">
+
+                                <h:outputText value="#{tal.teacher_name}" />
+
+                            </p:column>
+
+                            <p:column headerText="Grades" style="text-align: center;vertical-align: top;">
+
+                                <h:outputText value="#{tal.grades}" />
+
+                            </p:column>
+
+                            <p:column headerText="In Time" style="text-align: center;vertical-align: top;" sortBy="#{tal.in_time}">
+
+                                <h:outputText value="#{tal.in_time}" />
+
+                            </p:column>
+
+                            <p:column headerText="Out Time" style="text-align: center;vertical-align: top;">
+
+                                <h:outputText value="#{tal.out_time}" />
+
+                            </p:column>
+
+
+                        </p:dataTable>
+
+                    </h:form>
+
+                </p:panel>
+            </div>
+
+        </div>  
+
+        <script type="text/javascript">
+            window.onload = function () {
+                // Horizontal Bar Chart
+                var ctxBar = document.getElementById('myHorizontalBarChart').getContext('2d');
+                var myHorizontalBarChart = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Finger Machine Registered Teacher Count', 'Attend Teachers Count', 'Absent Teachers Count', 'Attend Before 7.30 Count'],
+                        datasets: [{
+                                label: 'Teacher Count',
+                                data: [#{DailyAbsentReport.totalRegisteredTeachers}, #{DailyAbsentReport.presentTeachersCount}, #{DailyAbsentReport.absentTeachersCount},#{DailyAbsentReport.attendBeforeSeventTwenty}],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(252, 186, 3,0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(252, 186, 3,1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                    },
+                    options: {
+                        indexAxis: 'y', // Makes the bar chart horizontal
+                        scales: {
+                            x: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                var ctx = document.getElementById('attendanceGroupedBarChart').getContext('2d');
+                var attendanceGroupedBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Administration', 'Primary', '6-11', 'A/L', 'SDS', 'Training'],
+                        datasets: [
+                            {
+                                label: 'Total Teachers',
+                                data: [#{DailyAbsentReport.administrationTeacherCount}, #{DailyAbsentReport.primary}, #{DailyAbsentReport.secondaryTeacherCount}, #{DailyAbsentReport.alTeacherCount},#{DailyAbsentReport.sdsTeacherCount},#{DailyAbsentReport.trainingTeacherCount}], // Replace with your total teachers data
+                                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Attendance Today',
+                                data: [#{DailyAbsentReport.administrationTeacherCountAttend}, #{DailyAbsentReport.primaryAttend}, #{DailyAbsentReport.secondaryTeacherCountAttend}, #{DailyAbsentReport.alTeacherCountAttend},#{DailyAbsentReport.sdsTeacherCountAttend},#{DailyAbsentReport.trainingTeacherCountAttend}], // Replace with your attendance data
+
+                                backgroundColor: 'rgba(5, 156, 10, 0.5)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Teachers'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Sections'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Doughnut Chart
+                var ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+                var myDoughnutChart = new Chart(ctxDoughnut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Teachers Attendance Percentage', 'Teachers Absent Percentage', 'Attend Percentage Before 07.20 AM'],
+                        datasets: [{
+                                label: 'Teacher Attendance KPIs %',
+                                data: ['#{DailyAbsentReport.attendPercentageCount}', '#{DailyAbsentReport.absentTeachersPercentage}', '#{DailyAbsentReport.attendBeforePercentage}'],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(252, 186, 3,0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(252, 186, 3,1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                enabled: true
+                            }
+                        }
+                    }
+                });
+            };
+        </script>
+    </ui:define>
+</ui:composition>

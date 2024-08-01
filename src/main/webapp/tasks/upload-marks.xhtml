@@ -1,0 +1,609 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <div class=" card ui-g ui-fluid">
+
+
+            <style>
+
+                .cell {
+                    width: 200px;;
+                    border-left: 1px solid silver;
+                    border-top: 1px solid silver;
+                    border-bottom: 1px solid silver;
+                    border-right: 1px solid silver;
+                }
+                .rotated {
+                    writing-mode: tb-rl;
+                    transform: rotate(-180deg);
+                }
+            </style>
+
+            <div class="ui-g-12 ui-lg-12">
+                <h1>Upload Marks</h1>
+                <h:form id="form">
+                    <p:growl autoUpdate="true" />
+                    <div class="ui-g-12" >
+
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Province" for="province" style="font-weight: bold;" />
+                            <p:selectOneMenu id="province" disabled="#{uploadMarks.disabledFiledProvince}" autoWidth="false" effect="slide" value="#{uploadMarks.provinceName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{uploadMarks.getEducationZoneList}" render="zone" />
+
+                                <f:selectItems value="#{uploadMarks.provinceNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Zone" for="zone" style="font-weight: bold;" />
+                            <p:selectOneMenu id="zone" disabled="#{uploadMarks.disabledFiledZone}" autoWidth="false" effect="slide" value="#{uploadMarks.zoneName}"  style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{uploadMarks.getEducationDivisionList}" render="division" />
+                                <f:selectItems value="#{uploadMarks.zoneNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="Division" for="division" style="font-weight: bold;" />
+                            <p:selectOneMenu id="division" disabled="#{uploadMarks.disabledFiledDivision}" autoWidth="false" effect="slide" value="#{uploadMarks.divisionName}"  style="width: 100%;" >
+                                <f:ajax event="change" listener="#{uploadMarks.getSchoolList}" render="school" />
+                                <f:selectItems value="#{uploadMarks.divisionNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-6" >
+
+                            <p:outputLabel value="School" for="school" style="font-weight: bold;" />
+                            <p:selectOneMenu id="school" disabled="#{uploadMarks.disabledFiledSchool}" autoWidth="false" effect="slide" value="#{uploadMarks.schoolName}" style="width: 100%;" >
+                                <f:ajax event="change" listener="#{uploadMarks.getClasses}" render="imgform:excel_classes" />
+                                <f:selectItems value="#{uploadMarks.schoolNameList}" />
+
+                            </p:selectOneMenu>
+
+                        </div>
+                    </div>
+                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Year" for="year" style="font-weight: bold;" />
+                            <p:selectOneMenu id="year"  autoWidth="false" effect="slide" value="#{uploadMarks.year}" style="width: 100%;" >
+
+                                <f:selectItems value="#{uploadMarks.yearList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Term" for="term" style="font-weight: bold;" />
+                            <p:selectOneMenu id="term"  autoWidth="false" effect="slide" value="#{uploadMarks.termName}" style="width: 100%;" >
+
+                                <f:selectItems value="#{uploadMarks.termNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Excel Sheet No" for="sheet_no" style="font-weight: bold;" />
+                            <p:outputLabel  value="?" id="fade" style="float: right;font-weight: bold;color: darkblue;"/>
+
+                            <p:inputText id="sheet_no" value="#{uploadMarks.sheetNo}" onkeypress="return isNumberKey(event)" style="width: 100%;"  />
+
+                            <p:tooltip id="toolTipFade" for="fade" position="top" style="width: 200px;">
+                                One Excel Document has many sheets as Sheet1, Sheet2, Sheet3 which Sheets can contain marks of many classes. Select the sheet number correctly which sheet has students marks are required to upload.
+                                <br/> <br/> 
+                                එක එක්සෙල් පිටුවක   Sheet1, Sheet2, Sheet3 ලෙස ශීට් ගණනාවක විවිධ පංති වල ලකුණු තිබිය හැක. එවිට ලකුණු අප්ලෝඩ් කිරීමට අවශ්‍ය පංතියේ ලකුණු ඇති ශීට් එකේ අංකය නිවැරදිව තෝරන්න.
+                            </p:tooltip>
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Stream" for="stream" style="font-weight: bold;" />
+                            <p:selectOneMenu id="stream"  autoWidth="false" effect="slide" value="#{uploadMarks.streamName}" style="width: 100%;" >
+                                <f:ajax event="change" listener="#{uploadMarks.getGrades}" render="grade" />
+                                <f:selectItems value="#{uploadMarks.streamNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Grade" for="grade" style="font-weight: bold;" />
+                            <p:selectOneMenu id="grade"  autoWidth="false" effect="slide" value="#{uploadMarks.gradeName}" style="width: 100%;" >
+
+                                <f:ajax event="change" listener="#{uploadMarks.getSubjectsFromGrade}" render="subjectFormatPanel" />
+                                <f:selectItems value="#{uploadMarks.gradeNameList}" />
+
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup >
+
+                            <p:outputLabel value="Class" for="classes" style="font-weight: bold;" />
+                            <p:autoComplete id="classes" value="#{uploadMarks.className}" completeMethod="#{uploadMarks.LoadClassNameAutoComplete}" style="margin-bottom:10px;"/>
+                            <p:outputLabel value="Class Names can be A,B,C,D or 1,2, 3 or Metta, Muditha or Similar"   style="font-size: 12px;color: #777d81;width: 100%;" />
+                            <!--<p:outputLabel value="ඔබගේ පන්තිය 10-A නම් මෙහි A පමණක් යොදන්න."   style="font-size: 12px;width: 100%;" />-->
+                        </h:panelGroup>
+
+
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:panelGroup >
+                            <!--<p:outputLabel value="" for="classes" style="font-weight: bold;color: #F44336;" />-->
+                            <p:link href="#" value="List of Available Subjects" onclick="PF('subjectFormatDLG').show();" />
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:link href="#" value="View Excel Format" onclick="PF('excelFormatDLG').show();" />
+                        </h:panelGroup>
+                        
+                        <h:panelGroup >
+                            <p:outputLabel value="DO NOT UPLOAD !" for="classes" style="font-weight: bold;color: #F44336;" /><br/>
+                            <p:outputLabel value="File Type -  .xls " for="classes" style="font-weight: bold;color: #F44336;" />
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:outputLabel value="Valid File Type -  .xlsx "  style="font-weight: bold;color: #4CAF50;" />
+
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:fileUpload fileUploadListener="#{uploadMarks.handleFileUpload}" id="file_upload" mode="advanced" dragDropSupport="true"
+                                          multiple="false" update="messages uploadStatus"  fileLimit="1" allowTypes="/(\.|\/)(xlsx)$/" style="width:100%" >
+                                <p:outputLabel value="#{uploadMarks.fileUploadedStatus}" id="uploadStatus" style="font-weight: bold;color: chocolate;" />
+                            </p:fileUpload>
+                        </h:panelGroup>
+                        <p:growl id="messages" showDetail="true" />
+                    </p:panelGrid>
+                    <div class="ui-g-12" >
+
+
+                        <div class="ui-g-12 ui-md-12 ui-lg-12" >
+
+                            <p:commandButton  value="Save"   icon="ui-icon-save" styleClass="secondary" style="width: auto;float: right;" >
+                                <f:ajax execute="@form" render="form:astTable form:subjectYear form:subjectClass form:classTeacher form:lastMarks form:uploadStatus form:file_upload form:classes form:saveBTN" listener="#{uploadMarks.saveUploadMarks()}" />
+                                <p:confirm header="Confirmation" message="Do You want to continue?" icon="ui-icon-alert"  >
+                                </p:confirm>
+                            </p:commandButton>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-12" >
+                            <p:commandButton  value="View Last Uploaded Marks" update="lastMarks" style="width: auto;float: right;" action="#{uploadMarks.loadLastUploadedMarks}" oncomplete="PF('lastUploadedMarksDLG').show();"  icon="ui-icon-remove-red-eye" styleClass="green-btn" >
+                            </p:commandButton>
+
+                        </div>
+                    </div>
+
+
+                    <p:dialog header="Excel Format"   widgetVar="excelFormatDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+
+                        <h:form id="imgform">
+                            <p:lightBox styleClass="imagebox" >  
+
+                                <a href="../resources/ultima-layout/images/rule1.png"  title="Rule - English">
+                                    <img src="../resources/ultima-layout/images/rule1.png" style="height: 77px; width: auto; margin-right: 10px;margin-top: 10px;" />
+                                </a>
+                                <a href="../resources/ultima-layout/images/rule2.png"  title="Rule - Sinhala">
+                                    <img src="../resources/ultima-layout/images/rule2.png" style="height: 77px; width: auto; margin-right: 10px;margin-top: 10px;" />
+                                </a>
+
+                            </p:lightBox>
+
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                <h:panelGroup >
+
+                                    <p:outputLabel value="Year" for="excel_year" style="font-weight: bold;" />
+                                    <p:selectOneMenu id="excel_year"  autoWidth="false" effect="slide" value="#{uploadMarks.excelyear}" style="width: 100%;" >
+
+                                        <f:selectItems value="#{uploadMarks.excelyearList}" />
+
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+                                <h:panelGroup >
+
+                                    <p:outputLabel value="Class" for="excel_classes" style="font-weight: bold;" />
+                                    <p:selectOneMenu id="excel_classes"  autoWidth="false" effect="slide" value="#{uploadMarks.excelClass}" style="width: 100%;" >
+
+                                        <f:selectItems value="#{uploadMarks.excelClassList}" />
+
+                                    </p:selectOneMenu>
+                                </h:panelGroup>
+                            </p:panelGrid>
+
+                            <table cellpadding="10" csllspacing="10" width="100%" >
+                                <tr style="background-color: #0277BD;">
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">Sinhala Medium</td>
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">English Medium</td>
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">Tamil Medium</td>
+                                </tr>
+                                <tr style="background-color: #dddddd;">
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 1 - 2" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" actionListener="#{uploadMarks.lOBExport2Excel('file_1_2_sinhala')}" style="width: auto;" styleClass="blue-grey-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 1 - 2" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  actionListener="#{uploadMarks.lOBExport2Excel('file_1_2_english')}" style="width: auto;" styleClass="cyan-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 1 - 2" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  actionListener="#{uploadMarks.lOBExport2Excel('file_1_2_tamil')}" style="width: auto;" styleClass="teal-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #dddddd;">
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 3 - 5" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" actionListener="#{uploadMarks.lOBExport2Excel('file_3_5_sinhala')}" style="width: auto;" styleClass="blue-grey-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 3 - 5" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  actionListener="#{uploadMarks.lOBExport2Excel('file_3_5_english')}" style="width: auto;" styleClass="cyan-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 3 - 5" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  actionListener="#{uploadMarks.lOBExport2Excel('file_3_5_tamil')}" style="width: auto;" styleClass="teal-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #DADADA;" >
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 6 - 11" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  actionListener="#{uploadMarks.lOBExport2Excel('file_6_11_sinhala')}" style="width: auto;" styleClass="blue-grey-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 6 - 11" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  actionListener="#{uploadMarks.lOBExport2Excel('file_6_11_english')}" style="width: auto;" styleClass="cyan-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                    <td style="font-weight: bold;color: white;text-align: center;" colspan="2">
+                                        <p:commandButton value="Grade 6 - 11" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  actionListener="#{uploadMarks.lOBExport2Excel('file_6_11_tamil')}" style="width: auto;" styleClass="teal-btn flat" icon="ui-icon-arrow-downward">
+                                            <p:fileDownload value="#{uploadMarks.downloadExcel}" />
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </h:form>
+                    </p:dialog>
+                    <p:dialog header="Subject Names"   widgetVar="subjectFormatDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="true" responsive="true">
+                        <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                            <p:outputPanel  style="text-align:left;width: 100%;border: none;" id="subjectFormatPanel">
+                                <!--<p:outputLabel value="#{uploadMarks.subjectNameTopic}" style="font-weight: bold;" />-->
+                                <ui:repeat var="gs"  value="#{uploadMarks.subList}" >
+                                    <h:panelGrid columns="1" style="width:100%">
+                                        <h:outputText value="#{gs}" styleClass="Fs14 FontDosisMedium"/>
+                                    </h:panelGrid>
+                                </ui:repeat>
+                            </p:outputPanel>
+                        </p:scrollPanel>
+                    </p:dialog>
+
+                    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+                        <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+                    </p:dialog>
+
+                    <p:dialog header="Last Uploaded Marks Sheet"   widgetVar="lastUploadedMarksDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="true" responsive="true">
+                        <p:scrollPanel mode="native" style="width:90vw;height:90vh;border: none;">
+                            <p:outputPanel  style="text-align:left;width: 100%;border: none;" id="lastMarks">
+                                <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:outputLabel value="Year : #{uploadMarks.lastYear}" style="font-weight: bold;" />
+                                    <p:outputLabel value="Term : #{uploadMarks.lastTerm}" style="font-weight: bold;" />
+                                    <p:outputLabel value="Class : #{uploadMarks.lastClass}" style="font-weight: bold;" />
+                                </p:panelGrid>
+                                <div class="ui-g-12" style="overflow-x: scroll;" >
+
+                                    <table cellspacing="0" cellpadding="3" border="1" >
+                                        <ui:repeat var="cla"  value="#{uploadMarks.studentList}" varStatus="loop">
+                                            <tr>
+                                                <ui:repeat var="val"  value="#{cla.name}" varStatus="loop">
+
+                                                    <td style="background-color: ${val.color} ; text-align: ${val.align}" > <p class="#{val.horalignment}"> #{val.marks}</p></td>
+                                                </ui:repeat>
+                                            </tr>
+                                        </ui:repeat>
+                                    </table>
+
+
+
+                                </div>
+
+                            </p:outputPanel>
+                        </p:scrollPanel>
+                    </p:dialog>
+                    <p:dialog header="Assign Subject Teachers" width="70%"  widgetVar="enterSubjectTeachersDLG" modal="true" showEffect="fade" hideEffect="fade" resizable="true" responsive="true">
+                        <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                            <p:outputPanel  style="text-align:left;width: 100%;border: none;" id="subjectTeachers">
+
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:outputLabel value="Select All Subject Teachers and Class Teacher" style="font-weight: bold;color: #F44336;" />
+                                </p:panelGrid>
+                                <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                                    <p:outputLabel id="subjectYear" value="Year : #{uploadMarks.subjectYear}" style="font-weight: bold;" />
+                                    <p:outputLabel id="subjectClass" value="Class : #{uploadMarks.subjectClass}" style="font-weight: bold;" />
+                                    <h:panelGroup >
+
+                                        <p:outputLabel value="Class Teacher *" for="classTeacher" style="font-weight: bold;" />
+                                        <p:selectOneMenu id="classTeacher"  autoWidth="false" effect="slide" value="#{uploadMarks.classTeacherName}" style="width: 100%;" >
+                                            <f:selectItems value="#{uploadMarks.classTeacherNameList}" />
+
+                                        </p:selectOneMenu>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+
+                                    <h:panelGroup >
+                                        <p:dataTable var="sub"  id="astTable" value="#{uploadMarks.gradeclassSubjectTeacherList}" >
+
+                                            <p:column headerText="Subject" visible="false" style="text-align: left;">
+                                                <h:outputText value="#{sub.subjectId}" id="subID" />
+                                            </p:column>
+                                            <p:column headerText="Subject" style="text-align: left;">
+                                                <h:outputText value="#{sub.subjectName}" />
+                                            </p:column>
+                                            <p:column headerText="Subject Teacher" >
+                                                <p:selectOneMenu   autoWidth="false" effect="slide" id="subTeacherID" value="#{sub.teacherName}" onchange="visibleSaveButton('#{uploadMarks.gradeclassSubjectTeacherList.size()}')" style="width: 100%;" >
+                                                    <f:selectItems value="#{sub.teacherNameList}" />
+
+                                                </p:selectOneMenu>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGroup>
+                                    <h:panelGroup  >
+                                        <p:commandButton icon="ui-icon-save" id="saveBTN" update="form" value="Save" style="float:right;width:auto;display: none;" styleClass="secondary" onclick="callSaveSubjectTeacher('#{uploadMarks.gradeclassSubjectTeacherList.size()}')"  >
+                                        </p:commandButton>
+                                    </h:panelGroup>
+
+
+                                </p:panelGrid>
+
+                            </p:outputPanel>
+                        </p:scrollPanel>
+                    </p:dialog>
+                </h:form>
+                <h:form>
+                    <p:remoteCommand  name="remoteSaveSubjectTeacherCmd" oncomplete="PF('enterSubjectTeachersDLG').hide();" value=""  actionListener="#{uploadMarks.saveSubjectTeachers()}" ></p:remoteCommand>
+                </h:form>
+                <p:dialog header="Error !" widgetVar="login_error" modal="true" height="100" width="400" responsive="true">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:outputText style="color: tomato;font-weight: bold;" id="loginModalMsg"  />
+                        <p:commandButton style="width: auto;float: right;"  styleClass="secondary"  value="Ok" type="button" onclick="PF('login_error').hide();" />
+                    </p:panelGrid>
+                </p:dialog> 
+                <p:dialog header="Error !" widgetVar="format_error" modal="true"  width="400" responsive="true">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:outputText style="color: tomato;font-weight: bold;" value="Check the Excel Format"  />
+
+                        <p:link href="#" value="How to Correct ?" onclick="PF('formatDLG').show();" />
+
+                        <p:commandButton style="width: auto;float: right;"  styleClass="secondary"  value="Ok" type="button" onclick="PF('format_error').hide();" />
+                    </p:panelGrid>
+                </p:dialog> 
+                <p:dialog header="Success !" widgetVar="login_success" modal="true" height="100" width="400" responsive="true">
+                    <f:ajax event="close" listener="#{uploadMarks.reloadPage()}" />
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:outputText style="color: mediumblue;font-weight: bold;" id="successModalMsg"  />
+                        <p:commandButton style="width: auto;float: right;"  styleClass="secondary"  value="Ok" type="button" onclick="location.reload()"  >
+
+                        </p:commandButton>
+                    </p:panelGrid>
+                </p:dialog> 
+                <p:dialog header="Error !" widgetVar="subject_error" modal="true"  width="400" responsive="true">
+                    <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                            <h:outputText style="color: tomato;font-weight: bold;" value="Sorry !"  />
+                            <h:outputText value="The Subject name you are trying to use "  />
+                            <h:outputText style="color: #2196F3;font-weight: bold;" id="subjectModalMsg"  />
+
+                            <h:outputText value="is wrongly spelled or not in our database.View 'List of Available Subjects' link above the “Choose” button. Copy and paste the correct subject name to the excel sheet before upload it again. "  />
+                            <p:link href="#" value="List of Available Subjects" onclick="PF('subjectFormatDLG').show();" />
+                            <p:link outcome="/tasks/grade-class-manager.xhtml"  value="If the subject name is not in our database click here"  />
+                            <br/>
+                            <h:outputText style="color: tomato;font-weight: bold;" value="කණගාටුයි!"  />
+                            <h:outputText value="ඔබ ඇතුලත් කිරීමට උත්සාහ කරන විෂය නාම/ය"  />
+                            <h:outputText style="color: #2196F3;font-weight: bold;" id="subjectModalMsg0"  />
+
+                            <h:outputText value="හි අක්ෂර වින්‍යාසය වැරදි හෝ එය අපගේ දත්ත පද්දතියට ඇතුලත් වී  නොමැත. චූස් බටන් එකට ඉහලින් ඇති 'List of Available Subjects' ලින්ක් එක ක්ලික් කරන්න. එම 
+                                          ලිස්ට් එකෙන් නිවැරදි විෂය නාමය කොපි කර එක්සෙල් ශීට් එකට පේස්ට් කර නැවත අප්ලෝඩ් කරන්න.
+                                          " />
+
+                            <p:link href="#" value="විෂය නාම ලැයිස්තුව මෙතනින් බලන්න" onclick="PF('subjectFormatDLG').show();" />
+                            <p:link outcome="/tasks/grade-class-manager.xhtml"  value="විෂය නාමය අපගේ දත්ත පද්දතියේ නොමැති නම් මෙතනින් එය ඇතුලත් කරන්න "  />
+
+                            <p:commandButton style="width: auto;float: right;"  styleClass="secondary"  value="Ok" type="button" onclick="PF('subject_error').hide();" />
+                        </p:panelGrid>
+                    </p:scrollPanel>
+                </p:dialog> 
+                <p:dialog header="Error !" widgetVar="subject_error2" modal="true"  width="400" responsive="true">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                        <h:outputText style="color: tomato;font-weight: bold;" value="Sorry !"  />
+                        <h:outputText  id="subjectModalMsg2"  />
+                        <h:outputText style="color: tomato;font-weight: bold;" value="කණගාටුයි!"  />
+                        <h:outputText  id="subjectModalMsg3"  />
+                        <p:commandButton style="width: auto;float: right;"  styleClass="secondary"  value="Ok" type="button" onclick="PF('subject_error2').hide();" />
+                    </p:panelGrid>
+                </p:dialog> 
+                <p:dialog header="How To Upload" widgetVar="formatDLG" modal="true"  width="80%" responsive="true">
+                    <p:scrollPanel mode="native" style="width:auto;height:90vh;border: none;">
+                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+                            <span style="font-weight: bold;">1. “අප්ලෝඩ් මාර්කස්” වින්ඩෝ එක ක්ලික් කරන්න.</span>
+                            <br/><span style="font-weight: bold;">  Open “Upload Marks” window</span>
+
+                            <br/><br/><img src="../resources/ultima-layout/images/rule/how3.png" width="80%" height="auto"/>
+
+                            <br/><br/><span style="font-weight: bold;">2. අදාළ පංතිය තෝරා ගන්න</span>
+                            <br/><span style="font-weight: bold;">  Select the relevant class</span>
+
+                            <br/><br/><img src="../resources/ultima-layout/images/rule/how6.png" width="80%" height="auto"/>
+
+                            <br/><br/><span style="font-weight: bold;">3. “වීව් ෆෝමැට්” ලින්ක් එක ක්ලික් කරන්න</span>
+                            <br/><span style="font-weight: bold;">  Click the “View Format” link</span>
+
+                            <br/><br/><img src="../resources/ultima-layout/images/rule/how1.png" width="80%" height="auto"/>
+
+                            <br/><br/><span style="font-weight: bold;">4. පංතියට අදාළ එක්සෙල් ෆොර්මැට් එක ඩවුන් ලෝඩ් කර ගන්න</span>
+                            <br/><span style="font-weight: bold;">  Download the relevant Excel format of the class</span>
+
+                            <br/><br/><img src="../resources/ultima-layout/images/rule/how2.png" width="80%" height="auto"/>
+
+                            <br/><br/><span style="font-weight: bold;">5. ඩවුන්ලෝඩ් වූ එක්සෙල් ශීට් එක වම් පැත්තේ යට කොනේ බලන්නන</span>
+                            <br/><span style="font-weight: bold;">  Notice the downloaded Excel Sheet at the left down Corner</span>
+
+                            <br/><br/><img src="../resources/ultima-layout/images/rule/how4.png" width="80%" height="auto"/>
+
+                            <br/><br/><span style="font-weight: bold;">6.  එක්සෙල් ශීට් එකේ එම පන්තියට අදාළ නොවන විෂයන් තිබේ නම් ඒවා කොලම් එක පිටින්ම ඩිලීට් කර දමන්න. ඉන්පසු ලකුණු දමා නැවත අප්ලෝඩ් කරන්න </span>
+                            <br/><span style="font-weight: bold;">  If there are subjects on the Excel Sheet which are not relevant to the class, delete that column.
+                                Then add marks and upload.</span>
+
+                            <br/><br/><img src="../resources/ultima-layout/images/rule/how5.png" width="80%" height="auto"/>
+
+
+                            <p:commandButton style="width: auto;float: right;"  styleClass="secondary"  value="Ok" type="button" onclick="PF('formatDLG').hide();" />
+                        </p:panelGrid>
+                    </p:scrollPanel>
+                </p:dialog> 
+
+                <!--Ajax Loading Start-->
+
+                <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+                    <f:facet name="default">
+                        <!--<h:outputText value="Status: StandBy" />-->
+                    </f:facet>
+
+                    <f:facet name="start">
+                        <p:graphicImage name="../demo/images/ajaxloadingbar.gif" />
+                    </f:facet>
+
+                    <f:facet name="complete">
+                        <h:outputText value="Status: Completed" />
+                    </f:facet>
+                </p:ajaxStatus>
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+                </p:dialog>
+
+                <!--Ajax Loading Over-->
+
+                <script type="text/javascript">
+                    function start() {
+                        PF('statusDialog').show();
+                    }
+
+                    function stop() {
+                        PF('statusDialog').hide();
+                    }
+                    //<![CDATA[
+                    function callSaveSubjectTeacher(size) {
+
+                        var check = true;
+
+                        for (var i = 0; i < size; i++) {
+
+                            document.getElementById("form:astTable:" + i + ":subTeacherID_label").style.backgroundColor = "white";
+
+                            var val = document.getElementById("form:astTable:" + i + ":subTeacherID_input").value;
+
+                            if (val == 0) {
+                                check = false;
+                                document.getElementById("form:astTable:" + i + ":subTeacherID_label").style.backgroundColor = "tomato";
+
+                            }
+
+                        }
+                        var classT = document.getElementById("form:classTeacher_input").value;
+
+                        document.getElementById("form:classTeacher_label").style.backgroundColor = "white";
+
+                        if (classT == 0) {
+
+                            alert("Select Class Teacher !");
+                            document.getElementById("form:classTeacher_label").style.backgroundColor = "tomato";
+
+                        } else if (check === false) {
+
+                            alert("Select All Subject Teachers !");
+
+
+
+                        } else {
+
+                            var jsn_object = {jsn: []};
+
+                            for (var i = 0; i < size; i++) {
+
+                                var subID = document.getElementById("form:astTable:" + i + ":subID").innerHTML;
+                                var subjectTeacherID = document.getElementById("form:astTable:" + i + ":subTeacherID_input").value;
+
+                                jsn_object.jsn.push({"subID": subID, "subjectTeacherID": subjectTeacherID});
+
+                            }
+
+                            var json_array = JSON.stringify(jsn_object);
+
+                            remoteSaveSubjectTeacherCmd([{name: 'json_array', value: json_array}, {name: 'classT', value: classT}]);
+
+                        }
+                    }
+                    function visibleSaveButton(size) {
+
+                        var check = true;
+
+                        for (var i = 0; i < size; i++) {
+
+
+                            var val = document.getElementById("form:astTable:" + i + ":subTeacherID_input").value;
+
+                            if (val == 0) {
+                                check = false;
+
+                            }
+
+                        }
+                        var classT = document.getElementById("form:classTeacher_input").value;
+
+
+                        if (classT != 0 && check == true) {
+
+                            document.getElementById("form:saveBTN").style.display = "block";
+
+                        } else {
+
+                            document.getElementById("form:saveBTN").style.display = "none";
+
+                        }
+
+                    }
+                    //]]>
+
+                </script>
+
+
+
+
+            </div>
+
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+
