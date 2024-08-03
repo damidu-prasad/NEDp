@@ -87,14 +87,14 @@ public class GoogleMail {
         final MimeMessage msg = new MimeMessage(session);
 
         // -- Set the FROM and TO fields --
-        msg.setFrom(new InternetAddress("Welcome to NEDp <" + username + "@gmail.com>"));
+        msg.setFrom(new InternetAddress("Welcome to NEDp <" + username + ">"));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail, false));
 
         if (ccEmail.length() > 0) {
             msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail, false));
         }
 
-        InternetAddress ia[] = {new InternetAddress("NEDp <" + username + "@gmail.com>")};
+        InternetAddress ia[] = {new InternetAddress("NEDp <" + username + ">")};
 
         msg.setReplyTo(ia);
 
