@@ -178,6 +178,10 @@ public class mailsend {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public static void Send1(String noreplysrilankasoftwarevalleylk, String sLsvnorepjiat2022, String teacherEmail, String weekly_Attendance_Report, String toString, Object object) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
    
 
     private mailsend() {

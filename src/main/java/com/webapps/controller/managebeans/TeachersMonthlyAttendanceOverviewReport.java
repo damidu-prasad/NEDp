@@ -123,7 +123,7 @@ public class TeachersMonthlyAttendanceOverviewReport {
         initializeDayStyles(selectedMonth);
     }
 
-    public void generateMonthlyAttendanceData() {
+     public void generateMonthlyAttendanceData() {
 
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Teachers Data is Loading", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -1064,11 +1064,11 @@ public class TeachersMonthlyAttendanceOverviewReport {
             Sheet sheet = workbook.createSheet("Attendance");
             sheet.autoSizeColumn(100);
             Row headerRow = sheet.createRow(0);
-
+            headerRow.setHeight((short) 500);
             Cell headerCell = headerRow.createCell(0);
             headerCell.setCellValue("TEACHERS MONTHLY ATTENDANCE OVERVIEW REPORT OF ANANDA COLLEGE");
 
-            // merge the cells to create a single cell that spans the entire width of the sheet
+           
             CellStyle headerCellStyle = workbook.createCellStyle();
             headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
 //            headerCellStyle.setFont(font);
@@ -1126,20 +1126,20 @@ public class TeachersMonthlyAttendanceOverviewReport {
                 row.createCell(17).setCellValue(atendance.day15);
                 row.createCell(18).setCellValue(atendance.day16);
                 row.createCell(19).setCellValue(atendance.day17);
-                row.createCell(19).setCellValue(atendance.day18);
-                row.createCell(20).setCellValue(atendance.day19);
-                row.createCell(21).setCellValue(atendance.day20);
-                row.createCell(22).setCellValue(atendance.day21);
-                row.createCell(23).setCellValue(atendance.day22);
-                row.createCell(24).setCellValue(atendance.day23);
-                row.createCell(25).setCellValue(atendance.day24);
-                row.createCell(26).setCellValue(atendance.day25);
-                row.createCell(27).setCellValue(atendance.day26);
-                row.createCell(28).setCellValue(atendance.day27);
-                row.createCell(29).setCellValue(atendance.day28);
-                row.createCell(30).setCellValue(atendance.day29);
-                row.createCell(31).setCellValue(atendance.day30);
-                row.createCell(32).setCellValue(atendance.day31);
+                row.createCell(20).setCellValue(atendance.day18);
+                row.createCell(21).setCellValue(atendance.day19);
+                row.createCell(22).setCellValue(atendance.day20);
+                row.createCell(23).setCellValue(atendance.day21);
+                row.createCell(24).setCellValue(atendance.day22);
+                row.createCell(25).setCellValue(atendance.day23);
+                row.createCell(26).setCellValue(atendance.day24);
+                row.createCell(27).setCellValue(atendance.day25);
+                row.createCell(28).setCellValue(atendance.day26);
+                row.createCell(29).setCellValue(atendance.day27);
+                row.createCell(30).setCellValue(atendance.day28);
+                row.createCell(31).setCellValue(atendance.day29);
+                row.createCell(32).setCellValue(atendance.day30);
+                row.createCell(33).setCellValue(atendance.day31);
             }
             File tempFile = File.createTempFile("attendance_report", ".xlsx");
             tempFile.deleteOnExit();

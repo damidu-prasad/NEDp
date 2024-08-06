@@ -155,6 +155,7 @@ com\webapps\controller\managebeans\DataInputScore1$SchoolNameList.class
 org\primefaces\ultima\view\panel\AccordionView.class
 com\ejb\model\entity\CivilStatus.class
 com\ejb\model\entity\UserRole_.class
+com\ejb\model\scheduler\weeklyTeacherAttendanceReportSheduler.class
 org\primefaces\ultima\view\data\DataListView.class
 org\primefaces\ultima\view\input\InplaceView.class
 com\webapps\controller\managebeans\TeacherPerformanceAnalyzer$MeanTeacherList.class
