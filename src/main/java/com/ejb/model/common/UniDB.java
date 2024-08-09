@@ -129,4 +129,9 @@ public class UniDB implements UniDBLocal {
         }
     }
 
+    @Override
+    public List findAll(String _TeacherType) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

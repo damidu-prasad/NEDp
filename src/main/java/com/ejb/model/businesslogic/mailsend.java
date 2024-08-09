@@ -44,6 +44,7 @@ public class mailsend {
      * connected state or if the message is not a MimeMessage
      */
     public static void Send1(final String username, final String password, String recipientEmail, String ccEmail, String title, String message, ArrayList<String> attachedFiles) throws AddressException, MessagingException {
+        System.out.println("Sending Mail............");
         Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
@@ -72,7 +73,7 @@ public class mailsend {
         final MimeMessage msg = new MimeMessage(session);
 
         // -- Set the FROM and TO fields --
-        msg.setFrom(new InternetAddress("Welcome to NEDp <" + username + ">"));
+        msg.setFrom(new InternetAddress("<" + username + ">"));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail, false));
 
         if (ccEmail.length() > 0) {
@@ -179,6 +180,10 @@ public class mailsend {
     }
 
     public static void Send1(String noreplysrilankasoftwarevalleylk, String sLsvnorepjiat2022, String teacherEmail, String weekly_Attendance_Report, String toString, Object object) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public static void Send1(String noreplysrilankasoftwarevalleylk, String sLsvnorepjiat2022, String teacherEmail, String ccEmails, String string, String subject, String toString, Object object) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

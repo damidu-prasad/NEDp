@@ -198,4 +198,8 @@ public class Teacher implements Serializable {
         this.teacherMonthlyScoresCollection = teacherMonthlyScoresCollection;
     }
 
+    public Object get(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

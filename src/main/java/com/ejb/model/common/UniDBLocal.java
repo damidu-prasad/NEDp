@@ -30,4 +30,6 @@ public interface UniDBLocal {
     List searchByQuerySingle(String query);
     
     List searchByQueryLimit(String query,int limit);
+
+    public List findAll(String _TeacherType);
 }

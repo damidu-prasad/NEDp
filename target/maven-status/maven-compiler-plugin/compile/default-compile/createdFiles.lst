@@ -305,6 +305,7 @@ com\ejb\model\entity\GradeClassSubjectTeacher.class
 org\primefaces\ultima\view\chart\ChartView$1.class
 com\ejb\model\common\ComDev.class
 com\ejb\model\entity\Gender_.class
+com\ejb\model\scheduler\NewSessionBean.class
 com\webapps\controller\managebeans\TeacherPerformanceAnalyzer$MeanGradeList.class
 com\ejb\model\entity\AccessLevel.class
 com\webapps\controller\loadbean\ExcellUploaderSubject18.class
