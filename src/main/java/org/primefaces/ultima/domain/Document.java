@@ -15,6 +15,7 @@
  */
 package org.primefaces.ultima.domain;
 
+
 import java.io.Serializable;
 
 public class Document implements Serializable, Comparable<Document> {
@@ -30,6 +31,9 @@ public class Document implements Serializable, Comparable<Document> {
 		this.size = size;
 		this.type = type;
 	}
+
+  
+    
 
 	public String getName() {
 		return name;

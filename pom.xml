@@ -101,12 +101,19 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.28</version>
         </dependency>
+<!--        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.2</version>
+            <type>jar</type>
+        </dependency>-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        
     </dependencies>
     <repositories>
         <!-- Copy this section from the Maven section of the "Connect to Feed" dialog -->
@@ -118,6 +125,10 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>external</id>
+            <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
 

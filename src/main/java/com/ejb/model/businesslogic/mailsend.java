@@ -29,7 +29,7 @@ import javax.mail.util.ByteArrayDataSource;
  * @author Lahiru
  */
 public class mailsend {
-    
+
     /**
      * Send email using GMail SMTP server.
      *
@@ -50,7 +50,7 @@ public class mailsend {
 
         // Get a Properties object
         Properties props = System.getProperties();
-       
+
         props.setProperty("mail.smtp.host", "smtp.gmail.com");
         props.setProperty("mail.smtp.port", "587");
         props.setProperty("mail.smtp.auth", "true");
@@ -120,7 +120,7 @@ public class mailsend {
         t.close();
     }
 
-    public static void Send(final String username, final String password, String recipientEmail, String ccEmail, String title, String message, byte[] excelFileBytes, String attachmentFileName) throws AddressException, MessagingException {
+    public static void Send(String username, String password, String recipientEmail, String damiduprasadjayarathnagmailcom, String title, String message, byte[] excelFileBytes, String excelAttachmentFileName, byte[] pdfFileBytes, String pdfAttachmentFileName) throws AddressException, MessagingException {
 
         Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
@@ -159,11 +159,22 @@ public class mailsend {
 
         multipart.addBodyPart(htmlPart);
 
-        // Add attachment
-        MimeBodyPart attachmentPart = new MimeBodyPart();
-        attachmentPart.setDataHandler(new DataHandler(new ByteArrayDataSource(excelFileBytes, "application/vnd.ms-excel")));
-        attachmentPart.setFileName(attachmentFileName);
-        multipart.addBodyPart(attachmentPart);
+        if (excelFileBytes != null && excelAttachmentFileName != null) {
+            MimeBodyPart excelAttachmentPart = new MimeBodyPart();
+            DataSource excelSource = new ByteArrayDataSource(excelFileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            excelAttachmentPart.setDataHandler(new DataHandler(excelSource));
+            excelAttachmentPart.setFileName(excelAttachmentFileName);
+            multipart.addBodyPart(excelAttachmentPart);
+        }
+
+        // Add PDF attachment
+        if (pdfFileBytes != null && pdfAttachmentFileName != null) {
+            MimeBodyPart pdfAttachmentPart = new MimeBodyPart();
+            DataSource pdfSource = new ByteArrayDataSource(pdfFileBytes, "application/pdf");
+            pdfAttachmentPart.setDataHandler(new DataHandler(pdfSource));
+            pdfAttachmentPart.setFileName(pdfAttachmentFileName);
+            multipart.addBodyPart(pdfAttachmentPart);
+        }
 
         msg.setContent(multipart);
         msg.addHeader("Disposition-Notification-To", "thilinimadagama23@gmail.com");
@@ -187,8 +198,9 @@ public class mailsend {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-   
-
+//    public static void Send(String noreplysrilankasoftwarevalleylk, String sLsvnorepjiat2022, String to, String damiduprasadjayarathnagmailcom, String emailSubject, String string, byte[] excelFileBytes, String excelAttachmentFileName, byte[] pdfFileBytes, String pdfAttachmentFileName) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
     private mailsend() {
     }
 
